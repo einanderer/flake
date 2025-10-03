@@ -11,7 +11,7 @@ in
 {
   options.bpletza.workstation.swaylock = lib.mkOption {
     type = lib.types.bool;
-    default = config.bpletza.workstation.wayland;
+    default = config.bpletza.workstation.sway;
   };
 
   config = lib.mkIf config.bpletza.workstation.swaylock {

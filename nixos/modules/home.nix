@@ -16,7 +16,7 @@ in
     };
     user = lib.mkOption {
       type = lib.types.str;
-      default = "fpletz";
+      default = "anderer";
       description = "username";
     };
     passwordFromSecrets = lib.mkOption {
@@ -30,6 +30,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets."${cfg.user}-password" = lib.mkIf cfg.passwordFromSecrets {
+      sopsFile = ../../secrets.yaml;
       neededForUsers = true;
     };
 
@@ -58,7 +59,6 @@ in
           "docker"
           "sway"
           "wireshark"
-          "adbusers"
           "input"
           "podman"
           "systemd-journal"
@@ -78,8 +78,8 @@ in
           }
         ];
         openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK20Lv3TggAXcctelNGBxjcQeMB4AqGZ1tDCzY19xBUV"
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCs/VM56N9OsG/hK7LEwheHwptClBNPdBl/tIW8URWyQPsE0dN2FYAERsHom3I3IvAS3phfhYtLOwrQ+MqEt7u5f/E3CgdfvEFRER12arxlT/q3gSh5rUdq508fTjkUNmJr6Vul+BCZ7VeESa2yvvTesFqvdVP9NtpGbAusX/JCrXwQciygJ0hDuMdLFW8MmRzljDoBsyjz18MDaMzsGQddQuE+3uAzJ1NXZpNh+M+C6eLNe+QJQMb9VTPGB3Pc0cU0GWyXYpWTVkpJqJVe180ldMU9x2c2sBBcRM3N/UDn2MF3XQi3TdGO93AIcUHNCLmUvIdqz+DPdKzCt3c3HvHh"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwg1laitTiNQACiFHgUvm4PYT1b3Fug7hmzFlxlrII+ deployment-19-12-2024"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN7IyhxIzMjHGq8dBi1jZDYfTBMRm7Z3l+U5ORNveh5e furry-12-08-2021"
         ];
       };
     };

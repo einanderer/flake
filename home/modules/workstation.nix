@@ -45,20 +45,19 @@ in
         python3
         uv
         yt-dlp
-        pass
-        gopass
         just
         git-remote-gcrypt
         rclone
 
         # GUI
+        heroic
+        remmina
         virt-manager
         virt-viewer
         transmission-remote-gtk
         mumble
         gimp3
         claws-mail
-        keepassxc
 
         # LSP servers
         nil
@@ -175,23 +174,6 @@ in
       settings = {
         git_protocol = "ssh";
       };
-    };
-
-    systemd.user.services.keepassxc = {
-      Unit = {
-        Description = "KeepassXC";
-        PartOf = [ "graphical-session.target" ];
-        After = [
-          "graphical-session.target"
-          "waybar.service"
-        ];
-        ConditionEnvironment = "WAYLAND_DISPLAY";
-      };
-      Service = {
-        ExecStart = lib.getExe pkgs.keepassxc;
-        Restart = "on-failure";
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
     };
   };
 }

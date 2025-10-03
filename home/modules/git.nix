@@ -14,19 +14,14 @@
     enable = true;
     package = if config.bpletza.workstation.enable then pkgs.git else pkgs.gitMinimal;
     lfs.enable = config.bpletza.workstation.enable;
-    maintenance = {
-      enable = config.bpletza.workstation.enable;
-      repositories = [ "/home/fpletz/src/nixpkgs" ];
-    };
     attributes = [
       "*.pdf diff=pdf"
     ];
     ignores = [ ".direnv" ];
     extraConfig = {
       user = {
-        name = "Franz Pletz";
-        email = "fpletz@fnordicwalking.de";
-        signingkey = "792617B4";
+        name = "einanderer";
+        email = "social.depot@posteo.de";
       };
       url = {
         "git@git.sr.ht:~".insteadOf = "sh:";
@@ -81,7 +76,7 @@
         prefetch.enabled = false;
       };
       commit = {
-        gpgsign = true;
+        gpgsign = false;
         verbose = true;
       };
       diff = {
@@ -157,7 +152,7 @@
   };
 
   programs.jujutsu = {
-    enable = true;
+    enable = false;
     settings = {
       user = { inherit (config.programs.git.extraConfig.user) name email; };
       signing = {

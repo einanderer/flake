@@ -110,4 +110,7 @@
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 1440;
   };
+
+  programs.coolercontrol.enable = true;
+
 }

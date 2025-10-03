@@ -15,7 +15,6 @@ in
         inherit system;
         overlays = [
           inputs.self.overlays.default
-          inputs.nixd.overlays.default
         ];
       };
 
@@ -28,24 +27,5 @@ in
       // byNamePackages pkgs;
     };
 
-  flake.overlays.default =
-    final: prev:
-    {
-      tailscale = prev.tailscale.overrideAttrs (
-        {
-          patches ? [ ],
-          ...
-        }:
-        {
-          patches = patches ++ [ ../static/tailscale-magicdns-aaaa.patch ];
-          doCheck = false;
-        }
-      );
-      keepassxc = prev.keepassxc.override {
-        withKeePassX11 = false;
-        withKeePassYubiKey = false;
-      };
-      linuxPackages-xanmod = final.linuxPackagesFor final.linux-xanmod;
-    }
-    // byNamePackages final;
+  flake.overlays.default = final: _prev: { } // byNamePackages final;
 }

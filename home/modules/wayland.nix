@@ -35,8 +35,6 @@ in
       pkgs.swww
     ];
 
-    home.file.".config/niri/config.kdl".source = ../../static/niri.kdl;
-
     services.wob = {
       enable = true;
       settings = {
@@ -85,6 +83,7 @@ in
       };
     };
 
+    # Eigene Monitor Setting und Anordnung anpassen wenn du sway benutzen willst
     services.shikane = {
       enable = true;
       settings =
@@ -224,6 +223,7 @@ in
       Install.WantedBy = [ "graphical-session.target" ];
     };
 
+    # Power off menu fuer sway
     programs.wleave = {
       enable = true;
       settings = {

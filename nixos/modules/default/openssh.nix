@@ -15,7 +15,6 @@
       "-f AUTHPRIV"
       "-l INFO"
     ];
-    moduliFile = ../../../static/ssh-moduli;
     settings = {
       PasswordAuthentication = false;
       PubkeyAuthOptions = "verify-required";

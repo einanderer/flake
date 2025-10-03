@@ -15,7 +15,6 @@
   nixpkgs.overlays = [
     inputs.self.overlays.default
     inputs.bad_gateway.overlays.default
-    inputs.nixd.overlays.default
   ];
 
   nixpkgs.flake = {
@@ -24,14 +23,16 @@
     setFlakeRegistry = lib.mkDefault true;
   };
 
-  sops.defaultSopsFile = ../../secrets.yaml;
+  sops = {
+    defaultSopsFile = ../../secrets + "/${config.networking.hostName}.yaml";
+  };
 
   environment.sessionVariables = {
     # https://consoledonottrack.com/
     DO_NOT_TRACK = "1";
   };
 
-  time.timeZone = "UTC";
+  time.timeZone = lib.mkDefault "UTC";
   console.keyMap = "us";
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -58,18 +59,13 @@
     tmp.useTmpfs = lib.mkDefault true;
     kernelPackages = lib.mkOverride 1001 pkgs.linuxPackages_latest;
     loader = {
-      timeout = lib.mkDefault 2;
+      timeout = lib.mkDefault 3;
       grub.splashImage = null;
       systemd-boot.configurationLimit = 10;
     };
     kernel.sysctl = {
       # fail fast on oom
       "vm.oom_kill_allocating_task" = 1;
-    };
-    supportedFilesystems = {
-      zfs = false;
-      bcachefs = true;
-      btrfs = true;
     };
   };
 
@@ -92,28 +88,14 @@
 
   users = {
     mutableUsers = false;
-    users = {
-      # unprivileged user for ad-hoc remote builds
-      nix-build = {
-        uid = 1100;
-        isNormalUser = true;
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPjOA6BgQxco18WpX1TfN22zTOG/EwACxIWI3Ho+530f"
-        ];
-      };
-    };
     users.root = {
       openssh.authorizedKeys.keys = [
-        "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAINybMKbAmqSwg56v39jAqgN+57JgZnm4CTAg6iZ6dF52AAAABHNzaDo="
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK20Lv3TggAXcctelNGBxjcQeMB4AqGZ1tDCzY19xBUV"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwg1laitTiNQACiFHgUvm4PYT1b3Fug7hmzFlxlrII+ deployment-19-12-2024"
       ];
     };
   };
 
   system = {
-    # living on the edge
-    stateVersion = lib.mkOverride 1001 "25.05";
-
     # include git rev of this repo/flake into the nixos-version
     configurationRevision = if inputs.self ? rev then lib.substring 0 8 inputs.self.rev else "dirty";
 
@@ -122,16 +104,12 @@
       versionSuffix = lib.mkForce ".${inputs.nixpkgs.shortRev}-${config.system.configurationRevision}";
     };
 
-    rebuild.enableNg = true;
-
     tools.nixos-option.enable = false;
   };
 
   nix = {
-    package = pkgs.nixVersions.git;
-
     registry = {
-      fpletz.flake = inputs.self;
+      anderer.flake = inputs.self;
     };
 
     channel.enable = false;
@@ -145,7 +123,6 @@
 
     settings = {
       trusted-users = [
-        "nix-build"
         "@wheel"
       ];
       connect-timeout = 3;
@@ -172,7 +149,7 @@
       execWheelOnly = lib.mkDefault true;
     };
     acme = {
-      defaults.email = "fpletz@fnordicwalking.de";
+      defaults.email = "social.depots@posteo.de";
       acceptTerms = true;
     };
   };

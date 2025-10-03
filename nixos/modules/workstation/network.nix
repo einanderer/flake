@@ -26,6 +26,7 @@ in
       type = lib.types.listOf lib.types.str;
       default = [
         "٩(̾●̮̮̃̾•̃̾)۶"
+        "FBBadgR"
         "muccc"
         "muccc.v6"
       ];
@@ -149,7 +150,9 @@ in
       };
 
     sops.secrets = lib.mkIf config.networking.wireless.enable {
-      wifi = { };
+      wifi = {
+        sopsFile = ../../../secrets.yaml;
+      };
     };
 
     networking.wireless = {
@@ -169,8 +172,8 @@ in
           pskRaw = "ext:psk_٩(̾●̮̮̃̾•̃̾)۶";
           priority = 42;
         };
-        mobilpletz = {
-          pskRaw = "ext:psk_mobilpletz";
+        FBBadgR = {
+          pskRaw = "ext:psk_fbbadgr";
           priority = 42;
         };
         muccc = {
@@ -180,10 +183,6 @@ in
         "muccc.v6" = {
           pskRaw = "ext:psk_muccc";
           priority = 21;
-        };
-        echelon = {
-          pskRaw = "ext:psk_echelon";
-          priority = 5;
         };
         "muenchen.freifunk.net/muc_cty" = {
           priority = 21;
@@ -200,11 +199,6 @@ in
       };
     };
 
-    services.tailscale = {
-      enable = true;
-      openFirewall = true;
-    };
-
     services.avahi = {
       enable = lib.mkDefault true;
       ipv4 = true;
@@ -216,7 +210,6 @@ in
       trustedInterfaces = [
         "podman+"
         "virbr+"
-        "tailscale+"
         "ve-+"
         "vb-+"
         "vz-+"

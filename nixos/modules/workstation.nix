@@ -16,7 +16,7 @@ let
 in
 {
   options.bpletza.workstation = {
-    enable = mkEnableOption "fpletz workstation";
+    enable = mkEnableOption "andere workstation";
     battery = mkEnableOption "machine has battery";
     libvirt = mkOption {
       type = types.bool;
@@ -69,7 +69,6 @@ in
         "kernel.nmi_watchdog" = 0;
       };
       kernelParams = [ "snd_hda_intel.power_save=1" ];
-      kernelPackages = pkgs.linuxPackages-xanmod;
       loader.grub = {
         ipxe = {
           netbootxyz = ''
@@ -104,9 +103,6 @@ in
       ATTR{idVendor}=="1d50", ATTR{idProduct}=="cc15", SYMLINK+="rad1o-%k", TAG+="uaccess"
       ATTR{idVendor}=="1fc9", ATTR{idProduct}=="000c", SYMLINK+="nxp-dfu-%k", TAG+="uaccess"
 
-      # qmk macropad
-      ATTR{idVendor}=="f1f1", ATTR{idProduct}=="0315", SYMLINK+="winry315-%k", TAG+="uaccess"
-
       # console/modem
       KERNEL=="ttyACM[0-9]*", TAG+="udev-acl", TAG+="uaccess"
 
@@ -122,13 +118,13 @@ in
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="2ce3", ATTR{idProduct}=="9563", TEST=="power/control", ATTR{power/control}="auto"
 
       # Rule for when switching to battery
-      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="0", RUN+="${pkgs.systemd}/bin/systemd-run --machine=fpletz@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full 'Using battery power'"
+      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="0", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full 'Using battery power'"
       # Rule for when switching to AC
-      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="1", RUN+="${pkgs.systemd}/bin/systemd-run --machine=fpletz@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full-charging 'Using AC power'"
+      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="1", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full-charging 'Using AC power'"
 
       # Battery warnings
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="15", RUN+="${pkgs.systemd}/bin/systemd-run --machine=fpletz@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-low 'Battery Power Low' 'Less than 15%% battery remaining'"
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="5", RUN+="${pkgs.systemd}/bin/systemd-run --machine=fpletz@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-empty 'Battery Power Critical' 'Less than 5%% battery remaining'"
+      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="15", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-low 'Battery Power Low' 'Less than 15%% battery remaining'"
+      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="5", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-empty 'Battery Power Critical' 'Less than 5%% battery remaining'"
 
       # Suspend when battery is at 2%
       SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-2]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
@@ -370,7 +366,6 @@ in
       ];
     };
 
-    programs.adb.enable = pkgs.stdenv.hostPlatform.isx86_64;
     programs.dconf.enable = true;
     programs.iotop.enable = true;
     programs.iftop.enable = true;
@@ -382,29 +377,12 @@ in
     programs.flashrom.enable = true;
     programs.git.package = pkgs.git;
 
-    programs.gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-      enableExtraSocket = true;
-      enableBrowserSocket = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
-    };
-
     programs.nh.enable = true;
 
     programs.ssh.knownHosts = {
       "bauwagen.env.club.muc.ccc.de".publicKey =
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXa8mFvlyGE+zJv6u2SybG9+W/wA0FIkl7th45K6g80";
-      "build-box.nix-community.org".publicKey =
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElIQ54qAy7Dh63rBudYKdbzJHrrbrrMXLYl7Pkmk88H";
-      "aarch64-build-box.nix-community.org".publicKey =
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG9uyfhyli+BRtk64y+niqtb+sKquRGGZ87f4YRc8EE1";
-      "darwin-build-box.nix-community.org".publicKey =
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKMHhlcn7fUpUuiOFeIhDqBzBNFsbNqq+NpzuGX3e6zv";
-    }
-    // lib.genAttrs [ "zocknix" "zocknix.evs" ] (_: {
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFZwZu77INAei0k/SmiQU3F6a2iO6Pz17oxm7bHmoxTe";
-    });
+    };
 
     nix = {
       daemonCPUSchedPolicy = "idle";
@@ -412,21 +390,14 @@ in
       settings = {
         keep-outputs = lib.mkDefault true;
         keep-derivations = true;
-        substituters = lib.mkBefore [
-          "https://cache.muc.ccc.de/muccc"
-          "https://nixos.snix.store"
-        ];
-        trusted-public-keys = [
-          "muccc:prppkBGhfZZniZyY/x9KZS0AnjgBQ7Ds22KmCgu1GZI="
-        ];
       };
-      distributedBuilds = true;
+      distributedBuilds = false;
       buildMachines = [
         {
           hostName = "bauwagen.env.club.muc.ccc.de";
           protocol = "ssh-ng";
           sshUser = "nix-build";
-          sshKey = "/home/fpletz/.ssh/id_build";
+          sshKey = "/home/${config.bpletza.home.user}/.ssh/id_build";
           systems = [
             "i686-linux"
             "x86_64-linux"
@@ -438,52 +409,6 @@ in
           ];
           maxJobs = 24;
           speedFactor = 6;
-        }
-      ]
-      ++ lib.optionals (config.networking.hostName != "zocknix") [
-        {
-          hostName = "zocknix.evs";
-          protocol = "ssh-ng";
-          sshUser = "nix-build";
-          sshKey = "/home/fpletz/.ssh/id_build";
-          systems = [
-            "i686-linux"
-            "x86_64-linux"
-          ];
-          supportedFeatures = [
-            "kvm"
-            "big-parallel"
-            "nixos-test"
-          ];
-          maxJobs = 10;
-          speedFactor = 2;
-        }
-      ]
-      ++ [
-        {
-          hostName = "aarch64-build-box.nix-community.org";
-          protocol = "ssh-ng";
-          maxJobs = 8;
-          sshKey = "/home/fpletz/.ssh/id_build";
-          sshUser = "fpletz";
-          system = "aarch64-linux";
-          supportedFeatures = [
-            "kvm"
-            "big-parallel"
-            "nixos-test"
-          ];
-        }
-        {
-          hostName = "darwin-build-box.nix-community.org";
-          protocol = "ssh-ng";
-          maxJobs = 4;
-          sshKey = "/home/fpletz/.ssh/id_build";
-          sshUser = "fpletz";
-          system = "aarch64-darwin";
-          supportedFeatures = [
-            "kvm"
-            "big-parallel"
-          ];
         }
       ];
     };
@@ -499,11 +424,15 @@ in
       };
     };
 
-    services.syncthing = {
+    programs.steam = {
+      enable = cfg.gaming;
+      remotePlay.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
+    };
+
+    programs.appimage = {
       enable = true;
-      user = "fpletz";
-      dataDir = "/home/fpletz";
-      openDefaultPorts = true;
+      binfmt = true;
     };
 
     services.ollama = {

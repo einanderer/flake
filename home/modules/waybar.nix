@@ -19,7 +19,7 @@ in
   options.bpletza.workstation.waybar = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.wayland;
+      default = config.bpletza.workstation.sway;
     };
   };
 

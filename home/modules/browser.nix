@@ -35,8 +35,6 @@ in
   };
 
   config = lib.mkIf config.bpletza.workstation.browser {
-    programs.browserpass.enable = true;
-
     home.file = {
       ".librewolf/default/chrome" = {
         source = "${inputs.potatofox}/chrome";
@@ -92,7 +90,6 @@ in
 
     programs.chromium = {
       enable = true;
-      package = pkgs.ungoogled-chromium;
       commandLineArgs = [
         "--enable-features=WebRTCPipeWireCapturer,VaapiVideoDecoder,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL"
         "--ignore-gpu-blocklist"
@@ -107,13 +104,8 @@ in
         "--ozone-platform-hint=auto"
       ];
       extensions = [
-        {
-          id = "ocaahdebbfolfmndjeplogmgcagdmblk";
-          updateUrl = "https://raw.githubusercontent.com/NeverDecaf/chromium-web-store/master/updates.xml";
-        }
         "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
         "pgdnlhfefecpicbbihgmbmffkjpaplco" # ublock extra
-        "naepdomgkenhinolocfifgehidddafch" # browserpass
       ];
     };
 

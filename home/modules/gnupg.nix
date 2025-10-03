@@ -2,7 +2,7 @@
 {
   options.bpletza.workstation.gnupg = lib.mkOption {
     type = lib.types.bool;
-    default = true;
+    default = false;
   };
 
   config = lib.mkIf config.bpletza.workstation.gnupg {

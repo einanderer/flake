@@ -6,13 +6,13 @@
       inherit (inputs.home-manager.lib) homeManagerConfiguration;
     in
     {
-      fpletz = homeManagerConfiguration {
+      anderer = homeManagerConfiguration {
         pkgs = import inputs.nixpkgs { };
         extraSpecialArgs = {
           inherit inputs;
           osConfig = { };
         };
-        modules = [ ./fpletz.nix ];
+        modules = [ ./anderer.nix ];
       };
     };
 }

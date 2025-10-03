@@ -10,7 +10,7 @@
   config = lib.mkIf config.services.systemd-lock-handler.enable {
     systemd.user.services.systemd-lock-handler = {
       Service = {
-        ExecStart = "${pkgs.systemd-lock-handler}/bin/systemd-lock-handler";
+        ExecStart = "${pkgs.systemd-lock-handler}/lib/systemd-lock-handler";
         Slice = "session.slice";
         Type = "notify";
         Restart = "on-failure";

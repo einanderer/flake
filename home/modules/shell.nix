@@ -168,7 +168,6 @@
         ];
         auto_sync = false;
         sync.records = true;
-        cwd_filter = [ "^/home/fpletz/.password-store" ];
       };
     };
 

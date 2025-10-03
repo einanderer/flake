@@ -61,16 +61,11 @@ in
       extraPackages = [ ];
     };
 
-    programs.niri.enable = true;
-    services.gnome.gnome-keyring.enable = false; # set by niri NixOS module
-
     qt = {
       enable = true;
       platformTheme = "gtk2";
       style = "gtk2";
     };
-
-    environment.systemPackages = [ pkgs.xwayland-satellite ];
 
     services.desktopManager.cosmic.enable = true;
     networking.networkmanager.enable = false; # set by cosmic

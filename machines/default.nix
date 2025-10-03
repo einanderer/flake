@@ -5,7 +5,6 @@
   ...
 }:
 {
-  # FIXME: these are only used for testing, not for actual deployment
   flake.nixosConfigurations =
     let
       nixos =
@@ -48,60 +47,14 @@
         };
       };
 
-      ananas = nixos {
+      trolllollo = nixos {
         system = "x86_64-linux";
-        module = import ./ananas.nix;
+        module = import ./trolllollo.nix;
       };
 
-      hal = nixos {
-        system = "aarch64-linux";
-        module = {
-          networking.hostName = "hal";
-          fileSystems."/" = {
-            device = "/dev/disk/by-label/nixos";
-            fsType = "ext4";
-          };
-          boot.loader = {
-            grub.enable = false;
-            generic-extlinux-compatible.enable = true;
-          };
-        };
-      };
-
-      fpine = nixos {
-        system = "aarch64-linux";
-        module = import ./fpine.nix;
-      };
-
-      trolovo = nixos {
+      amateur = nixos {
         system = "x86_64-linux";
-        module = import ./trolovo.nix;
-      };
-
-      lolnovo = nixos {
-        system = "x86_64-linux";
-        module = import ./lolnovo.nix;
-      };
-
-      zocknix = nixos {
-        system = "x86_64-linux";
-        module = {
-          networking.hostName = "zocknix";
-          fileSystems."/" = {
-            device = "/dev/disk/by-label/nixos";
-            fsType = "ext4";
-          };
-          boot.loader.systemd-boot = {
-            enable = true;
-          };
-
-          bpletza.hardware.cpu.amd = true;
-          bpletza.workstation = {
-            enable = true;
-            nvidia = true;
-            gaming = true;
-          };
-        };
+        module = import ./amateur.nix;
       };
     };
 }

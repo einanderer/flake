@@ -1,26 +1,15 @@
 creation_rules:
   - path_regex: secrets\.yaml$
     key_groups:
-      - pgp:
-          - 8A39615DCE78AF082E23F303846FDED7792617B4
-        age:
-          - age1sj6kx043vqxcet6fv05mzjs9umpd0yu4xfln99yh8jpkt07w3e6sf9rzxh
-          # lolnovo
-          - age1wcv25mzhklymfkn390qctufd3txrwzhhcj6q9ry9rgvs49e96pmqtgd2tl
-          # trolovo
-          - age1yc7l65hju8jagmh2dk63tteaykcvpzq6ntjyacm8nwkvjzhp5ugqsz0ext
-          # zocknix
-          - age1c3q8neuw3zrty97wkr5txqx4amydwn3d4h2uwc2zcpwcp3dcs3aq252etp
-          # ananas
-          - age108jh49zkvddns9xr4trcagpjdgxjlejyq0sjjhltgm5w56w8k33qxfntqy
-          # fpine
-          - age188sr0u38tlckq5qfpmyvdgfae8lnwvm4egyngf453pmz4h8m9fpsa8pzql
-  - path_regex: secrets\/trolovo\.yaml$
+      - age:
+        #anderer (Ich)
+        - age1grgn2qn6ajs6n64q5rnwg8nna0v8a3lzgrvaezp9xjcv675cuqhsthfta5
+        #trolllollo (Rechner)
+        - age1u6s4rlxc9mjm9d077qkvxakk6drpyrxpm0sfye286whnv4vywa5qyu3pqn
+  - path_regex: trolllollo\.yaml$
     key_groups:
-      - pgp:
-          - 8A39615DCE78AF082E23F303846FDED7792617B4
-        age:
-          - age1sj6kx043vqxcet6fv05mzjs9umpd0yu4xfln99yh8jpkt07w3e6sf9rzxh
-          - age10m6nkz6fngkeygfnsf4xkwx43qjt0lkefrzl2fntsma0ul8e5czs4qk9u2
-          # trolovo
-          - age1yc7l65hju8jagmh2dk63tteaykcvpzq6ntjyacm8nwkvjzhp5ugqsz0ext
+      - age:
+        #anderer (Ich)
+        - age1grgn2qn6ajs6n64q5rnwg8nna0v8a3lzgrvaezp9xjcv675cuqhsthfta5
+        #trolllollo (Rechner)
+        - age1u6s4rlxc9mjm9d077qkvxakk6drpyrxpm0sfye286whnv4vywa5qyu3pqn

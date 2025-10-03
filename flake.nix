@@ -1,5 +1,5 @@
 {
-  description = "fpletz flake";
+  description = "andere flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
@@ -82,24 +82,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixd = {
-      url = "github:nix-community/nixd";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
-        flake-root.follows = "flake-root";
-        treefmt-nix.follows = "treefmt-nix";
-      };
-    };
-
-    openwrt-imagebuilder = {
-      url = "github:Astro/nix-openwrt-imagebuilder";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
-      };
-    };
-
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs = {
@@ -124,7 +106,6 @@
       imports = [
         inputs.flake-root.flakeModule
         ./pkgs
-        ./openwrt
         ./machines
         ./home
         ./nixos

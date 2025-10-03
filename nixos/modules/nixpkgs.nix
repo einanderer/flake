@@ -20,6 +20,9 @@ in
       "spotify"
       "steam"
       "steam-unwrapped"
+      "1password"
+      "1password-cli"
+      "intel-ocl"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;
