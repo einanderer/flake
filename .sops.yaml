@@ -6,6 +6,8 @@ creation_rules:
         - age1grgn2qn6ajs6n64q5rnwg8nna0v8a3lzgrvaezp9xjcv675cuqhsthfta5
         #trolllollo (Rechner)
         - age1u6s4rlxc9mjm9d077qkvxakk6drpyrxpm0sfye286whnv4vywa5qyu3pqn
+        #amateur
+        - age1984nv4lw3yt2df2h9ys4m0rtc98ypcv5fy8fyft8gtlasceg3ctqkn2djz
   - path_regex: trolllollo\.yaml$
     key_groups:
       - age:

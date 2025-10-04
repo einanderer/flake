@@ -9,6 +9,9 @@
   options.bpletza.hardware.gpu.amd = lib.mkEnableOption "AMD GPUs";
 
   config = lib.mkIf config.bpletza.hardware.gpu.amd {
+
+    boot.initrd.kernelModules = [ "amdgpu" ];
+
     hardware.amdgpu = {
       opencl.enable = false;
       initrd.enable = true;

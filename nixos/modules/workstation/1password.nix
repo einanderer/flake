@@ -18,11 +18,9 @@ in
       enable = true;
       polkitPolicyOwners = [ "anderer" ];
     };
-    programs.ssh = {
-      extraConfig = ''
-        Host *
-            IdentityAgent /home/anderer/.1password/agent.sock
-      '';
+    
+    environment.variables = {
+      SSH_AUTH_SOCK = "~/.1password/agent.sock";
     };
   };
 }
