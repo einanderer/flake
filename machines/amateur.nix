@@ -7,13 +7,13 @@
   system.stateVersion = "25.05";
 
   time.timeZone = "Europe/Berlin";
-  
+
   hardware.firmware = [
     pkgs.linux-firmware
     pkgs.alsa-firmware
   ];
 
-boot.initrd.availableKernelModules = [
+  boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"
     "ahci"
@@ -72,6 +72,20 @@ boot.initrd.availableKernelModules = [
 
   networking.hostName = "amateur"; # Define your hostname.
 
+  programs.coolercontrol.enable = true;
+  services.lact.enable = true;
+
+  home-manager.sharedModules = [
+    {
+      programs.waybar.settings.mainBar.temperature = {
+        hwmon-path-abs = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5";
+        input-filename = "temp1_input";
+        warning-threshold = 80;
+        critical-threshold = 90;
+      };
+    }
+  ];
+
   bpletza.hardware = {
     cpu.amd = true;
     gpu.amd = true;
@@ -85,7 +99,4 @@ boot.initrd.availableKernelModules = [
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 2160;
   };
-
-  programs.coolercontrol.enable = true;
-  services.lact.enable = true;
 }

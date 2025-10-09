@@ -49,8 +49,16 @@ in
         git-remote-gcrypt
         rclone
 
-        # GUI
+        # Anderer Packages
+        fluffychat
+        legcord
         heroic
+        protonup-qt
+        kdePackages.qtsvg
+        kdePackages.dolphin
+        haruna
+
+        # GUI
         remmina
         virt-manager
         virt-viewer

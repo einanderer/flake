@@ -428,7 +428,9 @@ in
       enable = cfg.gaming;
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
+      gamescopeSession.enable = true;
     };
+    programs.gamescope.enable = cfg.gaming;
 
     programs.appimage = {
       enable = true;

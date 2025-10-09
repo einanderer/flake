@@ -83,7 +83,6 @@ in
       };
     };
 
-    # Eigene Monitor Setting und Anordnung anpassen wenn du sway benutzen willst
     services.shikane = {
       enable = true;
       settings =
@@ -91,14 +90,19 @@ in
           internalDisplay = [ "n=${oscfg.internalDisplay}" ];
           allOutputs = [ "n/HDMI-[A-Z]-[1-9]+" ];
           homeLeft = [
-            "v=Dell Inc."
-            "m=DELL U2520D"
-            "s=8KQLGZ2"
+            "v=BNQ"
+            "m=BenQ EL2870U"
+            "s=38L05701SL0"
           ];
           homeRight = [
-            "v=Dell Inc."
-            "m=DELL U2520D"
-            "s=79PLGZ2"
+            "v=BNQ"
+            "m=BenQ EX2780Q"
+            "s=E7M05692019"
+          ];
+          homeTV = [
+            "v=Samsung Electric Company"
+            "m=SAMSUNG"
+            "s=0x00000001"
           ];
           muccc1 = [
             "v=AOC"
@@ -125,7 +129,13 @@ in
                 {
                   search = homeRight;
                   enable = true;
-                  position.x = 2560;
+                  position.x = 3840;
+                  position.y = 0;
+                }
+                {
+                  search = homeTV;
+                  enable = false;
+                  position.x = 6400;
                   position.y = 0;
                 }
               ];
