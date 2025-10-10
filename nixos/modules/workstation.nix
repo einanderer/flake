@@ -379,8 +379,10 @@ in
     programs.nh.enable = true;
 
     programs.ssh.knownHosts = {
-      "bauwagen.env.club.muc.ccc.de".publicKey =
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXa8mFvlyGE+zJv6u2SybG9+W/wA0FIkl7th45K6g80";
+      # "bauwagen.env.club.muc.ccc.de".publicKey =
+      # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFXa8mFvlyGE+zJv6u2SybG9+W/wA0FIkl7th45K6g80";
+      "10.0.0.50".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIxLv1bbV62V1t4k2rUjITBlPPgTiBvmPDAwzWTJq0QH root@nixos";
     };
 
     nix = {
@@ -390,13 +392,30 @@ in
         keep-outputs = lib.mkDefault true;
         keep-derivations = true;
       };
-      distributedBuilds = false;
+      distributedBuilds = true;
       buildMachines = [
+        # {
+        #   hostName = "bauwagen.env.club.muc.ccc.de";
+        #   protocol = "ssh-ng";
+        #   sshUser = "nix-build";
+        #   sshKey = "/home/${config.bpletza.home.user}/.ssh/id_build";
+        #   systems = [
+        #     "i686-linux"
+        #     "x86_64-linux"
+        #   ];
+        #   supportedFeatures = [
+        #     "kvm"
+        #     "big-parallel"
+        #     "nixos-test"
+        #   ];
+        #   maxJobs = 24;
+        #   speedFactor = 6;
+        # }
         {
-          hostName = "bauwagen.env.club.muc.ccc.de";
+          hostName = "10.0.0.50";
           protocol = "ssh-ng";
           sshUser = "nix-build";
-          sshKey = "/home/${config.bpletza.home.user}/.ssh/id_build";
+          sshKey = "/home/${config.bpletza.home.user}/.ssh/bauwagen_ed25519";
           systems = [
             "i686-linux"
             "x86_64-linux"

@@ -88,10 +88,19 @@
 
   users = {
     mutableUsers = false;
-    users.root = {
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwg1laitTiNQACiFHgUvm4PYT1b3Fug7hmzFlxlrII+ deployment-19-12-2024"
-      ];
+    users = {
+      nix-build = {
+        uid = 1100;
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILlbG1MLUOzT5tS58v8yjahaEd/+dX+SMcztQ29yxr6F"
+        ];
+      };
+      root = {
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwg1laitTiNQACiFHgUvm4PYT1b3Fug7hmzFlxlrII+ deployment-19-12-2024"
+        ];
+      };
     };
   };
 
