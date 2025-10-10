@@ -25,7 +25,6 @@ in
 
   config = {
     systemd.user.services.waybar.Install.WantedBy = [
-      "niri.service"
       "sway-session.target"
     ];
 
@@ -40,7 +39,6 @@ in
         position = "top";
         reload_style_on_change = true;
         modules-left = [
-          "niri/workspaces"
           "sway/workspaces"
           "sway/mode"
           "idle_inhibitor"
@@ -118,8 +116,8 @@ in
             ""
             ""
           ];
-          on-scroll-up = "${lib.getExe pkgs.light} -A 5";
-          on-scroll-down = "${lib.getExe pkgs.light} -U 5";
+          on-scroll-up = "swayosd-client --brightness raise";
+          on-scroll-down = "swayosd-client --brightness lower";
         };
         power-profiles-daemon = {
           format-icons = {

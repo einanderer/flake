@@ -16,7 +16,7 @@ let
 in
 {
   options.bpletza.workstation = {
-    enable = mkEnableOption "andere workstation";
+    enable = mkEnableOption "${config.bpletza.home.user} workstation";
     battery = mkEnableOption "machine has battery";
     libvirt = mkOption {
       type = types.bool;
@@ -195,6 +195,7 @@ in
     };
     services.geoclue2.enable = lib.mkForce false;
     services.udisks2.enable = true;
+    services.gnome.gnome-keyring.enable = false;
 
     services.logind = {
       settings = {
@@ -222,7 +223,6 @@ in
     hardware.graphics = {
       enable = true;
       extraPackages = lib.optionals (pkgs.stdenv.hostPlatform.isx86) [
-        pkgs.libvdpau-va-gl
         pkgs.vulkan-validation-layers
       ];
       enable32Bit = pkgs.stdenv.hostPlatform.isx86_64 && cfg.gaming;
@@ -297,7 +297,6 @@ in
     environment.systemPackages = [
       pkgs.alsa-utils
       pkgs.pulsemixer
-      pkgs.pamixer
       pkgs.wiremix
       pkgs.efibootmgr
     ]
