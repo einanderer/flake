@@ -96,7 +96,6 @@ in
       });
       inherit policies;
       nativeMessagingHosts = [
-        pkgs.keepassxc
         pkgs.tridactyl-native
       ];
     };
