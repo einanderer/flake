@@ -55,6 +55,11 @@
           zvm_after_init_commands+=(eval "$(atuin init zsh)")
           zvm_after_init_commands+=(eval "bindkey -M vicmd '^r' atuin-search-vicmd")
         '')
+        ''
+          if [ -n "SSH_CONNECTION" ]; then
+            export SSH_AUTH_SOCK=
+          fi
+        ''
       ];
       plugins = [
         {

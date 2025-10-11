@@ -56,5 +56,10 @@
         system = "x86_64-linux";
         module = import ./amateur.nix;
       };
+
+      tentacle = nixos {
+        system = "x86_64-linux";
+        module = import ./tentacle.nix;
+      };
     };
 }
