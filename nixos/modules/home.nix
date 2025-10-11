@@ -62,6 +62,7 @@ in
           "input"
           "podman"
           "systemd-journal"
+          "hardinfo2"
         ];
         home = "/home/${cfg.user}";
         shell = "/run/current-system/sw/bin/zsh";

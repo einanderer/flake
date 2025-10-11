@@ -132,6 +132,7 @@
 
     settings = {
       trusted-users = [
+        "nix-build"
         "@wheel"
       ];
       connect-timeout = 3;

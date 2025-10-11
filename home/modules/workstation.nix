@@ -58,6 +58,8 @@ in
         kdePackages.qtsvg
         kdePackages.dolphin
         haruna
+        hardinfo2
+        geekbench
 
         # GUI
         remmina
