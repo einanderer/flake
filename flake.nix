@@ -93,6 +93,11 @@
       url = "git+https://codeberg.org/awwpotato/potatofox";
       flake = false;
     };
+
+    chaotic = {
+      url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

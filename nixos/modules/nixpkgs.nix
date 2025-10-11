@@ -25,6 +25,7 @@ in
       "intel-ocl"
       "geekbench"
       "rustdesk"
+      "libsciter"
       "unigine-valley"
       "unigine-heaven"
       "unigine-tropics"

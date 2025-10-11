@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 
@@ -69,6 +70,7 @@
   };
 
   boot.loader.systemd-boot.enable = true;
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
   networking.hostName = "amateur"; # Define your hostname.
 
@@ -85,6 +87,8 @@
       };
     }
   ];
+
+  chaotic.hdr.enable = true;
 
   bpletza.hardware = {
     cpu.amd = true;
