@@ -25,6 +25,11 @@ in
       "intel-ocl"
       "geekbench"
       "rustdesk"
+      "unigine-valley"
+      "unigine-heaven"
+      "unigine-tropics"
+      "unigine-sanctuary"
+      "unigine-superposition"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;

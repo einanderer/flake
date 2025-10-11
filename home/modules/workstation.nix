@@ -61,6 +61,11 @@ in
         hardinfo2
         geekbench
         rustdesk
+        unigine-valley
+        unigine-heaven
+        unigine-tropics
+        unigine-sanctuary
+        unigine-superposition
 
         # GUI
         remmina
