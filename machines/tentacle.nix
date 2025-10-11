@@ -235,6 +235,11 @@
     };
   };
 
+  services.rustdesk-server = {
+    enable = true;
+    openFirewall = true;
+  };
+
   services.nginx = {
     enable = true;
     statusPage = true;

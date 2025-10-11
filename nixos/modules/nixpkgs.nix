@@ -24,6 +24,7 @@ in
       "1password-cli"
       "intel-ocl"
       "geekbench"
+      "rustdesk"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;

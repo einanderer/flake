@@ -60,6 +60,7 @@ in
         haruna
         hardinfo2
         geekbench
+        rustdesk
 
         # GUI
         remmina
