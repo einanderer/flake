@@ -90,6 +90,28 @@
 
   chaotic.hdr.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    # Benchmark
+    hardinfo2
+    geekbench
+    unigine-valley
+    unigine-heaven
+    unigine-tropics
+    unigine-sanctuary
+    unigine-superposition
+    # ChaoticFlake
+    proton-cachyos
+    # Gaming
+    heroic
+    protonup-qt
+    # Tools
+    fluffychat
+    legcord
+    kdePackages.qtsvg
+    kdePackages.dolphin
+    rustdesk
+  ];
+
   bpletza.hardware = {
     cpu.amd = true;
     gpu.amd = true;

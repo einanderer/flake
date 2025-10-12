@@ -50,23 +50,6 @@ in
         rclone
         wiremix
 
-        # Anderer Packages
-        fluffychat
-        legcord
-        heroic
-        protonup-qt
-        kdePackages.qtsvg
-        kdePackages.dolphin
-        haruna
-        hardinfo2
-        geekbench
-        rustdesk
-        unigine-valley
-        unigine-heaven
-        unigine-tropics
-        unigine-sanctuary
-        unigine-superposition
-
         # GUI
         remmina
         virt-manager
