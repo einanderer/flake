@@ -238,6 +238,7 @@
   services.rustdesk-server = {
     enable = true;
     openFirewall = true;
+    signal.relayHosts = [ "tentacle.tagesthe.men" ];
   };
 
   services.nginx = {
