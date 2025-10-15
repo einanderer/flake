@@ -113,13 +113,14 @@ in
                 {
                   search = homeLeft;
                   enable = true;
+                  scale = 1.5;
                   position.x = 0;
                   position.y = 0;
                 }
                 {
                   search = homeRight;
                   enable = true;
-                  position.x = 3840;
+                  position.x = 2560;
                   position.y = 0;
                 }
                 {

@@ -444,6 +444,9 @@ in
 
     programs.steam = {
       enable = cfg.gaming;
+      extraCompatPackages = with pkgs; [
+        proton-cachyos
+      ];
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
       gamescopeSession.enable = true;
