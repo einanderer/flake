@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   ...
 }:
 
@@ -66,6 +67,10 @@
     };
     firewall.allowedUDPPorts = [ 52342 ];
   };
+
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+  ];
 
   bpletza.hardware.thinkpad.t470s = true;
   bpletza.secureboot = false;
