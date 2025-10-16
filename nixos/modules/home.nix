@@ -34,7 +34,7 @@ in
       neededForUsers = true;
     };
 
-    home-manager = lib.mkIf (!config.boot.isContainer) {
+    home-manager = lib.mkIf (!config.boot.isContainer && config.bpletza.workstation.enable) {
       useGlobalPkgs = true;
       useUserPackages = true;
       users.${cfg.user} = ../../home/${cfg.user}.nix;
