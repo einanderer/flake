@@ -22,7 +22,16 @@
     "usb_storage"
     "sd_mod"
   ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "coretemp"
+    "it87"
+  ];
+  #boot.extraModprobeConfig = ''
+  #  options it87 force_id=0x8689
+  #  options it87 force_id=0x8795
+  #'';
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/91848f23-e272-42ff-8120-5d052957a589";
@@ -128,6 +137,7 @@
     heroic
     #protonup-qt
     # Tools
+    liquidctl
     qpwgraph
     fluffychat
     legcord
