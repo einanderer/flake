@@ -126,11 +126,27 @@ in
                 {
                   search = homeTV;
                   enable = false;
-                  position.x = 6400;
+                }
+              ];
+            }
+            {
+              name = "homeTV";
+              output = [
+                {
+                  search = homeLeft;
+                  enable = true;
+                  position.x = 1920;
+                  position.y = 0;
+                }
+                {
+                  search = homeTV;
+                  enable = true;
+                  position.x = 0;
                   position.y = 0;
                 }
               ];
             }
+
           ]
           ++ lib.optionals (oscfg.internalDisplay != null) [
             {
@@ -165,6 +181,28 @@ in
                 }
               ];
             }
+            {
+              name = "builtin-home";
+              output = [
+                {
+                  search = homeLeft;
+                  enable = true;
+                  position.x = 0;
+                  position.y = 0;
+                }
+                {
+                  search = homeRight;
+                  enable = true;
+                  position.x = 3840;
+                  position.y = 0;
+                }
+                {
+                  search = internalDisplay;
+                  enable = false;
+                }
+              ];
+            }
+
             {
               name = "muccc-hauptraum1";
               output = [

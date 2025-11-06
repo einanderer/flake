@@ -70,6 +70,7 @@
 
   environment.systemPackages = with pkgs; [
     moonlight-qt
+    rustdesk
   ];
 
   bpletza.hardware.thinkpad.t470s = true;

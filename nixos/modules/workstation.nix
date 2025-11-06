@@ -92,10 +92,11 @@ in
       settings.Manager.DefaultTimeoutStopSec = "20s";
     };
 
-    services.udev.packages = with pkgs; [
-      # platformio
-      android-udev-rules
-    ];
+    #services.udev.packages = with pkgs; [
+    # platformio
+    # #Kaputt gegangen mit update vom 23.11.25
+    # android-udev-rules
+    #];
     services.udev.extraRules = ''
       # SDRs
       ATTR{idVendor}=="1d50", ATTR{idProduct}=="604b", SYMLINK+="hackrf-jawbreaker-%k", TAG+="uaccess"
@@ -353,7 +354,7 @@ in
         font-awesome_5
         font-awesome_6
         b612
-        ubuntu_font_family
+        ubuntu-classic
         noto-fonts
         fira-code
         fira-mono

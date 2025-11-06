@@ -6,7 +6,8 @@
 }:
 {
   home.packages = lib.optionals config.bpletza.workstation.enable [
-    pkgs.gitAndTools.tig
+    #entfallen mit update vom 30.11.2025
+    #pkgs.gitAndTools.tig
     pkgs.git-absorb
   ];
 

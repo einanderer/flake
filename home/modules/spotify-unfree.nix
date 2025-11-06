@@ -20,7 +20,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.spicetify =
       let
-        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+        spicePkgs = inputs.spicetify-nix.legacyPackages.x86_64-linux;
+        #spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
       in
       {
         enable = true;
