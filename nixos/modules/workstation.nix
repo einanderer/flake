@@ -92,11 +92,6 @@ in
       settings.Manager.DefaultTimeoutStopSec = "20s";
     };
 
-    #services.udev.packages = with pkgs; [
-    # platformio
-    # #Kaputt gegangen mit update vom 23.11.25
-    # android-udev-rules
-    #];
     services.udev.extraRules = ''
       # SDRs
       ATTR{idVendor}=="1d50", ATTR{idProduct}=="604b", SYMLINK+="hackrf-jawbreaker-%k", TAG+="uaccess"
@@ -109,6 +104,13 @@ in
 
       # pci runtime power management
       ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
+
+      # Keychron Q3 HE
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b30", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+      # Keychron Q3 HE stm bootloader
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+      # Keychron-Link
+      SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", MODE="0666", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
     ''
     + (lib.optionalString cfg.battery ''
       ACTION=="add|move", SUBSYSTEM=="net", ENV{INTERFACE}=="enp*", RUN+="${lib.getExe pkgs.ethtool} -s %k wol d"

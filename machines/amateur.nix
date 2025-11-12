@@ -5,6 +5,11 @@
 }:
 
 {
+  ##temoporär damits baut
+  #nixpkgs.config.permittedInsecurePackages = [
+  #  "electron-36.9.5"
+  #];
+
   system.stateVersion = "25.05";
 
   time.timeZone = "Europe/Berlin";
@@ -97,7 +102,7 @@
     }
   ];
 
-  chaotic.hdr.enable = false;
+  chaotic.hdr.enable = true;
 
   services.sunshine = {
     enable = true;
