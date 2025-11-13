@@ -108,7 +108,45 @@ in
         {
           profile = [
             {
-              name = "home";
+              name = "homeBenQ28";
+              output = [
+                {
+                  search = homeLeft;
+                  enable = true;
+                  position.x = 0;
+                  position.y = 0;
+                }
+                {
+                  search = homeRight;
+                  enable = false;
+                }
+                {
+                  search = homeTV;
+                  enable = false;
+                }
+              ];
+            }
+            {
+              name = "homeBenQ27";
+              output = [
+                {
+                  search = homeLeft;
+                  enable = false;
+                }
+                {
+                  search = homeRight;
+                  enable = true;
+                  position.x = 0;
+                  position.y = 0;
+                }
+                {
+                  search = homeTV;
+                  enable = false;
+                }
+              ];
+            }
+            {
+              name = "homeBenQAll";
               output = [
                 {
                   search = homeLeft;
@@ -137,6 +175,10 @@ in
                   enable = true;
                   position.x = 1920;
                   position.y = 0;
+                }
+                {
+                  search = homeRight;
+                  enable = false;
                 }
                 {
                   search = homeTV;
