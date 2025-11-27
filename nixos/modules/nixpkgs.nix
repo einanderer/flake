@@ -24,7 +24,6 @@ in
       "1password-cli"
       "intel-ocl"
       "geekbench"
-      "rustdesk"
       "libsciter"
       "unigine-valley"
       "unigine-heaven"

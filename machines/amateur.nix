@@ -148,7 +148,6 @@
     legcord
     kdePackages.qtsvg
     kdePackages.dolphin
-    rustdesk
   ];
 
   bpletza.hardware = {
