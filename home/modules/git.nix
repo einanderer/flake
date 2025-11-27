@@ -19,7 +19,7 @@
       "*.pdf diff=pdf"
     ];
     ignores = [ ".direnv" ];
-    extraConfig = {
+    settings = {
       user = {
         name = "einanderer";
         email = "social.depot@posteo.de";
@@ -96,24 +96,26 @@
           title-blur = "black blue";
         };
       };
-    };
-    aliases = {
-      bp = "cherry-pick -x";
-      co = "commit -v";
-      cpa = "cherry-pick --abort";
-      cpc = "cherry-pick --continue";
-      pfush = "push --force-with-lease --force-if-includes";
-      recommit = "!git commit -eF $(git rev-parse --git-dir)/COMMIT_EDITMSG";
-      blame = "-w -M";
-      pr = "!\"pr() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; pr\"";
-    };
-    delta = {
-      enable = true;
-      options = {
-        dark = true;
-        line-numbers = false;
-        hyperlinks = true;
+      alias = {
+        bp = "cherry-pick -x";
+        co = "commit -v";
+        cpa = "cherry-pick --abort";
+        cpc = "cherry-pick --continue";
+        pfush = "push --force-with-lease --force-if-includes";
+        recommit = "!git commit -eF $(git rev-parse --git-dir)/COMMIT_EDITMSG";
+        blame = "-w -M";
+        pr = "!\"pr() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; pr\"";
       };
+    };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      dark = true;
+      line-numbers = false;
+      hyperlinks = true;
     };
   };
 

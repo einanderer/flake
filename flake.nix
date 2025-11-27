@@ -49,8 +49,6 @@
       url = "github:nix-community/lanzaboote/master";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
-        pre-commit-hooks-nix.follows = "git-hooks";
       };
     };
 

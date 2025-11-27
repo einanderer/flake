@@ -50,6 +50,7 @@
       fontconfig.enable = lib.mkDefault false;
       sxiv.enable = false;
       gnome-text-editor.enable = false;
+      librewolf.profileNames = [ "7wx2c1if.default" ];
     };
   };
 

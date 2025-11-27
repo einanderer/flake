@@ -41,6 +41,7 @@ in
       extraSpecialArgs = {
         inherit inputs;
       };
+      backupFileExtension = "hm_backup";
     };
 
     users = {
