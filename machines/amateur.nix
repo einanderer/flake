@@ -132,14 +132,16 @@
   environment.systemPackages = with pkgs; [
     # Benchmark
     hardinfo2
-    geekbench
-    unigine-valley
-    unigine-heaven
-    unigine-tropics
-    unigine-sanctuary
-    unigine-superposition
+    #geekbench
+    #unigine-valley
+    #unigine-heaven
+    #unigine-tropics
+    #unigine-sanctuary
+    #unigine-superposition
     # Gaming
     heroic
+    dosbox-x
+    ryubing
     #protonup-qt
     # Tools
     liquidctl
