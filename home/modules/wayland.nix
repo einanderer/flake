@@ -116,32 +116,16 @@ in
                   position.x = 0;
                   position.y = 0;
                 }
-                {
-                  search = homeRight;
-                  enable = false;
-                }
-                {
-                  search = homeTV;
-                  enable = false;
-                }
               ];
             }
             {
               name = "homeBenQ27";
               output = [
                 {
-                  search = homeLeft;
-                  enable = false;
-                }
-                {
                   search = homeRight;
                   enable = true;
                   position.x = 0;
                   position.y = 0;
-                }
-                {
-                  search = homeTV;
-                  enable = false;
                 }
               ];
             }
@@ -161,10 +145,6 @@ in
                   position.x = 2560;
                   position.y = 0;
                 }
-                {
-                  search = homeTV;
-                  enable = false;
-                }
               ];
             }
             {
@@ -173,12 +153,9 @@ in
                 {
                   search = homeLeft;
                   enable = true;
+                  scale = 1.5;
                   position.x = 1920;
                   position.y = 0;
-                }
-                {
-                  search = homeRight;
-                  enable = false;
                 }
                 {
                   search = homeTV;
@@ -229,22 +206,20 @@ in
                 {
                   search = homeLeft;
                   enable = true;
+                  mode.width = 2560;
+                  mode.height = 1440;
                   position.x = 0;
                   position.y = 0;
                 }
                 {
-                  search = homeRight;
-                  enable = true;
-                  position.x = 3840;
-                  position.y = 0;
-                }
-                {
                   search = internalDisplay;
-                  enable = false;
+                  enable = true;
+                  scale = lib.mkIf (!isNull oscfg.displayScale) oscfg.displayScale;
+                  position.x = 2560;
+                  position.y = 0;
                 }
               ];
             }
-
             {
               name = "muccc-hauptraum1";
               output = [
