@@ -36,6 +36,7 @@
   environment.systemPackages = with pkgs; [
     # system
     molly-guard
+    gitui
     # introspection
     bottom
     perf-tools
