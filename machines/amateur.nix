@@ -150,6 +150,8 @@
     legcord
     kdePackages.qtsvg
     kdePackages.dolphin
+    # KI Foo
+    code-cursor
   ];
 
   bpletza.hardware = {
