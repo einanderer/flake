@@ -139,9 +139,11 @@
     #unigine-sanctuary
     #unigine-superposition
     # Gaming
+    wine
     heroic
     dosbox-x
     ryubing
+    lutris-free
     #protonup-qt
     # Tools
     liquidctl
