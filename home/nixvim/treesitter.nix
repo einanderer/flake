@@ -60,7 +60,7 @@
         jq
         json
         json5
-        jsonc
+        #jsonc ♯failed
         jsonnet
         just
         kcl
@@ -90,7 +90,7 @@
         python
         regex
         requirements
-        robots
+        #robots #failed
         ron
         ruby
         rust
