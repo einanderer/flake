@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 
@@ -84,7 +83,7 @@
   };
 
   boot.loader.systemd-boot.enable = true;
-  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
+  #boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
   networking.hostName = "amateur"; # Define your hostname.
 
@@ -102,7 +101,7 @@
     }
   ];
 
-  chaotic.hdr.enable = true;
+  #chaotic.hdr.enable = true;
 
   services.sunshine = {
     enable = true;
@@ -149,6 +148,7 @@
     liquidctl
     qpwgraph
     fluffychat
+    element-desktop
     legcord
     kdePackages.qtsvg
     kdePackages.dolphin
