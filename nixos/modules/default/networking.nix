@@ -22,9 +22,11 @@
 
   services.resolved = {
     llmnr = "false";
-    extraConfig = ''
-      MulticastDNS=false
-      Cache=no-negative
-    '';
+    settings = {
+      "Resolve" = {
+        "MulticastDNS" = "false";
+        "Cache" = "no-negative";
+      };
+    };
   };
 }
