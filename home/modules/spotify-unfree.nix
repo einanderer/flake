@@ -24,7 +24,7 @@ in
         #spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
       in
       {
-        enable = true;
+        enable = false;
         enabledExtensions = with spicePkgs.extensions; [
           adblock
           hidePodcasts
