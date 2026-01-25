@@ -30,7 +30,6 @@ in
       "unigine-tropics"
       "unigine-sanctuary"
       "unigine-superposition"
-      "cursor"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;
