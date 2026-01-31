@@ -21,11 +21,11 @@
   };
 
   services.resolved = {
-    llmnr = "false";
     settings = {
       "Resolve" = {
         "MulticastDNS" = "false";
         "Cache" = "no-negative";
+        "LLMNR" = "false";
       };
     };
   };
