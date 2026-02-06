@@ -103,6 +103,25 @@
 
   #chaotic.hdr.enable = true;
 
+  #services.pipewire.extraConfig.pipewire."99-line-in-loopback" = {
+  #  "context.modules" = [
+  #    {
+  #      name = "libpipewire-module-loopback";
+  #      args = {
+  #        "node.description" = "Line-In Monitor"; # Name im Audiomixer
+  #        "capture.props" = {
+  #          "node.name" = "line_in_capture";
+  #          "target.object" = "alsa_input.pci-0000_10_00.4.analog-stereo"; # Deinen Device-Namen hier einsetzen
+  #        };
+  #        "playback.props" = {
+  #          "node.name" = "line_in_playback";
+  #          "media.class" = "Audio/Sink"; # Erstellt ein virtuelles Wiedergabegerät
+  #        };
+  #      };
+  #    }
+  #  ];
+  #};
+
   services.sunshine = {
     enable = true;
     autoStart = true;
