@@ -206,8 +206,9 @@ in
                 {
                   search = homeLeft;
                   enable = true;
-                  mode.width = 2560;
-                  mode.height = 1440;
+                  mode.width = 3840;
+                  mode.height = 2160;
+                  scale = 1.25;
                   position.x = 0;
                   position.y = 0;
                 }
@@ -215,7 +216,7 @@ in
                   search = internalDisplay;
                   enable = true;
                   scale = lib.mkIf (!isNull oscfg.displayScale) oscfg.displayScale;
-                  position.x = 2560;
+                  position.x = 3072;
                   position.y = 0;
                 }
               ];
