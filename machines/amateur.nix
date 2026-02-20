@@ -181,7 +181,7 @@
   bpletza.workstation = {
     enable = true;
     gaming = true;
-    libvirt = true;
+    libvirt = false;
     ai = true;
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 2160;

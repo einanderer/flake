@@ -78,7 +78,7 @@
   bpletza.workstation = {
     enable = true;
     gaming = true;
-    libvirt = true;
+    libvirt = false;
   };
 
 }
