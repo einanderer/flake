@@ -62,6 +62,7 @@
     nmap
     netcat
     ngrep
+    wpa_supplicant_gui
     # hardware
     dmidecode
     pciutils
