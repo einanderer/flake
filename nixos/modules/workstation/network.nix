@@ -27,7 +27,6 @@ in
       default = [
         "٩(̾●̮̮̃̾•̃̾)۶"
         "FBBadgR"
-        "testalarm-5g"
         "muccc"
         "muccc.v6"
       ];
@@ -178,10 +177,6 @@ in
         FBBadgR = {
           pskRaw = "ext:psk_fbbadgr";
           priority = 42;
-        };
-        testalarm-5g = {
-          pskRaw = "ext:psk_tdl";
-          priority = 23;
         };
         muccc = {
           pskRaw = "ext:psk_muccc";
