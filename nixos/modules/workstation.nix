@@ -371,7 +371,6 @@ in
     programs.dconf.enable = true;
     programs.iotop.enable = true;
     programs.iftop.enable = true;
-    programs.light.enable = true;
     programs.wireshark = {
       enable = true;
       package = pkgs.wireshark;
