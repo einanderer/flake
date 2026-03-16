@@ -209,14 +209,14 @@ in
                   mode.width = 3840;
                   mode.height = 2160;
                   scale = 1.25;
-                  position.x = 0;
+                  position.x = 1920;
                   position.y = 0;
                 }
                 {
                   search = internalDisplay;
                   enable = true;
                   scale = lib.mkIf (!isNull oscfg.displayScale) oscfg.displayScale;
-                  position.x = 1920;
+                  position.x = 0;
                   position.y = 0;
                 }
               ];
