@@ -216,7 +216,7 @@ in
                   search = internalDisplay;
                   enable = true;
                   scale = lib.mkIf (!isNull oscfg.displayScale) oscfg.displayScale;
-                  position.x = 3072;
+                  position.x = 1920;
                   position.y = 0;
                 }
               ];
