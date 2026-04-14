@@ -47,11 +47,11 @@ in
   config = lib.mkIf cfg.enable {
     networking.useDHCP = false;
 
-    services.resolved.settings = {
-      "Resolve" = {
-        "StaleRetentionSec" = "1800";
-        "Cache" = "no-negative";
-      };
+    networking.networkmanager.enable = false;
+
+    services.resolved.settings.Resolve = {
+      StaleRetentionSec = 1800;
+      cache = "no-negative";
     };
 
     systemd.network.config = {
@@ -88,16 +88,13 @@ in
               DNSOverTLS = "opportunistic";
             };
             dhcpV4Config = {
-              UseHostname = true;
               UseDNS = true;
               UseNTP = true;
               inherit RouteMetric;
             };
             dhcpV6Config = {
-              UseHostname = true;
               UseDNS = true;
               UseNTP = true;
-              inherit RouteMetric;
             };
             ipv6AcceptRAConfig = {
               inherit RouteMetric;
@@ -142,7 +139,6 @@ in
           dhcpV6Config = {
             UseHostname = false;
             SendHostname = false;
-            RouteMetric = 23;
           };
           ipv6AcceptRAConfig = {
             RouteMetric = 23;
