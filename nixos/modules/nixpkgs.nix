@@ -31,6 +31,7 @@ in
       "unigine-sanctuary"
       "unigine-superposition"
       "barbar.nvim"
+      "cursor"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;

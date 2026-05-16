@@ -70,6 +70,7 @@
 
   environment.systemPackages = with pkgs; [
     moonlight-qt
+    code-cursor
     unzip
     heroic
     (pkgs.lutris-free.override {
