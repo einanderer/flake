@@ -21,7 +21,11 @@
   ];
   boot.loader.grub.device = "/dev/sda";
 
-  fileSystems."/".device = "/dev/disk/by-uuid/f98f14b5-83bc-4f62-98e2-7257e6c297ab";
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/f98f14b5-83bc-4f62-98e2-7257e6c297ab";
+    fsType = "ext4";
+  };
+
   swapDevices = [ { device = "/dev/disk/by-uuid/841d2a95-6f5d-491e-8b0c-a198041dd175"; } ];
 
   sops = {
