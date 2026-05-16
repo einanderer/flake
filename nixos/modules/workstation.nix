@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
   inherit (lib)
     types
     mkEnableOption
@@ -15,8 +15,8 @@ let
     ;
 in
 {
-  options.bpletza.workstation = {
-    enable = mkEnableOption "${config.bpletza.home.user} workstation";
+  options.anderer.workstation = {
+    enable = mkEnableOption "${config.anderer.home.user} workstation";
     battery = mkEnableOption "machine has battery";
     libvirt = mkOption {
       type = types.bool;
@@ -37,7 +37,6 @@ in
       default = 1080;
       description = "youtube-dl maximum resolution";
     };
-    gaming = mkEnableOption "gaming support";
     ai = mkEnableOption "AI";
 
     internalDisplay = lib.mkOption {
@@ -57,7 +56,7 @@ in
   imports = lib.filesystem.listFilesRecursive ./workstation;
 
   config = mkIf cfg.enable {
-    bpletza.workstation.libvirt = lib.mkOptionDefault (!cfg.battery);
+    anderer.workstation.libvirt = lib.mkOptionDefault (!cfg.battery);
 
     services.dbus.implementation = "broker";
 
@@ -121,13 +120,13 @@ in
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="2ce3", ATTR{idProduct}=="9563", TEST=="power/control", ATTR{power/control}="auto"
 
       # Rule for when switching to battery
-      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="0", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full 'Using battery power'"
+      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="0", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.anderer.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full 'Using battery power'"
       # Rule for when switching to AC
-      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="1", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full-charging 'Using AC power'"
+      ACTION=="change", SUBSYSTEM=="power_supply", ATTRS{type}=="Mains", ATTRS{online}=="1", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.anderer.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-full-charging 'Using AC power'"
 
       # Battery warnings
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="15", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-low 'Battery Power Low' 'Less than 15%% battery remaining'"
-      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="5", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.bpletza.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-empty 'Battery Power Critical' 'Less than 5%% battery remaining'"
+      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="15", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.anderer.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-low 'Battery Power Low' 'Less than 15%% battery remaining'"
+      SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="5", RUN+="${pkgs.systemd}/bin/systemd-run --machine=${config.anderer.home.user}@.host --user ${lib.getExe pkgs.libnotify} -a Power -i battery-empty 'Battery Power Critical' 'Less than 5%% battery remaining'"
 
       # Suspend when battery is at 2%
       SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-2]", RUN+="${pkgs.systemd}/bin/systemctl suspend"
@@ -228,14 +227,12 @@ in
       extraPackages = lib.optionals (pkgs.stdenv.hostPlatform.isx86) [
         pkgs.vulkan-validation-layers
       ];
-      enable32Bit = pkgs.stdenv.hostPlatform.isx86_64 && cfg.gaming;
     };
 
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;
       alsa.enable = true;
-      alsa.support32Bit = pkgs.stdenv.hostPlatform.isx86_64 && cfg.gaming;
       pulse.enable = true;
       jack.enable = true;
       wireplumber.extraConfig.bluetoothEnhancements = {
@@ -400,7 +397,7 @@ in
         #   hostName = "bauwagen.env.club.muc.ccc.de";
         #   protocol = "ssh-ng";
         #   sshUser = "nix-build";
-        #   sshKey = "/home/${config.bpletza.home.user}/.ssh/id_build";
+        #   sshKey = "/home/${config.anderer.home.user}/.ssh/id_build";
         #   systems = [
         #     "i686-linux"
         #     "x86_64-linux"
@@ -417,7 +414,7 @@ in
           hostName = "10.0.0.50";
           protocol = "ssh-ng";
           sshUser = "nix-build";
-          sshKey = "/home/${config.bpletza.home.user}/.ssh/bauwagen_ed25519";
+          sshKey = "/home/${config.anderer.home.user}/.ssh/bauwagen_ed25519";
           systems = [
             "i686-linux"
             "x86_64-linux"
@@ -442,22 +439,6 @@ in
         layout = "eu";
         options = "compose:caps";
       };
-    };
-
-    programs.steam = {
-      enable = cfg.gaming;
-      #extraCompatPackages = with pkgs; [
-      #  proton-cachyos
-      #];
-      remotePlay.openFirewall = true;
-      localNetworkGameTransfers.openFirewall = true;
-      gamescopeSession.enable = true;
-    };
-    programs.gamescope.enable = cfg.gaming;
-
-    programs.appimage = {
-      enable = true;
-      binfmt = true;
     };
 
     services.ollama = {

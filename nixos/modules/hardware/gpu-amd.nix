@@ -6,9 +6,9 @@
 }:
 
 {
-  options.bpletza.hardware.gpu.amd = lib.mkEnableOption "AMD GPUs";
+  options.anderer.hardware.gpu.amd = lib.mkEnableOption "AMD GPUs";
 
-  config = lib.mkIf config.bpletza.hardware.gpu.amd {
+  config = lib.mkIf config.anderer.hardware.gpu.amd {
 
     boot.initrd.kernelModules = [ "amdgpu" ];
 

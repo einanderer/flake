@@ -7,12 +7,12 @@
   ...
 }:
 {
-  options.bpletza.nixvim = lib.mkOption {
+  options.anderer.nixvim = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.bpletza.workstation.enable;
+    default = osConfig.anderer.workstation.enable;
   };
 
-  config = lib.mkIf config.bpletza.nixvim {
+  config = lib.mkIf config.anderer.nixvim {
     home.packages = [ inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nvim ];
 
     home.sessionVariables = {

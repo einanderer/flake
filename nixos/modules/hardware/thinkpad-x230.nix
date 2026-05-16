@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.bpletza.hardware.thinkpad.x230 = lib.mkEnableOption "Thinkpad X230";
+  options.anderer.hardware.thinkpad.x230 = lib.mkEnableOption "Thinkpad X230";
 
-  config = lib.mkIf config.bpletza.hardware.thinkpad.x230 {
+  config = lib.mkIf config.anderer.hardware.thinkpad.x230 {
     boot = {
       initrd = {
         availableKernelModules = [
@@ -58,7 +58,7 @@
 
     services.tuned.enable = true;
 
-    bpletza.workstation = {
+    anderer.workstation = {
       battery = true;
       waybar.wiredInterface = "eno0";
       ytdlVideoCodec = "avc1";

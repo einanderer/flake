@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -66,8 +66,5 @@ in
       platformTheme = "gtk2";
       style = "gtk2";
     };
-
-    services.desktopManager.cosmic.enable = true;
-    networking.networkmanager.enable = false; # set by cosmic
   };
 }

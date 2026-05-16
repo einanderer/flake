@@ -1,11 +1,11 @@
 { lib, config, ... }:
 {
-  options.bpletza.workstation.gnupg = lib.mkOption {
+  options.anderer.workstation.gnupg = lib.mkOption {
     type = lib.types.bool;
     default = false;
   };
 
-  config = lib.mkIf config.bpletza.workstation.gnupg {
+  config = lib.mkIf config.anderer.workstation.gnupg {
     programs.gpg = {
       enable = true;
       settings = {

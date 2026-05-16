@@ -122,74 +122,8 @@
   #  ];
   #};
 
-  services.sunshine = {
-    enable = true;
-    autoStart = true;
-    capSysAdmin = true;
-    openFirewall = true;
-  };
-  networking.firewall = {
-    allowedTCPPorts = [
-      47984
-      47989
-      47990
-      48010
-    ];
-    allowedUDPPortRanges = [
-      {
-        from = 47998;
-        to = 48000;
-      }
-      {
-        from = 8000;
-        to = 8010;
-      }
-    ];
-  };
-
   environment.systemPackages = with pkgs; [
-    # Benchmark
     hardinfo2
-    #geekbench
-    #unigine-valley
-    #unigine-heaven
-    #unigine-tropics
-    #unigine-sanctuary
-    #unigine-superposition
-    # Gaming
-    wine
-    heroic
-    dosbox-x
-    ryubing
-
-    (pkgs.lutris-free.override {
-      # Override the underlying lutris package
-      lutris = pkgs.lutris.override {
-        # Intercept buildFHSEnv to modify target packages
-        buildFHSEnv =
-          args:
-          pkgs.buildFHSEnv (
-            args
-            // {
-              multiPkgs =
-                envPkgs:
-                let
-                  # Fetch original package list
-                  originalPkgs = args.multiPkgs envPkgs;
-                  # Disable tests for openldap
-                  customLdap = envPkgs.openldap.overrideAttrs (_: {
-                    doCheck = false;
-                  });
-                in
-                # Replace broken openldap with the custom one
-                builtins.filter (p: (p.pname or "") != "openldap") originalPkgs ++ [ customLdap ];
-            }
-          );
-      };
-    })
-
-    #protonup-qt
-    # Tools
     liquidctl
     qpwgraph
     fluffychat
@@ -199,17 +133,25 @@
     kdePackages.dolphin
   ];
 
-  bpletza.hardware = {
+  anderer.hardware = {
     cpu.amd = true;
     gpu.amd = true;
   };
-  bpletza.secureboot = false;
-  bpletza.workstation = {
+  anderer.secureboot = false;
+  anderer.workstation = {
     enable = true;
-    gaming = true;
     libvirt = false;
     ai = true;
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 2160;
+    gaming = {
+      enable = true;
+      wine.enable = true;
+      streaming.enable = true;
+      extraPackages = with pkgs; [
+        dosbox-x
+        ryubing
+      ];
+    };
   };
 }

@@ -5,12 +5,12 @@
   ...
 }:
 {
-  options.bpletza.workstation.nvidia = lib.mkOption {
+  options.anderer.workstation.nvidia = lib.mkOption {
     type = lib.types.bool;
-    default = config.bpletza.workstation.wayland && (osConfig.bpletza.workstation.nvidia or false);
+    default = config.anderer.workstation.wayland && (osConfig.anderer.workstation.nvidia or false);
   };
 
-  config = lib.mkIf config.bpletza.workstation.nvidia {
+  config = lib.mkIf config.anderer.workstation.nvidia {
     wayland.windowManager.sway = {
       extraOptions = [ "--unsupported-gpu" ];
     };

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  home.packages = lib.optionals config.bpletza.workstation.enable [
+  home.packages = lib.optionals config.anderer.workstation.enable [
     #entfallen mit update vom 30.11.2025
     #pkgs.gitAndTools.tig
     pkgs.git-absorb
@@ -13,8 +13,8 @@
 
   programs.git = {
     enable = true;
-    package = if config.bpletza.workstation.enable then pkgs.git else pkgs.gitMinimal;
-    lfs.enable = config.bpletza.workstation.enable;
+    package = if config.anderer.workstation.enable then pkgs.git else pkgs.gitMinimal;
+    lfs.enable = config.anderer.workstation.enable;
     attributes = [
       "*.pdf diff=pdf"
     ];
@@ -120,7 +120,7 @@
   };
 
   programs.lazygit = {
-    enable = config.bpletza.workstation.enable;
+    enable = config.anderer.workstation.enable;
     settings = {
       git = {
         paging = {

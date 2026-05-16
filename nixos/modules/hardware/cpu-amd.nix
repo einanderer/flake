@@ -1,8 +1,8 @@
 { config, lib, ... }:
 {
-  options.bpletza.hardware.cpu.amd = lib.mkEnableOption "AMD CPUs";
+  options.anderer.hardware.cpu.amd = lib.mkEnableOption "AMD CPUs";
 
-  config = lib.mkIf config.bpletza.hardware.cpu.amd {
+  config = lib.mkIf config.anderer.hardware.cpu.amd {
     boot = {
       kernelModules = [ "kvm-amd" ];
       kernelParams = [ "amd_pstate=active" ];

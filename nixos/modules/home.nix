@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.bpletza.home;
+  cfg = config.anderer.home;
 in
 {
-  options.bpletza.home = {
+  options.anderer.home = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -34,7 +34,7 @@ in
       neededForUsers = true;
     };
 
-    home-manager = lib.mkIf (!config.boot.isContainer && config.bpletza.workstation.enable) {
+    home-manager = lib.mkIf (!config.boot.isContainer && config.anderer.workstation.enable) {
       useGlobalPkgs = true;
       useUserPackages = true;
       users.${cfg.user} = ../../home/${cfg.user}.nix;

@@ -1,18 +1,19 @@
 {
   config,
   osConfig,
+  inputs,
   lib,
   pkgs,
   ...
 }:
 
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
 in
 {
-  options.bpletza.workstation.enable = lib.mkOption {
+  options.anderer.workstation.enable = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.bpletza.workstation.enable or false;
+    default = osConfig.anderer.workstation.enable or false;
   };
 
   config = lib.mkIf cfg.enable {
@@ -175,18 +176,14 @@ in
         language-server = {
           nixd = {
             command = "nixd";
-            config =
-              let
-                localFlake = ''(builtins.getFlake "/home/fpletz/src/flake")'';
-              in
-              {
-                nixpkgs.expr = "import <nixpkgs> {}";
-                formatting.command = [ (lib.getExe pkgs.nixfmt) ];
-                options = {
-                  nixos.expr = "${localFlake}.nixosConfigurations.server.options";
-                  home-manager.expr = "${localFlake}.homeConfigurations.fpletz.options";
-                };
+            config = {
+              nixpkgs.expr = "import <nixpkgs> {}";
+              formatting.command = [ (lib.getExe pkgs.nixfmt) ];
+              options = {
+                nixos.expr = "${inputs.self}.nixosConfigurations.${osConfig.networking.hostName}.options";
+                home-manager.expr = "${inputs.self}.homeConfigurations.${config.home.username}.options";
               };
+            };
           };
         };
       };

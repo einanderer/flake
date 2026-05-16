@@ -5,10 +5,10 @@
   ...
 }:
 {
-  options.bpletza.workstation.terminal = {
+  options.anderer.workstation.terminal = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.wayland;
+      default = config.anderer.workstation.wayland;
     };
 
     default = lib.mkOption {
@@ -17,9 +17,9 @@
     };
   };
 
-  config = lib.mkIf config.bpletza.workstation.terminal.enable {
+  config = lib.mkIf config.anderer.workstation.terminal.enable {
     home.sessionVariables = {
-      TERMINAL = config.bpletza.workstation.terminal.default.meta.mainProgram;
+      TERMINAL = config.anderer.workstation.terminal.default.meta.mainProgram;
     };
 
     programs.alacritty = {

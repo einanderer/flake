@@ -6,12 +6,12 @@
   ...
 }:
 {
-  options.bpletza.workstation.obs = lib.mkOption {
+  options.anderer.workstation.obs = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.bpletza.workstation.enable && pkgs.stdenv.hostPlatform.isx86_64;
+    default = osConfig.anderer.workstation.enable && pkgs.stdenv.hostPlatform.isx86_64;
   };
 
-  config = lib.mkIf config.bpletza.workstation.obs {
+  config = lib.mkIf config.anderer.workstation.obs {
     home.packages = [ pkgs.obs-cmd ];
     programs.obs-studio = {
       enable = true;

@@ -5,12 +5,12 @@
   ...
 }:
 {
-  options.bpletza.workstation.shell = lib.mkOption {
+  options.anderer.workstation.shell = lib.mkOption {
     type = lib.types.bool;
     default = true;
   };
 
-  config = lib.mkIf config.bpletza.workstation.shell {
+  config = lib.mkIf config.anderer.workstation.shell {
     home.shellAliases = {
       p = "$PAGER";
       vi = "vim";
@@ -75,10 +75,10 @@
       historyIgnore = [ "exit" ];
     };
 
-    programs.zoxide.enable = config.bpletza.workstation.enable;
+    programs.zoxide.enable = config.anderer.workstation.enable;
 
     programs.direnv = {
-      enable = config.bpletza.workstation.enable;
+      enable = config.anderer.workstation.enable;
       nix-direnv.enable = true;
       config.warn_timeout = "1m";
     };

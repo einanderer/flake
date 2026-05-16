@@ -48,12 +48,12 @@ let
 
 in
 {
-  options.bpletza.workstation.browser = lib.mkOption {
+  options.anderer.workstation.browser = lib.mkOption {
     type = lib.types.bool;
-    default = config.bpletza.workstation.wayland;
+    default = config.anderer.workstation.wayland;
   };
 
-  config = lib.mkIf config.bpletza.workstation.browser {
+  config = lib.mkIf config.anderer.workstation.browser {
     home.file = {
       ".librewolf/default/chrome" = {
         source = "${inputs.potatofox}/chrome";

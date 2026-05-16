@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation.waybar;
+  cfg = config.anderer.workstation.waybar;
 
   fuzzelMenuWrapped =
     pkg:
@@ -16,10 +16,10 @@ let
     '';
 in
 {
-  options.bpletza.workstation.waybar = {
+  options.anderer.workstation.waybar = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.sway;
+      default = config.anderer.workstation.sway;
     };
   };
 
@@ -143,7 +143,7 @@ in
           format = "{percentage} {time}";
         };
         "network#en" = {
-          interface = osConfig.bpletza.workstation.waybar.wiredInterface;
+          interface = osConfig.anderer.workstation.waybar.wiredInterface;
           family = "ipv4_6";
           format-ethernet = "{bandwidthDownBits} {bandwidthUpBits} ";
           tooltip-format-ethernet = "{ifname}";
@@ -199,7 +199,7 @@ in
               ""
             ];
           };
-          on-click = "${lib.getExe config.bpletza.workstation.terminal.default} -e ${lib.getExe pkgs.wiremix}";
+          on-click = "${lib.getExe config.anderer.workstation.terminal.default} -e ${lib.getExe pkgs.wiremix}";
         };
         bluetooth = {
           format = "{status} ";

@@ -4,12 +4,12 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.bpletza.workstation._1password = mkEnableOption "1Password support" // {
-    default = config.bpletza.workstation.enable;
+  options.anderer.workstation._1password = mkEnableOption "1Password support" // {
+    default = config.anderer.workstation.enable;
   };
 
   config = mkIf cfg._1password {

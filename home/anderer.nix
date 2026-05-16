@@ -96,7 +96,7 @@
   programs.home-manager.enable = true;
 
   programs.nix-index.enable = false; # enabled by nix-index-database module
-  programs.nix-index-database.comma.enable = config.bpletza.workstation.enable;
+  programs.nix-index-database.comma.enable = config.anderer.workstation.enable;
 
   programs.btop = {
     enable = true;

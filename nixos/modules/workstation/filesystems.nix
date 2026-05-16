@@ -4,12 +4,12 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.bpletza.workstation.filesystems = mkEnableOption "Filesystems" // {
-    default = config.bpletza.workstation.enable;
+  options.anderer.workstation.filesystems = mkEnableOption "Filesystems" // {
+    default = config.anderer.workstation.enable;
   };
 
   config = mkIf cfg.filesystems {

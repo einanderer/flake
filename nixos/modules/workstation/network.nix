@@ -4,13 +4,13 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation.network;
+  cfg = config.anderer.workstation.network;
 in
 {
-  options.bpletza.workstation.network = {
+  options.anderer.workstation.network = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.enable;
+      default = config.anderer.workstation.enable;
       description = "workstation networking";
     };
 

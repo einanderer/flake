@@ -7,13 +7,13 @@
 }:
 
 {
-  options.bpletza.secureboot = lib.mkEnableOption "Secure Boot";
+  options.anderer.secureboot = lib.mkEnableOption "Secure Boot";
 
   imports = [
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
-  config = lib.mkIf config.bpletza.secureboot {
+  config = lib.mkIf config.anderer.secureboot {
     environment.systemPackages = [
       pkgs.sbctl
     ];

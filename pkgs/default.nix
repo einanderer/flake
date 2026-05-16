@@ -72,6 +72,27 @@ in
       #);
 
       linuxPackages-xanmod = final.linuxPackagesFor final.linux-xanmod;
+
+      lutris-free = prev.lutris-free.override {
+        lutris = prev.lutris.override {
+          buildFHSEnv =
+            args:
+            final.buildFHSEnv (
+              args
+              // {
+                multiPkgs =
+                  envPkgs:
+                  let
+                    originalPkgs = args.multiPkgs envPkgs;
+                    customLdap = envPkgs.openldap.overrideAttrs (_: {
+                      doCheck = false;
+                    });
+                  in
+                  builtins.filter (p: (p.pname or "") != "openldap") originalPkgs ++ [ customLdap ];
+              }
+            );
+        };
+      };
     }
     // byNamePackages final;
 }

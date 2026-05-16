@@ -69,44 +69,19 @@
   };
 
   environment.systemPackages = with pkgs; [
-    moonlight-qt
     code-cursor
     unzip
-    heroic
-    (pkgs.lutris-free.override {
-      # Override the underlying lutris package
-      lutris = pkgs.lutris.override {
-        # Intercept buildFHSEnv to modify target packages
-        buildFHSEnv =
-          args:
-          pkgs.buildFHSEnv (
-            args
-            // {
-              multiPkgs =
-                envPkgs:
-                let
-                  # Fetch original package list
-                  originalPkgs = args.multiPkgs envPkgs;
-
-                  # Disable tests for openldap
-                  customLdap = envPkgs.openldap.overrideAttrs (_: {
-                    doCheck = false;
-                  });
-                in
-                # Replace broken openldap with the custom one
-                builtins.filter (p: (p.pname or "") != "openldap") originalPkgs ++ [ customLdap ];
-            }
-          );
-      };
-    })
   ];
 
-  bpletza.hardware.thinkpad.t470s = true;
-  bpletza.secureboot = false;
-  bpletza.workstation = {
+  anderer.hardware.thinkpad.t470s = true;
+  anderer.secureboot = false;
+  anderer.workstation = {
     enable = true;
-    gaming = true;
     libvirt = false;
+    gaming = {
+      enable = true;
+      remotePlay.enable = true;
+    };
   };
 
 }

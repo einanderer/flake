@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.bpletza.workstation.nvidia = mkEnableOption "nvidia support";
+  options.anderer.workstation.nvidia = mkEnableOption "nvidia support";
 
   config = mkIf cfg.nvidia {
     nixpkgs = {

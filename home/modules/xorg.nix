@@ -4,14 +4,14 @@
   ...
 }:
 {
-  options.bpletza.workstation = {
+  options.anderer.workstation = {
     xorg-settings = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.wayland;
+      default = config.anderer.workstation.wayland;
     };
   };
 
-  config = lib.mkIf config.bpletza.workstation.xorg-settings {
+  config = lib.mkIf config.anderer.workstation.xorg-settings {
     stylix.targets.xresources.enable = true;
     xresources.properties = {
       "Xft.hinting" = "1";

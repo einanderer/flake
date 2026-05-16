@@ -6,12 +6,12 @@
   ...
 }:
 {
-  options.bpletza.workstation.sway = lib.mkOption {
+  options.anderer.workstation.sway = lib.mkOption {
     type = lib.types.bool;
     default = osConfig.programs.sway.enable;
   };
 
-  config = lib.mkIf config.bpletza.workstation.sway {
+  config = lib.mkIf config.anderer.workstation.sway {
     wayland.windowManager.sway = {
       enable = true;
       extraSessionCommands = ''
@@ -50,7 +50,7 @@
           };
         };
         modifier = "Mod4";
-        terminal = "systemd-run --user --scope --slice=app ${lib.getExe config.bpletza.workstation.terminal.default}";
+        terminal = "systemd-run --user --scope --slice=app ${lib.getExe config.anderer.workstation.terminal.default}";
         defaultWorkspace = "workspace number 1";
         window = {
           titlebar = false;

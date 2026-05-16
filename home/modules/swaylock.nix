@@ -9,12 +9,12 @@ let
   systemdPackage = osConfig.systemd.package or pkgs.systemd;
 in
 {
-  options.bpletza.workstation.swaylock = lib.mkOption {
+  options.anderer.workstation.swaylock = lib.mkOption {
     type = lib.types.bool;
-    default = config.bpletza.workstation.sway;
+    default = config.anderer.workstation.sway;
   };
 
-  config = lib.mkIf config.bpletza.workstation.swaylock {
+  config = lib.mkIf config.anderer.workstation.swaylock {
     services.systemd-lock-handler.enable = true;
 
     programs.swaylock.enable = true;

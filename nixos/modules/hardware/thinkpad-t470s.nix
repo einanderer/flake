@@ -6,9 +6,9 @@
 }:
 
 {
-  options.bpletza.hardware.thinkpad.t470s = lib.mkEnableOption "Thinkpad T470s";
+  options.anderer.hardware.thinkpad.t470s = lib.mkEnableOption "Thinkpad T470s";
 
-  config = lib.mkIf config.bpletza.hardware.thinkpad.t470s {
+  config = lib.mkIf config.anderer.hardware.thinkpad.t470s {
 
     boot = {
       initrd.availableKernelModules = [
@@ -28,7 +28,7 @@
       interfaces = [ "wlp58s0" ];
     };
 
-    bpletza.hardware.wireless.powerSave.enable = false;
+    anderer.hardware.wireless.powerSave.enable = false;
 
     hardware = {
       firmware = with pkgs; [
@@ -61,7 +61,7 @@
     #  }
     #];
 
-    bpletza.workstation = {
+    anderer.workstation = {
       battery = true;
       internalDisplay = "eDP-1";
       displayScale = 1.0;

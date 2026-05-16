@@ -6,11 +6,11 @@
 }:
 
 {
-  options.bpletza.workstation.plymouth = lib.mkEnableOption "bootsplash" // {
+  options.anderer.workstation.plymouth = lib.mkEnableOption "bootsplash" // {
     default = false;
   };
 
-  config = lib.mkIf config.bpletza.workstation.plymouth {
+  config = lib.mkIf config.anderer.workstation.plymouth {
     boot = {
       plymouth = {
         enable = true;

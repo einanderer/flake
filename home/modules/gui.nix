@@ -6,27 +6,27 @@
   ...
 }:
 let
-  cfg = config.bpletza.workstation;
+  cfg = config.anderer.workstation;
 in
 {
-  options.bpletza.workstation = {
+  options.anderer.workstation = {
     gui = lib.mkOption {
       type = lib.types.bool;
-      default = config.bpletza.workstation.wayland;
+      default = config.anderer.workstation.wayland;
     };
     ytdlVideoCodec = lib.mkOption {
       type = lib.types.str;
-      default = osConfig.bpletza.workstation.ytdlVideoCodec or "vp09";
+      default = osConfig.anderer.workstation.ytdlVideoCodec or "vp09";
       description = "youtube-dl video codec";
     };
     ytdlMaxRes = lib.mkOption {
       type = lib.types.int;
-      default = osConfig.bpletza.workstation.ytdlMaxRes or 1080;
+      default = osConfig.anderer.workstation.ytdlMaxRes or 1080;
       description = "youtube-dl maximum resolution";
     };
   };
 
-  config = lib.mkIf config.bpletza.workstation.gui {
+  config = lib.mkIf config.anderer.workstation.gui {
     stylix.cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Ice";

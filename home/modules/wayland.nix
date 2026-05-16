@@ -6,15 +6,15 @@
   ...
 }:
 let
-  oscfg = osConfig.bpletza.workstation;
+  oscfg = osConfig.anderer.workstation;
 in
 {
-  options.bpletza.workstation.wayland = lib.mkOption {
+  options.anderer.workstation.wayland = lib.mkOption {
     type = lib.types.bool;
-    default = config.bpletza.workstation.enable;
+    default = config.anderer.workstation.enable;
   };
 
-  config = lib.mkIf config.bpletza.workstation.wayland {
+  config = lib.mkIf config.anderer.workstation.wayland {
     home.packages = [
       pkgs.libnotify
       pkgs.wdisplays
@@ -58,7 +58,7 @@ in
       settings = {
         main = {
           launch-prefix = "systemd-run --user --scope --slice=app";
-          terminal = "${lib.getExe config.bpletza.workstation.terminal.default} -e";
+          terminal = "${lib.getExe config.anderer.workstation.terminal.default} -e";
           dpi-aware = false;
           icon-theme = config.gtk.iconTheme.name;
           show-actions = true;
