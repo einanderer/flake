@@ -12,7 +12,10 @@
           inherit inputs;
           osConfig = { };
         };
-        modules = [ ./anderer.nix ];
+        modules = [
+          ./anderer.nix
+          ../nixos/modules/nixpkgs.nix
+        ];
       };
     };
 }
