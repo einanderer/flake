@@ -51,7 +51,7 @@ in
         wiremix
 
         # GUI
-        remmina
+        #remmina
         #virt-manager
         #virt-viewer
         transmission-remote-gtk
