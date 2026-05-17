@@ -59,95 +59,58 @@
     };
   };
 
-  networking = {
-    hostName = "tentacle";
-    useDHCP = false;
+  networking.hostName = "tentacle";
 
-    firewall.allowedTCPPorts = [
-      80
-      443
-    ];
-    firewall.allowedUDPPorts = [
-      53
-      52342
-      4445
-    ];
+  anderer.network.tentacleEdge.enable = true;
 
-    interfaces.ens3 = {
-      useDHCP = true;
-      ipv6.addresses = [
+  anderer.network.ttvpn = {
+    enable = true;
+    privateKeyFile = config.sops.secrets.ttvpn_s-private.path;
+    hub = {
+      listenPort = 52342;
+      addresses = [
+        "10.111.101.1/24"
+        "fd72:db04:ef1a:e953::1/128"
+      ];
+      peers = [
         {
-          address = "2a01:4f8:c2c:6a6f::1";
-          prefixLength = 64;
+          name = "GL-AX1800";
+          allowedIPs = [
+            "10.111.101.10/32"
+            "10.0.0.0/24"
+            "fd72:db04:ef1a::/48"
+          ];
+          publicKey = "D6v/2Nx26tZ/hQ50gRw4HgWileDE+k1mjum+rrWC+BI=";
+          presharedKeyFile = config.sops.secrets.ttvpn_router-psk.path;
+        }
+        {
+          name = "WSL2-spare";
+          allowedIPs = [
+            "10.111.101.50/32"
+            "fd72:db04:ef1a:e953::51/128"
+          ];
+          publicKey = "lc3jKA+legkJxN831g2lwKd9FwshShbNyg+R0RH++yo=";
+          presharedKeyFile = config.sops.secrets.ttvpn_spare-psk.path;
+        }
+        {
+          name = "trolllollo";
+          allowedIPs = [
+            "10.111.101.60/32"
+            "fd72:db04:ef1a:e953::60/128"
+          ];
+          publicKey = "RdH7Is025kgKVpwLZpQJEGS8J01dM1cNJNvCbHHLJCc=";
+          presharedKeyFile = config.sops.secrets.ttvpn_trolllollo-psk.path;
+        }
+        {
+          name = "iPhone12";
+          allowedIPs = [
+            "10.111.101.80/32"
+            "fd72:db04:ef1a:e953::80/128"
+          ];
+          publicKey = "+fmXEzXg9b8eYeTs2FaH2AZnrXYMLxKdtKSTszIZF0E=";
+          presharedKeyFile = config.sops.secrets.ttvpn_iphone12-psk.path;
         }
       ];
-      ipv6.routes = [
-        {
-          address = "::0";
-          prefixLength = 0;
-          via = "fe80::1";
-        }
-      ];
-    };
-
-    nat = {
-      enable = true;
-      enableIPv6 = true;
-      externalInterface = "ens3";
-      internalInterfaces = [ "ttvpn" ];
-    };
-
-    wireguard.interfaces = {
-      ttvpn = {
-        ips = [
-          "10.111.101.1/24"
-          "fd72:db04:ef1a:e953::1/128"
-        ];
-        listenPort = 52342;
-        mtu = 1300;
-        privateKeyFile = config.sops.secrets.ttvpn_s-private.path;
-        # PublicKey wc70z49Afc94vFGvSQUioZbslgBHtFLWxckl9RMzuwc=
-
-        peers = [
-          {
-            #GL-AX1800
-            allowedIPs = [
-              "10.111.101.10/32"
-              "10.0.0.0/24"
-              "fd72:db04:ef1a::/48"
-            ];
-            publicKey = "D6v/2Nx26tZ/hQ50gRw4HgWileDE+k1mjum+rrWC+BI=";
-            presharedKeyFile = config.sops.secrets.ttvpn_router-psk.path;
-          }
-          {
-            #WSL2-spare
-            allowedIPs = [
-              "10.111.101.50/32"
-              "fd72:db04:ef1a:e953::51/128"
-            ];
-            publicKey = "lc3jKA+legkJxN831g2lwKd9FwshShbNyg+R0RH++yo=";
-            presharedKeyFile = config.sops.secrets.ttvpn_spare-psk.path;
-          }
-          {
-            #trolllollo
-            allowedIPs = [
-              "10.111.101.60/32"
-              "fd72:db04:ef1a:e953::60/128"
-            ];
-            publicKey = "RdH7Is025kgKVpwLZpQJEGS8J01dM1cNJNvCbHHLJCc=";
-            presharedKeyFile = config.sops.secrets.ttvpn_trolllollo-psk.path;
-          }
-          {
-            #iPhone12
-            allowedIPs = [
-              "10.111.101.80/32"
-              "fd72:db04:ef1a:e953::80/128"
-            ];
-            publicKey = "+fmXEzXg9b8eYeTs2FaH2AZnrXYMLxKdtKSTszIZF0E=";
-            presharedKeyFile = config.sops.secrets.ttvpn_iphone12-psk.path;
-          }
-        ];
-      };
     };
   };
 

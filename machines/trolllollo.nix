@@ -41,31 +41,26 @@
     };
   };
 
-  networking = {
-    hostName = "trolllollo";
-    wireguard.interfaces = {
-      ttvpn = {
-        ips = [ "10.111.101.60/32" ];
-        allowedIPsAsRoutes = true;
-        peers = [
-          {
-            #allowedIPs = [ "0.0.0.0/0" ];
-            allowedIPs = [
-              "10.111.101.0/24"
-              "192.168.100.0/24"
-              "10.0.0.0/24"
-            ];
-            endpoint = "tentacle.tagesthe.men:52342";
-            publicKey = "wc70z49Afc94vFGvSQUioZbslgBHtFLWxckl9RMzuwc=";
-            presharedKeyFile = config.sops.secrets.ttvpn-psk.path;
-            persistentKeepalive = 25;
-          }
-        ];
-        privateKeyFile = config.sops.secrets.ttvpn-private.path;
-        mtu = 1300;
-      };
+  networking.hostName = "trolllollo";
+
+  anderer.network.ttvpn = {
+    enable = true;
+    privateKeyFile = config.sops.secrets.ttvpn-private.path;
+    client = {
+      addresses = [
+        "10.111.101.60/32"
+        "fd72:db04:ef1a:e953::60/128"
+      ];
+      endpoint = "tentacle.tagesthe.men:52342";
+      peerPublicKey = "wc70z49Afc94vFGvSQUioZbslgBHtFLWxckl9RMzuwc=";
+      presharedKeyFile = config.sops.secrets.ttvpn-psk.path;
+      allowedIPs = [
+        "10.111.101.0/24"
+        "192.168.100.0/24"
+        "10.0.0.0/24"
+        "fd72:db04:ef1a::/48"
+      ];
     };
-    firewall.allowedUDPPorts = [ 52342 ];
   };
 
   environment.systemPackages = with pkgs; [

@@ -138,6 +138,8 @@
     gpu.amd = true;
   };
   anderer.secureboot = false;
+  anderer.workstation.network.publicUplinks = [ ];
+
   anderer.workstation = {
     enable = true;
     cursor.enable = true;
