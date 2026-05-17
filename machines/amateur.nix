@@ -140,6 +140,7 @@
   anderer.secureboot = false;
   anderer.workstation = {
     enable = true;
+    cursor.enable = true;
     libvirt = false;
     ai = true;
     ytdlVideoCodec = "av01";

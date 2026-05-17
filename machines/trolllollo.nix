@@ -69,7 +69,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    code-cursor
     unzip
   ];
 
@@ -77,6 +76,7 @@
   anderer.secureboot = false;
   anderer.workstation = {
     enable = true;
+    cursor.enable = true;
     libvirt = false;
     gaming = {
       enable = true;
