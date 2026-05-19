@@ -57,6 +57,18 @@ in
       ];
       description = "UDP ports allowed on the WAN interface.";
     };
+
+    vpnUlaPrefix = lib.mkOption {
+      type = lib.types.str;
+      default = "fd72:db04:ef1a:e953::/64";
+      description = "ULA prefix for VPN clients on ttvpn.";
+    };
+
+    homeUlaPrefix = lib.mkOption {
+      type = lib.types.str;
+      default = "fd72:db04:ef1a::/48";
+      description = "ULA prefix of the home network (GL router peer).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -99,6 +111,8 @@ in
         define VPN = ${cfg.vpnInterface}
         define VPN_NET4 = 10.111.101.0/24
         define HOME_NET4 = 10.0.0.0/24
+        define VPN_ULA6 = ${cfg.vpnUlaPrefix}
+        define HOME_ULA6 = ${cfg.homeUlaPrefix}
 
         chain input {
           type filter hook input priority filter; policy drop;
@@ -125,8 +139,13 @@ in
 
           iifname $VPN oifname $VPN accept comment "VPN peer ↔ peer"
 
-          iifname $VPN ip saddr $HOME_NET4 accept comment "Heimnetz → VPN"
-          iifname $VPN ip daddr $HOME_NET4 accept comment "VPN → Heimnetz"
+          iifname $VPN ip saddr $HOME_NET4 accept comment "Heimnetz-v4 → VPN"
+          iifname $VPN ip daddr $HOME_NET4 accept comment "VPN → Heimnetz-v4"
+
+          iifname $VPN ip6 saddr $HOME_ULA6 accept comment "Heimnetz-v6 → VPN"
+          iifname $VPN ip6 daddr $HOME_ULA6 accept comment "VPN → Heimnetz-v6"
+          iifname $VPN ip6 saddr $VPN_ULA6 accept comment "VPN-ULA → weiterleiten"
+          iifname $VPN ip6 daddr $VPN_ULA6 accept comment "→ VPN-ULA"
 
           iifname $WAN oifname $VPN drop comment "kein WAN → VPN ohne WG"
         }
@@ -141,11 +160,12 @@ in
       family = "ip";
       content = ''
         define WAN = ${cfg.wanInterface}
-        define VPN_NET4 = 10.111.101.0/24
+        define VPN = ${cfg.vpnInterface}
 
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr $VPN_NET4 oifname $WAN masquerade comment "VPN-v4 → Internet"
+          # wie networking.nat.internalInterfaces (alles von ttvpn nach ens3)
+          iifname $VPN oifname $WAN masquerade comment "VPN-v4 → Internet"
         }
       '';
     };
@@ -154,11 +174,12 @@ in
       family = "ip6";
       content = ''
         define WAN = ${cfg.wanInterface}
-        define VPN_ULA6 = fd72:db04:ef1a:e953::/64
+        define VPN = ${cfg.vpnInterface}
 
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip6 saddr $VPN_ULA6 oifname $WAN masquerade comment "VPN-ULA → Hetzner-v6"
+          # wie networking.nat.enableIPv6 + internalInterfaces = [ ttvpn ]
+          iifname $VPN oifname $WAN masquerade comment "VPN-v6 → Internet"
         }
       '';
     };
