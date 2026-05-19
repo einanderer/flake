@@ -33,9 +33,36 @@ in
       default = "fe80::1";
       description = "Default IPv6 gateway on WAN.";
     };
+
+    allowedTcpPorts = lib.mkOption {
+      type = lib.types.listOf lib.types.port;
+      default = [
+        22
+        80
+        443
+      ];
+      description = ''
+        TCP ports on the WAN interface allowed to reach this host.
+        Includes 22 for SSH (replaces services.openssh.openFirewall while the
+        NixOS firewall is disabled here).
+      '';
+    };
+
+    allowedUdpPorts = lib.mkOption {
+      type = lib.types.listOf lib.types.port;
+      default = [
+        53
+        52342
+        4445
+      ];
+      description = "UDP ports allowed on the WAN interface.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    # Port 22 was previously opened via openFirewall + networking.firewall.
+    services.openssh.openFirewall = lib.mkForce false;
+
     networking = {
       useDHCP = false;
       firewall.enable = false;
@@ -65,16 +92,14 @@ in
     };
 
     networking.nftables.enable = true;
-    networking.nftables.ruleset = ''
-      # tentacle edge — WAN ens3 + VPN ttvpn (ersetzt networking.nat/firewall)
+    networking.nftables.tables."tentacle-edge" = {
+      family = "inet";
+      content = ''
+        define WAN = ${cfg.wanInterface}
+        define VPN = ${cfg.vpnInterface}
+        define VPN_NET4 = 10.111.101.0/24
+        define HOME_NET4 = 10.0.0.0/24
 
-      define WAN = ${cfg.wanInterface}
-      define VPN = ${cfg.vpnInterface}
-      define VPN_NET4 = 10.111.101.0/24
-      define HOME_NET4 = 10.0.0.0/24
-      define VPN_ULA6 = fd72:db04:ef1a:e953::/64
-
-      table inet filter {
         chain input {
           type filter hook input priority filter; policy drop;
 
@@ -84,12 +109,10 @@ in
           ip protocol icmp accept comment "ICMPv4"
           ip6 nexthdr icmpv6 accept comment "ICMPv6"
 
-          iifname $WAN tcp dport { 80, 443 } accept comment "nginx / ACME"
-          iifname $WAN udp dport 53 accept comment "DNS (falls exponiert)"
-          iifname $WAN udp dport 52342 accept comment "WireGuard Hub"
-          iifname $WAN udp dport 4445 accept comment "legacy UDP (ohmgraphite)"
+          iifname $WAN tcp dport { ${lib.concatStringsSep ", " (map toString cfg.allowedTcpPorts)} } accept comment "WAN TCP (SSH, nginx, …)"
+          iifname $WAN udp dport { ${lib.concatStringsSep ", " (map toString cfg.allowedUdpPorts)} } accept comment "WAN UDP (DNS, WireGuard, …)"
 
-          iifname $VPN accept comment "Dienste auf ttvpn"
+          iifname $VPN accept comment "alles auf ttvpn (SSH, Grafana intern, …)"
         }
 
         chain forward {
@@ -111,21 +134,33 @@ in
         chain output {
           type filter hook output priority filter; policy accept;
         }
-      }
+      '';
+    };
 
-      table ip nat {
+    networking.nftables.tables."tentacle-nat4" = {
+      family = "ip";
+      content = ''
+        define WAN = ${cfg.wanInterface}
+        define VPN_NET4 = 10.111.101.0/24
+
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
-          ip saddr $VPN_NET4 oifname $WAN masquerade comment "VPN-v4 NAT"
+          ip saddr $VPN_NET4 oifname $WAN masquerade comment "VPN-v4 → Internet"
         }
-      }
+      '';
+    };
 
-      table ip6 nat {
+    networking.nftables.tables."tentacle-nat6" = {
+      family = "ip6";
+      content = ''
+        define WAN = ${cfg.wanInterface}
+        define VPN_ULA6 = fd72:db04:ef1a:e953::/64
+
         chain postrouting {
           type nat hook postrouting priority srcnat; policy accept;
           ip6 saddr $VPN_ULA6 oifname $WAN masquerade comment "VPN-ULA → Hetzner-v6"
         }
-      }
-    '';
+      '';
+    };
   };
 }
