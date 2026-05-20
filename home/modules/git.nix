@@ -5,7 +5,7 @@
   ...
 }:
 {
-  home.packages = lib.optionals config.anderer.workstation.enable [
+  home.packages = lib.optionals config.anderer.home.workstation.enable [
     #entfallen mit update vom 30.11.2025
     #pkgs.gitAndTools.tig
     pkgs.git-absorb
@@ -13,8 +13,8 @@
 
   programs.git = {
     enable = true;
-    package = if config.anderer.workstation.enable then pkgs.git else pkgs.gitMinimal;
-    lfs.enable = config.anderer.workstation.enable;
+    package = if config.anderer.home.workstation.enable then pkgs.git else pkgs.gitMinimal;
+    lfs.enable = config.anderer.home.workstation.enable;
     attributes = [
       "*.pdf diff=pdf"
     ];
@@ -120,7 +120,7 @@
   };
 
   programs.lazygit = {
-    enable = config.anderer.workstation.enable;
+    enable = config.anderer.home.workstation.enable;
     settings = {
       git = {
         paging = {

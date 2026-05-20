@@ -5,12 +5,12 @@
   ...
 }:
 {
-  options.anderer.workstation.shell = lib.mkOption {
+  options.anderer.home.workstation.shell = lib.mkOption {
     type = lib.types.bool;
     default = true;
   };
 
-  config = lib.mkIf config.anderer.workstation.shell {
+  config = lib.mkIf config.anderer.home.workstation.shell {
     home.shellAliases = {
       p = "$PAGER";
       vi = "vim";
@@ -75,10 +75,10 @@
       historyIgnore = [ "exit" ];
     };
 
-    programs.zoxide.enable = config.anderer.workstation.enable;
+    programs.zoxide.enable = config.anderer.home.workstation.enable;
 
     programs.direnv = {
-      enable = config.anderer.workstation.enable;
+      enable = config.anderer.home.workstation.enable;
       nix-direnv.enable = true;
       config.warn_timeout = "1m";
     };

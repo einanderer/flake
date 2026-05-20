@@ -6,15 +6,15 @@
   ...
 }:
 let
-  oscfg = osConfig.anderer.workstation;
+  oscfg = osConfig.anderer.os.workstation;
 in
 {
-  options.anderer.workstation.wayland = lib.mkOption {
+  options.anderer.home.workstation.wayland = lib.mkOption {
     type = lib.types.bool;
-    default = config.anderer.workstation.enable;
+    default = config.anderer.home.workstation.enable;
   };
 
-  config = lib.mkIf config.anderer.workstation.wayland {
+  config = lib.mkIf config.anderer.home.workstation.wayland {
     home.packages = [
       pkgs.libnotify
       pkgs.wdisplays
@@ -58,7 +58,7 @@ in
       settings = {
         main = {
           launch-prefix = "systemd-run --user --scope --slice=app";
-          terminal = "${lib.getExe config.anderer.workstation.terminal.default} -e";
+          terminal = "${lib.getExe config.anderer.home.workstation.terminal.default} -e";
           dpi-aware = false;
           icon-theme = config.gtk.iconTheme.name;
           show-actions = true;

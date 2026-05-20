@@ -4,14 +4,14 @@
   ...
 }:
 {
-  options.anderer.workstation = {
+  options.anderer.home.workstation = {
     xorg-settings = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.wayland;
+      default = config.anderer.home.workstation.wayland;
     };
   };
 
-  config = lib.mkIf config.anderer.workstation.xorg-settings {
+  config = lib.mkIf config.anderer.home.workstation.xorg-settings {
     stylix.targets.xresources.enable = true;
     xresources.properties = {
       "Xft.hinting" = "1";

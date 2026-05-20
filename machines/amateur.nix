@@ -4,14 +4,7 @@
 }:
 
 {
-  ##temoporär damits baut
-  #nixpkgs.config.permittedInsecurePackages = [
-  #  "electron-36.9.5"
-  #];
-
   system.stateVersion = "25.05";
-
-  time.timeZone = "Europe/Berlin";
 
   hardware.firmware = [
     pkgs.linux-firmware
@@ -32,10 +25,6 @@
     "coretemp"
     "it87"
   ];
-  #boot.extraModprobeConfig = ''
-  #  options it87 force_id=0x8689
-  #  options it87 force_id=0x8795
-  #'';
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/91848f23-e272-42ff-8120-5d052957a589";
@@ -82,10 +71,10 @@
     ];
   };
 
-  boot.loader.systemd-boot.enable = true;
-  #boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
+  networking.hostName = "amateur";
 
-  networking.hostName = "amateur"; # Define your hostname.
+  anderer.profiles.workstation.enable = true;
+  anderer.profiles.workstationDesktop.enable = true;
 
   programs.coolercontrol.enable = true;
   services.lact.enable = true;
@@ -101,27 +90,6 @@
     }
   ];
 
-  #chaotic.hdr.enable = true;
-
-  #services.pipewire.extraConfig.pipewire."99-line-in-loopback" = {
-  #  "context.modules" = [
-  #    {
-  #      name = "libpipewire-module-loopback";
-  #      args = {
-  #        "node.description" = "Line-In Monitor"; # Name im Audiomixer
-  #        "capture.props" = {
-  #          "node.name" = "line_in_capture";
-  #          "target.object" = "alsa_input.pci-0000_10_00.4.analog-stereo"; # Deinen Device-Namen hier einsetzen
-  #        };
-  #        "playback.props" = {
-  #          "node.name" = "line_in_playback";
-  #          "media.class" = "Audio/Sink"; # Erstellt ein virtuelles Wiedergabegerät
-  #        };
-  #      };
-  #    }
-  #  ];
-  #};
-
   environment.systemPackages = with pkgs; [
     hardinfo2
     liquidctl
@@ -133,17 +101,10 @@
     kdePackages.dolphin
   ];
 
-  anderer.hardware = {
-    cpu.amd = true;
-    gpu.amd = true;
-  };
-  anderer.secureboot = false;
-  anderer.workstation.network.publicUplinks = [ ];
+  anderer.hardware.cpu.amd = true;
+  anderer.hardware.gpu.amd = true;
 
-  anderer.workstation = {
-    enable = true;
-    cursor.enable = true;
-    libvirt = false;
+  anderer.os.workstation = {
     ai = true;
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 2160;

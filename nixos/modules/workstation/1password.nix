@@ -4,12 +4,12 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.os.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.anderer.workstation._1password = mkEnableOption "1Password support" // {
-    default = config.anderer.workstation.enable;
+  options.anderer.os.workstation._1password = mkEnableOption "1Password support" // {
+    default = config.anderer.os.workstation.enable;
   };
 
   config = mkIf cfg._1password {

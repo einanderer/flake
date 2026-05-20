@@ -5,12 +5,13 @@
   ...
 }:
 {
-  options.anderer.workstation.nvidia = lib.mkOption {
+  options.anderer.home.workstation.nvidia = lib.mkOption {
     type = lib.types.bool;
-    default = config.anderer.workstation.wayland && (osConfig.anderer.workstation.nvidia or false);
+    default =
+      config.anderer.home.workstation.wayland && (osConfig.anderer.os.workstation.nvidia or false);
   };
 
-  config = lib.mkIf config.anderer.workstation.nvidia {
+  config = lib.mkIf config.anderer.home.workstation.nvidia {
     wayland.windowManager.sway = {
       extraOptions = [ "--unsupported-gpu" ];
     };

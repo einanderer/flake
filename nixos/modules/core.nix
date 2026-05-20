@@ -10,8 +10,7 @@
     inputs.disko.nixosModules.default
     inputs.sops-nix.nixosModules.sops
     #inputs.chaotic.nixosModules.default
-  ]
-  ++ lib.filesystem.listFilesRecursive ./default;
+  ];
 
   nixpkgs.overlays = [
     inputs.self.overlays.default

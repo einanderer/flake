@@ -7,8 +7,6 @@
 {
   system.stateVersion = "25.05";
 
-  time.timeZone = "Europe/Berlin";
-
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/5ad8e402-7054-42dc-b1c4-3f31ffe0e336";
     fsType = "ext4";
@@ -28,20 +26,15 @@
     ];
   };
 
-  boot.loader.systemd-boot.enable = true;
-
-  sops = {
-    secrets = {
-      ttvpn-private = {
-        owner = "systemd-network";
-      };
-      ttvpn-psk = {
-        owner = "systemd-network";
-      };
-    };
+  sops.secrets = {
+    ttvpn-private.owner = "systemd-network";
+    ttvpn-psk.owner = "systemd-network";
   };
 
   networking.hostName = "trolllollo";
+
+  anderer.profiles.workstation.enable = true;
+  anderer.profiles.workstationLaptop.enable = true;
 
   anderer.network.ttvpn = {
     enable = true;
@@ -63,20 +56,12 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    unzip
-  ];
+  environment.systemPackages = [ pkgs.unzip ];
 
   anderer.hardware.thinkpad.t470s = true;
-  anderer.secureboot = false;
-  anderer.workstation = {
-    enable = true;
-    cursor.enable = true;
-    libvirt = false;
-    gaming = {
-      enable = true;
-      remotePlay.enable = true;
-    };
-  };
 
+  anderer.os.workstation.gaming = {
+    enable = true;
+    remotePlay.enable = true;
+  };
 }

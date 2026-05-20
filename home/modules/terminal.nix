@@ -5,10 +5,10 @@
   ...
 }:
 {
-  options.anderer.workstation.terminal = {
+  options.anderer.home.workstation.terminal = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.wayland;
+      default = config.anderer.home.workstation.wayland;
     };
 
     default = lib.mkOption {
@@ -17,9 +17,9 @@
     };
   };
 
-  config = lib.mkIf config.anderer.workstation.terminal.enable {
+  config = lib.mkIf config.anderer.home.workstation.terminal.enable {
     home.sessionVariables = {
-      TERMINAL = config.anderer.workstation.terminal.default.meta.mainProgram;
+      TERMINAL = config.anderer.home.workstation.terminal.default.meta.mainProgram;
     };
 
     programs.alacritty = {

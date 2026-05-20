@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation.cursor;
+  cfg = config.anderer.os.workstation.cursor;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.anderer.workstation.cursor = {
+  options.anderer.os.workstation.cursor = {
     enable = mkEnableOption "Cursor IDE";
   };
 

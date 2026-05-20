@@ -86,6 +86,11 @@ in
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
+    services.ndppd = {
+      enable = true;
+      proxies.${cfg.wanInterface}.rules.${cfg.ipv6Address} = { };
+    };
+
     systemd.network.networks."50-${cfg.wanInterface}" = {
       matchConfig.Name = cfg.wanInterface;
       networkConfig = {

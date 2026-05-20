@@ -6,12 +6,12 @@
   ...
 }:
 {
-  options.anderer.workstation.obs = lib.mkOption {
+  options.anderer.home.workstation.obs = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.anderer.workstation.enable && pkgs.stdenv.hostPlatform.isx86_64;
+    default = osConfig.anderer.os.workstation.enable && pkgs.stdenv.hostPlatform.isx86_64;
   };
 
-  config = lib.mkIf config.anderer.workstation.obs {
+  config = lib.mkIf config.anderer.home.workstation.obs {
     home.packages = [ pkgs.obs-cmd ];
     programs.obs-studio = {
       enable = true;

@@ -6,11 +6,11 @@
 }:
 
 {
-  options.anderer.workstation.plymouth = lib.mkEnableOption "bootsplash" // {
+  options.anderer.os.workstation.plymouth = lib.mkEnableOption "bootsplash" // {
     default = false;
   };
 
-  config = lib.mkIf config.anderer.workstation.plymouth {
+  config = lib.mkIf config.anderer.os.workstation.plymouth {
     boot = {
       plymouth = {
         enable = true;

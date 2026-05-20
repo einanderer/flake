@@ -8,12 +8,12 @@
 }:
 
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.home.workstation;
 in
 {
-  options.anderer.workstation.enable = lib.mkOption {
+  options.anderer.home.workstation.enable = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.anderer.workstation.enable or false;
+    default = osConfig.anderer.os.workstation.enable or false;
   };
 
   config = lib.mkIf cfg.enable {

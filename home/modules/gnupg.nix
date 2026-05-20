@@ -1,11 +1,11 @@
 { lib, config, ... }:
 {
-  options.anderer.workstation.gnupg = lib.mkOption {
+  options.anderer.home.workstation.gnupg = lib.mkOption {
     type = lib.types.bool;
     default = false;
   };
 
-  config = lib.mkIf config.anderer.workstation.gnupg {
+  config = lib.mkIf config.anderer.home.workstation.gnupg {
     programs.gpg = {
       enable = true;
       settings = {

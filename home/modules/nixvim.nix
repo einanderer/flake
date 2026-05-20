@@ -9,7 +9,7 @@
 {
   options.anderer.nixvim = lib.mkOption {
     type = lib.types.bool;
-    default = osConfig.anderer.workstation.enable;
+    default = osConfig.anderer.os.workstation.enable;
   };
 
   config = lib.mkIf config.anderer.nixvim {

@@ -48,12 +48,12 @@ let
 
 in
 {
-  options.anderer.workstation.browser = lib.mkOption {
+  options.anderer.home.workstation.browser = lib.mkOption {
     type = lib.types.bool;
-    default = config.anderer.workstation.wayland;
+    default = config.anderer.home.workstation.wayland;
   };
 
-  config = lib.mkIf config.anderer.workstation.browser {
+  config = lib.mkIf config.anderer.home.workstation.browser {
     home.file = {
       ".librewolf/default/chrome" = {
         source = "${inputs.potatofox}/chrome";

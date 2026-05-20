@@ -35,17 +35,7 @@
     {
       server = nixos {
         system = "x86_64-linux";
-        module = {
-          networking.hostName = "server";
-          anderer.network.serverUplink.enable = true;
-          fileSystems."/" = {
-            device = "/dev/disk/by-label/nixos";
-            fsType = "ext4";
-          };
-          boot.loader.systemd-boot = {
-            enable = true;
-          };
-        };
+        module = import ./server.nix;
       };
 
       trolllollo = nixos {

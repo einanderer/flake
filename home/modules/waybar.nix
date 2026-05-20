@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation.waybar;
+  cfg = config.anderer.home.workstation.waybar;
 
   fuzzelMenuWrapped =
     pkg:
@@ -16,10 +16,10 @@ let
     '';
 in
 {
-  options.anderer.workstation.waybar = {
+  options.anderer.home.workstation.waybar = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.sway;
+      default = config.anderer.home.workstation.sway;
     };
   };
 
@@ -143,7 +143,7 @@ in
           format = "{percentage} {time}";
         };
         "network#en" = {
-          interface = osConfig.anderer.workstation.waybar.wiredInterface;
+          interface = osConfig.anderer.os.workstation.waybar.wiredInterface;
           family = "ipv4_6";
           format-ethernet = "{bandwidthDownBits} {bandwidthUpBits} ";
           tooltip-format-ethernet = "{ifname}";
@@ -199,7 +199,7 @@ in
               ""
             ];
           };
-          on-click = "${lib.getExe config.anderer.workstation.terminal.default} -e ${lib.getExe pkgs.wiremix}";
+          on-click = "${lib.getExe config.anderer.home.workstation.terminal.default} -e ${lib.getExe pkgs.wiremix}";
         };
         bluetooth = {
           format = "{status} ";

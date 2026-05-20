@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.os.workstation;
 in
 {
   config = lib.mkIf cfg.enable {

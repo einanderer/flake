@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation.gaming;
+  cfg = config.anderer.os.workstation.gaming;
   inherit (lib)
     mkEnableOption
     mkIf
@@ -16,18 +16,18 @@ let
     ;
 in
 {
-  options.anderer.workstation.gaming = {
+  options.anderer.os.workstation.gaming = {
     enable = mkEnableOption "gaming support";
 
     lutris = {
       enable = mkEnableOption "Lutris" // {
-        default = config.anderer.workstation.gaming.enable;
+        default = config.anderer.os.workstation.gaming.enable;
       };
     };
 
     heroic = {
       enable = mkEnableOption "Heroic Games Launcher" // {
-        default = config.anderer.workstation.gaming.enable;
+        default = config.anderer.os.workstation.gaming.enable;
       };
     };
 

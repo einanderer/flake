@@ -34,7 +34,7 @@ in
       neededForUsers = true;
     };
 
-    home-manager = lib.mkIf (!config.boot.isContainer && config.anderer.workstation.enable) {
+    home-manager = lib.mkIf (!config.boot.isContainer && config.anderer.os.workstation.enable) {
       useGlobalPkgs = true;
       useUserPackages = true;
       users.${cfg.user} = ../../home/${cfg.user}.nix;

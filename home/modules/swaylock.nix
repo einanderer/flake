@@ -9,12 +9,12 @@ let
   systemdPackage = osConfig.systemd.package or pkgs.systemd;
 in
 {
-  options.anderer.workstation.swaylock = lib.mkOption {
+  options.anderer.home.workstation.swaylock = lib.mkOption {
     type = lib.types.bool;
-    default = config.anderer.workstation.sway;
+    default = config.anderer.home.workstation.sway;
   };
 
-  config = lib.mkIf config.anderer.workstation.swaylock {
+  config = lib.mkIf config.anderer.home.workstation.swaylock {
     services.systemd-lock-handler.enable = true;
 
     programs.swaylock.enable = true;

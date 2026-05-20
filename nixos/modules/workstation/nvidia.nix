@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.os.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.anderer.workstation.nvidia = mkEnableOption "nvidia support";
+  options.anderer.os.workstation.nvidia = mkEnableOption "nvidia support";
 
   config = mkIf cfg.nvidia {
     nixpkgs = {

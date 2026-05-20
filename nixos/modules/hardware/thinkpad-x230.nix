@@ -8,6 +8,8 @@
   options.anderer.hardware.thinkpad.x230 = lib.mkEnableOption "Thinkpad X230";
 
   config = lib.mkIf config.anderer.hardware.thinkpad.x230 {
+    anderer.hardware.thinkpad.enable = true;
+
     boot = {
       initrd = {
         availableKernelModules = [
@@ -26,30 +28,13 @@
         "mei_me"
         "mei"
       ];
-      extraModprobeConfig = ''
-        options thinkpad_acpi experimental=1 fan_control=1
-      '';
     };
 
-    networking.wireless = {
-      enable = true;
-      interfaces = [ "wlp2s0" ];
-    };
+    networking.wireless.interfaces = [ "wlp2s0" ];
 
-    hardware = {
-      firmware = with pkgs; [
-        linux-firmware
-        alsa-firmware
-      ];
-      trackpoint = {
-        enable = true;
-      };
-      wirelessRegulatoryDatabase = true;
-      cpu.intel.updateMicrocode = true;
-      graphics.extraPackages = [
-        pkgs.intel-vaapi-driver
-      ];
-    };
+    hardware.graphics.extraPackages = [
+      pkgs.intel-vaapi-driver
+    ];
 
     environment.systemPackages = with pkgs; [
       intel-gpu-tools
@@ -58,7 +43,7 @@
 
     services.tuned.enable = true;
 
-    anderer.workstation = {
+    anderer.os.workstation = {
       battery = true;
       waybar.wiredInterface = "eno0";
       ytdlVideoCodec = "avc1";

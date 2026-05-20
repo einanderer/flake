@@ -6,27 +6,27 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.home.workstation;
 in
 {
-  options.anderer.workstation = {
+  options.anderer.home.workstation = {
     gui = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.wayland;
+      default = config.anderer.home.workstation.wayland;
     };
     ytdlVideoCodec = lib.mkOption {
       type = lib.types.str;
-      default = osConfig.anderer.workstation.ytdlVideoCodec or "vp09";
+      default = osConfig.anderer.os.workstation.ytdlVideoCodec or "vp09";
       description = "youtube-dl video codec";
     };
     ytdlMaxRes = lib.mkOption {
       type = lib.types.int;
-      default = osConfig.anderer.workstation.ytdlMaxRes or 1080;
+      default = osConfig.anderer.os.workstation.ytdlMaxRes or 1080;
       description = "youtube-dl maximum resolution";
     };
   };
 
-  config = lib.mkIf config.anderer.workstation.gui {
+  config = lib.mkIf config.anderer.home.workstation.gui {
     stylix.cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Ice";

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.os.workstation;
   inherit (lib)
     types
     mkEnableOption
@@ -15,7 +15,7 @@ let
     ;
 in
 {
-  options.anderer.workstation = {
+  options.anderer.os.workstation = {
     enable = mkEnableOption "${config.anderer.home.user} workstation";
     battery = mkEnableOption "machine has battery";
     libvirt = mkOption {
@@ -53,10 +53,8 @@ in
     };
   };
 
-  imports = lib.filesystem.listFilesRecursive ./workstation;
-
   config = mkIf cfg.enable {
-    anderer.workstation.libvirt = lib.mkOptionDefault (!cfg.battery);
+    anderer.os.workstation.libvirt = lib.mkOptionDefault (!cfg.battery);
 
     services.dbus.implementation = "broker";
 

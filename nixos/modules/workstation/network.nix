@@ -4,13 +4,13 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation.network;
+  cfg = config.anderer.os.workstation.network;
 in
 {
-  options.anderer.workstation.network = {
+  options.anderer.os.workstation.network = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.enable;
+      default = config.anderer.os.workstation.enable;
       description = "workstation networking";
     };
 

@@ -12,7 +12,7 @@ in
   options.programs.spotify-unfree = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = config.anderer.workstation.gui && pkgs.stdenv.hostPlatform.isx86_64;
+      default = config.anderer.home.workstation.gui && pkgs.stdenv.hostPlatform.isx86_64;
       description = "Unfree Spotify Client";
     };
   };

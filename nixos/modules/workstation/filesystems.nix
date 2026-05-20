@@ -4,12 +4,12 @@
   ...
 }:
 let
-  cfg = config.anderer.workstation;
+  cfg = config.anderer.os.workstation;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.anderer.workstation.filesystems = mkEnableOption "Filesystems" // {
-    default = config.anderer.workstation.enable;
+  options.anderer.os.workstation.filesystems = mkEnableOption "Filesystems" // {
+    default = config.anderer.os.workstation.enable;
   };
 
   config = mkIf cfg.filesystems {

@@ -6,12 +6,12 @@
   ...
 }:
 {
-  options.anderer.workstation.sway = lib.mkOption {
+  options.anderer.home.workstation.sway = lib.mkOption {
     type = lib.types.bool;
     default = osConfig.programs.sway.enable;
   };
 
-  config = lib.mkIf config.anderer.workstation.sway {
+  config = lib.mkIf config.anderer.home.workstation.sway {
     wayland.windowManager.sway = {
       enable = true;
       extraSessionCommands = ''
@@ -50,7 +50,7 @@
           };
         };
         modifier = "Mod4";
-        terminal = "systemd-run --user --scope --slice=app ${lib.getExe config.anderer.workstation.terminal.default}";
+        terminal = "systemd-run --user --scope --slice=app ${lib.getExe config.anderer.home.workstation.terminal.default}";
         defaultWorkspace = "workspace number 1";
         window = {
           titlebar = false;
