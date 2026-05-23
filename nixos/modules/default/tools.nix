@@ -63,6 +63,7 @@
     netcat
     ngrep
     wpa_supplicant_gui
+    wireguard-tools
     # hardware
     dmidecode
     pciutils
