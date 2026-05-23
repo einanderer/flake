@@ -171,7 +171,11 @@ in
           IPv4Forwarding = true;
           IPv6Forwarding = true;
         };
+        routes = lib.optionals (cfg.hub != null) [
+          { Destination = "10.0.0.0/24"; } # muss noch schoen gemacht werden
+        ];
       };
+
     };
   };
 }
