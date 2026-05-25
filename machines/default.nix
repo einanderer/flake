@@ -52,5 +52,10 @@
         system = "x86_64-linux";
         module = import ./tentacle.nix;
       };
+
+      bettenlager = nixos {
+        system = "x86_64-linux";
+        module = import ./bettenlager.nix;
+      };
     };
 }
