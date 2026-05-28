@@ -10,6 +10,8 @@ creation_rules:
         - age1984nv4lw3yt2df2h9ys4m0rtc98ypcv5fy8fyft8gtlasceg3ctqkn2djz
         #tentacle
         - age1y7mmxptf59wmzsqnkhyraqee8j02ccj62u0z7fu9qkh25pc3us2spfk4g8
+        #bettenlager
+        - age1875x66lqzhnvv60d75zsfqshzwwc8js2u83mwn2s5dl4yf893yvs60lzm2
   - path_regex: trolllollo\.yaml$
     key_groups:
       - age:
@@ -24,3 +26,10 @@ creation_rules:
         - age1grgn2qn6ajs6n64q5rnwg8nna0v8a3lzgrvaezp9xjcv675cuqhsthfta5
         #tentacle (Rechner)
         - age1y7mmxptf59wmzsqnkhyraqee8j02ccj62u0z7fu9qkh25pc3us2spfk4g8
+  - path_regex: bettenlager\.yaml$
+    key_groups:
+      - age:
+        #anderer (Ich)
+        - age1grgn2qn6ajs6n64q5rnwg8nna0v8a3lzgrvaezp9xjcv675cuqhsthfta5
+        #bettenlager
+        - age1875x66lqzhnvv60d75zsfqshzwwc8js2u83mwn2s5dl4yf893yvs60lzm2
