@@ -29,9 +29,12 @@
 
   anderer.hardware.thinkpad.x230 = true;
 
-  anderer.os.workstation.gaming = {
-    enable = true;
-    remotePlay.enable = true;
+  anderer.os.workstation = {
+    ai = false;
+    gaming = {
+      enable = true;
+      remotePlay.enable = true;
+    };
   };
 
 }
