@@ -153,7 +153,7 @@ in
       };
     };
 
-    services.easyeffects.enable = true;
+    services.easyeffects.enable = false;
 
     programs.mpv = {
       enable = true;
