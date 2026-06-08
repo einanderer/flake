@@ -94,7 +94,6 @@
     hardinfo2
     liquidctl
     qpwgraph
-    fluffychat
     element-desktop
     legcord
     kdePackages.qtsvg
@@ -106,6 +105,7 @@
 
   anderer.os.workstation = {
     ai = true;
+    libvirt = true;
     ytdlVideoCodec = "av01";
     ytdlMaxRes = 2160;
     gaming = {

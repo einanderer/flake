@@ -53,8 +53,8 @@ in
 
         # GUI
         #remmina
-        #virt-manager
-        #virt-viewer
+        virt-manager
+        virt-viewer
         transmission-remote-gtk
         mumble
         gimp3
