@@ -40,7 +40,7 @@
   anderer.network.tentacleEdge.enable = true;
 
   anderer.server.stack = {
-    enable = true;
+    enable = false;
     hostAlias = "tentacle";
     grafanaDomain = "meine.tagesthe.men";
   };
