@@ -60,8 +60,11 @@
 
   anderer.hardware.thinkpad.t470s = true;
 
-  anderer.os.workstation.gaming = {
-    enable = true;
-    remotePlay.enable = true;
+  anderer.os.workstation = {
+    ai = false;
+    gaming = {
+      enable = true;
+      remotePlay.enable = true;
+    };
   };
 }
