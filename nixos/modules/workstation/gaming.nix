@@ -75,7 +75,8 @@ in
       optionals cfg.lutris.enable [ pkgs.lutris-unwrapped ]
       ++ optionals cfg.heroic.enable [ pkgs.heroic-unwrapped ]
       ++ optionals cfg.wine.enable [
-        pkgs.wineWow64Packages.stableFull
+        #pkgs.wineWow64Packages.stableFull
+        pkgs.wine
         pkgs.winetricks
       ]
       ++ optionals cfg.remotePlay.enable [ pkgs.moonlight-qt ]
