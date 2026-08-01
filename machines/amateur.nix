@@ -110,7 +110,6 @@
     ytdlMaxRes = 2160;
     gaming = {
       enable = true;
-      wine.enable = true;
       streaming.enable = true;
       extraPackages = with pkgs; [
         dosbox-x

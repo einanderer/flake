@@ -32,7 +32,9 @@ in
     };
 
     wine = {
-      enable = mkEnableOption "Wine";
+      enable = mkEnableOption "Wine" // {
+        default = config.anderer.os.workstation.gaming.enable;
+      };
     };
 
     streaming = {
@@ -70,9 +72,12 @@ in
     };
 
     environment.systemPackages =
-      optionals cfg.lutris.enable [ pkgs.lutris-free ]
-      ++ optionals cfg.heroic.enable [ pkgs.heroic ]
-      ++ optionals cfg.wine.enable [ pkgs.wine ]
+      optionals cfg.lutris.enable [ pkgs.lutris-unwrapped ]
+      ++ optionals cfg.heroic.enable [ pkgs.heroic-unwrapped ]
+      ++ optionals cfg.wine.enable [
+        pkgs.wineWow64Packages.stableFull
+        pkgs.winetricks
+      ]
       ++ optionals cfg.remotePlay.enable [ pkgs.moonlight-qt ]
       ++ cfg.extraPackages;
 
