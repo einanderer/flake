@@ -39,16 +39,8 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         nixos-stable.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
         disko.follows = "disko";
         treefmt-nix.follows = "treefmt-nix";
-      };
-    };
-
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote/master";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
       };
     };
 
@@ -70,9 +62,19 @@
       };
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/master";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
     };
 
     bad_gateway = {

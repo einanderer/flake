@@ -196,10 +196,11 @@
       };
     };
 
-    journald.extraConfig = ''
-      SystemMaxUse=100M
-      MaxRetentionSec=3days
-    '';
+    ##Update 06.09.2026 no longer has any effect; please remove it.
+    #journald.extraConfig = ''
+    #  SystemMaxUse=100M
+    #  MaxRetentionSec=3days
+    #'';
 
     userborn.enable = true;
 

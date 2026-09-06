@@ -21,12 +21,12 @@
         obs-gstreamer
         wlrobs
         obs-pipewire-audio-capture
-        obs-move-transition
+        #obs-move-transition #failed
         obs-tuna
         obs-text-pthread
         waveform
         obs-vintage-filter
-        obs-shaderfilter
+        #obs-shaderfilter #failed
         obs-composite-blur
         obs-source-record
         obs-source-clone

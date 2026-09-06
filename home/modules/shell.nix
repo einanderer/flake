@@ -86,14 +86,14 @@
     programs.fzf = {
       enable = true;
       enableZshIntegration = false;
-      changeDirWidgetCommand = "fd --type d --color always";
-      changeDirWidgetOptions = [
+      changeDirWidget.command = "fd --type d --color always";
+      changeDirWidget.options = [
         "--ansi"
         "--preview 'tree -C {} | head -200'"
       ];
       defaultCommand = "fd --type f --color always";
-      fileWidgetCommand = "fd --type f --color always";
-      fileWidgetOptions = [
+      fileWidget.command = "fd --type f --color always";
+      fileWidget.options = [
         "--ansi"
         "--preview 'bat --style=numbers --color=always --line-range :500 {}'"
       ];
@@ -165,6 +165,7 @@
       enable = true;
       enableZshIntegration = false;
       daemon.enable = true;
+      flags = [ "--disable-ctrl-r" ];
       settings = {
         update_check = false;
         style = "compact";

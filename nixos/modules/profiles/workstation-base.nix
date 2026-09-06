@@ -14,6 +14,6 @@
     anderer.secureboot = lib.mkDefault false;
 
     anderer.os.workstation.enable = lib.mkDefault true;
-    anderer.os.workstation.cursor.enable = lib.mkDefault true;
+    anderer.os.workstation.cursor.enable = lib.mkDefault false;
   };
 }

@@ -78,7 +78,7 @@ in
         taplo
         llvmPackages.clang
       ]
-      ++ (lib.optionals pkgs.stdenv.isx86_64 [ pkgs.lurk ]);
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [ pkgs.lurk ]);
 
     xdg.configFile."wiremix/wiremix.toml".source = pkgs.writers.writeTOML "wiremix.toml" {
       fps = 30;
