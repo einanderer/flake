@@ -30,7 +30,7 @@
       ];
     };
 
-    networking.wireless.interfaces = [ "wlp2s0" ];
+    networking.wireless.interfaces = [ "wlp3s0" ];
 
     hardware.graphics.extraPackages = [
       pkgs.intel-vaapi-driver
