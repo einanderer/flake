@@ -91,6 +91,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    opencode
     hardinfo2
     liquidctl
     qpwgraph
