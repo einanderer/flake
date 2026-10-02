@@ -63,8 +63,8 @@ in
 
     qt = {
       enable = true;
-      platformTheme = "gtk2";
-      style = "gtk2";
+      platformTheme = "qt5ct";
+      style = "adwaita-dark";
     };
   };
 }
