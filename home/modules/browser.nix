@@ -109,7 +109,7 @@ in
     };
 
     programs.chromium = {
-      enable = true;
+      enable = false;
       commandLineArgs = [
         "--enable-features=WebRTCPipeWireCapturer,VaapiVideoDecoder,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL"
         "--ignore-gpu-blocklist"
