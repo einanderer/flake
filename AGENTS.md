@@ -35,3 +35,37 @@
 - **Linting/Formatting:** Uses `treefmt.nix` and `git-hooks.nix`.
 - **Dev Shell:** Use `nix develop` to enter a shell with `sops`, `ssh-to-age`, and `nixos-anywhere`.
 - **Ad-hoc Tools:** For temporary tools not in the dev shell, use `nix shell -p <package>` or `nix run nixpkgs#<package>` instead of imperative package managers.
+
+## 🧠 Intelligence & Preferences
+
+### Path Awareness
+- Most active development and project-specific configurations are located within `~/Projekte/`.
+- Always ensure tool configurations (like Taskwarrior's `.taskrc`) are correctly placed within their respective project contexts to avoid polluting the home directory.
+
+### Terminal & Tooling
+- **Terminal-Centric:** The user environment heavily utilizes terminal multiplexers (e.g., Zellij) and CLI-first tools. 
+- **Existing Utilities:** Always check `~/.local/bin/` for existing scripts or custom utilities before implementing new ones to avoid duplication.
+
+### LSP Debugging Protocol
+- When LSP issues are reported, the standard procedure is to use the automated diagnostic script: `./scripts/test-lsp.sh`.
+- Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
+
+### Task Management
+- Use the Taskwarrior MCP integration to track long-term tasks and development workflows.
+- Register new diagnostic or testing workflows as persistent tasks.
+
+### Path Awareness
+- Most active development and project-specific configurations are located within `~/Projekte/`.
+- Always ensure tool configurations (like Taskwarrior's `.taskrc`) are correctly placed within their respective project contexts to avoid polluting the home directory.
+
+### Terminal & Tooling
+- **Terminal-Centric:** The user environment heavily utilizes terminal multiplexers (e.g., Zellij) and CLI-first tools. 
+- **Existing Utilities:** Always check `~/.local/bin/` for existing scripts or custom utilities before implementing new ones to avoid duplication.
+
+### LSP Debugging Protocol
+- When LSP issues are reported, the standard procedure is to use the automated diagnostic script: `./scripts/test-lsp.sh`.
+- Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
+
+### Task Management
+- Use the Taskwarrior MCP integration to track long-term tasks and development workflows.
+- Register new diagnostic or testing workflows as persistent tasks.

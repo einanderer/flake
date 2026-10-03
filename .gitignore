@@ -1,3 +1,5 @@
 result*
 /.direnv/
+/logs/
+/scripts/
 .pre-commit-config.yaml
