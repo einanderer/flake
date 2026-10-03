@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   keymaps = [
     {
@@ -41,14 +45,14 @@
         enable = true;
         config =
           let
-            localFlake = import /home/anderer/flake;
+            localFlake = ''(builtins.getFlake "/home/fpletz/src/flake")'';
           in
           {
             nixpkgs.expr = "import <nixpkgs> {}";
             formatting.command = [ (lib.getExe pkgs.nixfmt) ];
             options = {
-              nixos.expr = "${localFlake}.nixosConfigurations.amateur.options";
-              home-manager.expr = "${localFlake}.homeConfigurations.anderer.options";
+              nixos.expr = "${localFlake}.nixosConfigurations.server.options";
+              home-manager.expr = "${localFlake}.homeConfigurations.fpletz.options";
             };
           };
       };
