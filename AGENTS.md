@@ -22,6 +22,15 @@
 - **`pkgs/`**: Custom package definitions.
 - **`secrets/`**: Encrypted secrets managed by SOPS.
 
+## 🌐 Host Inventory
+
+| Hostname | Type | Role | Notes |
+| :--- | :--- | :--- | :--- |
+| `amateur` | Local Desktop | Gaming, Streaming Server, Dev, Multimedia | **Core Deployment Machine**. Remote builds happen here. **Opencode runs here.** |
+| `tentacle` | External VPS (Hetzner) | VPN Gateway | **Critical Infrastructure**. Accessible via SSH or Hetzner Web Console. |
+| `trolllollo` | Local Notebook | Multimedia, Gaming, Streaming, Dev | **Critical**. High priority, similar importance to `amateur`. |
+| `bettenlager` | Local Notebook | Multimedia, Streaming Client | Non-critical consumer device. |
+
 ## 📝 Development Workflow
 - **Linting/Formatting:** Uses `treefmt.nix` and `git-hooks.nix`.
 - **Dev Shell:** Use `nix develop` to enter a shell with `sops`, `ssh-to-age`, and `nixos-anywhere`.
