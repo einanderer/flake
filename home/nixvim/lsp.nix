@@ -25,57 +25,19 @@
       '';
       options.desc = "Toggle lsp inlay hints";
     }
-    {
-      mode = "n";
-      key = "<leader>k";
-      action = lib.nixvim.mkRaw "function() vim.diagnostic.jump({ count=-1, float=true }) end";
-    }
-    {
-      mode = "n";
-      key = "<leader>j";
-      action = lib.nixvim.mkRaw "function() vim.diagnostic.jump({ count=1, float=true }) end";
-    }
-    {
-      mode = "n";
-      key = "<leader>lx";
-      action = "<CMD>LspStop<Enter>";
-    }
-    {
-      mode = "n";
-      key = "<leader>ls";
-      action = "<CMD>LspStart<Enter>";
-    }
-    {
-      mode = "n";
-      key = "<leader>lr";
-      action = "<CMD>LspRestart<Enter>";
-    }
-    {
-      mode = "n";
-      key = "rn";
-      lspBufAction = "rename";
-    }
-    {
-      mode = "n";
-      key = "ca";
-      lspBufAction = "code_action";
-    }
   ];
 
   lsp = {
     servers = {
       bashls.enable = true;
-      basedpyright.enable = true;
       clangd.enable = true;
       cssls.enable = true;
-      docker_compose_language_service.enable = true;
-      dockerls.enable = true;
       gopls.enable = true;
       html.enable = true;
       jsonls.enable = true;
       just.enable = true;
       lemminx.enable = true;
-      lua_ls.enable = true;
+      lua_ls.enable = false;
       nixd = {
         enable = true;
         config =
@@ -93,16 +55,63 @@
       };
       marksman.enable = true;
       markdown_oxide.enable = true;
-      pylsp.enable = true;
       ruff.enable = true;
       taplo.enable = true;
       texlab.enable = false;
+      ty.enable = true;
       yamlls.enable = true;
-      zls.enable = true;
+      # zls.enable = true;  # XXX: broken
     };
+    keymaps = [
+      {
+        key = "gd";
+        lspBufAction = "definition";
+      }
+      {
+        key = "gt";
+        lspBufAction = "type_definition";
+      }
+      {
+        key = "gi";
+        lspBufAction = "implementation";
+      }
+      {
+        key = "K";
+        lspBufAction = "hover";
+      }
+      {
+        key = "<leader>k";
+        action = lib.nixvim.mkRaw "function() vim.diagnostic.jump({ count=-1, float=true }) end";
+      }
+      {
+        key = "<leader>j";
+        action = lib.nixvim.mkRaw "function() vim.diagnostic.jump({ count=1, float=true }) end";
+      }
+      {
+        key = "<leader>lx";
+        action = "<CMD>LspStop<Enter>";
+      }
+      {
+        key = "<leader>ls";
+        action = "<CMD>LspStart<Enter>";
+      }
+      {
+        key = "<leader>lr";
+        action = "<CMD>LspRestart<Enter>";
+      }
+      {
+        key = "rn";
+        lspBufAction = "rename";
+      }
+      {
+        key = "ca";
+        lspBufAction = "code_action";
+      }
+    ];
   };
 
   plugins = {
+    lsp.enable = true;
     rustaceanvim = {
       enable = true;
       settings.server = {

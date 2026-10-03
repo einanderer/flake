@@ -1,15 +1,15 @@
 { lib, inputs, ... }:
+let
+  byNamePackages =
+    pkgs:
+    lib.filesystem.packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./by-name;
+    };
+in
 {
   perSystem =
     { pkgs, system, ... }:
-    let
-      byNamePackages =
-        pkgs:
-        lib.filesystem.packagesFromDirectoryRecursive {
-          inherit (pkgs) callPackage;
-          directory = ./by-name;
-        };
-    in
     {
       _module.args.pkgs = import inputs.nixpkgs {
         inherit system;
@@ -31,8 +31,6 @@
         };
       }
       // byNamePackages pkgs;
-
-      formatter = pkgs.treefmt;
     };
 
   flake.overlays.default = final: prev: {
