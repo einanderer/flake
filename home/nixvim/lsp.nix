@@ -75,19 +75,19 @@
       jsonls.enable = true;
       just.enable = true;
       lemminx.enable = true;
-      lua_ls.enable = false;
+      lua_ls.enable = true;
       nixd = {
         enable = true;
         config =
           let
-            localFlake = ''(builtins.getFlake "/home/fpletz/src/flake")'';
+            localFlake = ''(builtins.getFlake "/home/anderer/flake")'';
           in
           {
             nixpkgs.expr = "import <nixpkgs> {}";
             formatting.command = [ (lib.getExe pkgs.nixfmt) ];
             options = {
-              nixos.expr = "${localFlake}.nixosConfigurations.server.options";
-              home-manager.expr = "${localFlake}.homeConfigurations.fpletz.options";
+              nixos.expr = "${localFlake}.nixosConfigurations.amateur.options";
+              home-manager.expr = "${localFlake}.homeConfigurations.anderer.options";
             };
           };
       };
