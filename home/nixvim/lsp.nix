@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs }:
 {
   keymaps = [
     {
@@ -39,14 +39,18 @@
       lua_ls.enable = false;
       nixd = {
         enable = true;
-        config = {
-          nixpkgs.expr = "import <nixpkgs> {}";
-          formatting.command = [ (lib.getExe pkgs.nixfmt) ];
-          options = {
-            nixos.expr = "/home/anderer/flake/nixosConfigurations/amateur.options";
-            home-manager.expr = "/home/anderer/flake/homeConfigurations/anderer.options";
+        config =
+          let
+            localFlake = import /home/anderer/flake;
+          in
+          {
+            nixpkgs.expr = "import <nixpkgs> {}";
+            formatting.command = [ (lib.getExe pkgs.nixfmt) ];
+            options = {
+              nixos.expr = "${localFlake}.nixosConfigurations.amateur.options";
+              home-manager.expr = "${localFlake}.homeConfigurations.anderer.options";
+            };
           };
-        };
       };
       marksman.enable = true;
       markdown_oxide.enable = true;
