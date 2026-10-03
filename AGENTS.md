@@ -25,3 +25,4 @@
 ## 📝 Development Workflow
 - **Linting/Formatting:** Uses `treefmt.nix` and `git-hooks.nix`.
 - **Dev Shell:** Use `nix develop` to enter a shell with `sops`, `ssh-to-age`, and `nixos-anywhere`.
+- **Ad-hoc Tools:** For temporary tools not in the dev shell, use `nix shell -p <package>` or `nix run nixpkgs#<package>` instead of imperative package managers.
