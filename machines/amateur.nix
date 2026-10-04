@@ -92,6 +92,7 @@
 
   environment.systemPackages = with pkgs; [
     opencode
+    taskwarrior3
     hardinfo2
     liquidctl
     qpwgraph
