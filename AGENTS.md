@@ -51,7 +51,11 @@
 - Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
 
 ### Task Management
-- Use the Taskwarrior MCP integration to track long-term tasks and development workflows.
+- Use the `nix-dev-assistant` skill (via `scripts/nix_dev_helper.sh`) for Nix-related tasks:
+    - `format <file>`: Formats Nix files using `treefmt`.
+    - `check <file>`: Validates Nix syntax using `nix eval`.
+    - `shell <package>`: Runs commands in a `nix-shell` with the specified package.
+- Use the `research-agent` skill for deep technical dives, automated web-to-documentation workflows, and persistent knowledge management.
 - Register new diagnostic or testing workflows as persistent tasks.
 
 ### Path Awareness
@@ -67,5 +71,9 @@
 - Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
 
 ### Task Management
-- Use the Taskwarrior MCP integration to track long-term tasks and development workflows.
+- Use the `nix-dev-assistant` skill (via `scripts/nix_dev_helper.sh`) for Nix-related tasks:
+    - `format <file>`: Formats Nix files using `treefmt`.
+    - `check <file>`: Validates Nix syntax using `nix eval`.
+    - `shell <package>`: Runs commands in a `nix-shell` with the specified package.
+- Use the `research-agent` skill for deep technical dives, automated web-to-documentation workflows, and persistent knowledge management.
 - Register new diagnostic or testing workflows as persistent tasks.
