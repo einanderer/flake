@@ -1,14 +1,13 @@
-"""DDG-HTML Engine: sucht auf html.duckduckgo.com, liefert (title, url, snippet).
-
-- Keine offizielle JSON-API, sondern HTML-Endpunkt
-- Fallback: DuckDuckGo Instant Answer API (api.duckduckgo.com) wenn erreichbar
-- Returns list[dict]
-"""
+"""DDG-HTML Engine: DuckDuckGo HTML search + URL fetch."""
 
 from __future__ import annotations
 
 import html as _html_lib
+import json
 import re
+import time
+import urllib.error
+import urllib.request
 from urllib.parse import urlencode
 
 from botguard import (
@@ -19,49 +18,31 @@ from botguard import (
 )
 
 DDG_HTML_URL = "https://html.duckduckgo.com/html/"
-DDG_IA_URL = "https://api.duckduckgo.com/"
+
+
+def _strip_tags(raw: str) -> str:
+    """Strip HTML tags and decode entities."""
+    cleaned = _TAG_RE.sub(" ", raw or "").strip()
+    cleaned = _html_lib.unescape(cleaned)
+    return re.sub(r"\s+", " ", cleaned)
+
 
 _TAG_RE = re.compile(r"<[^>]+>")
 
 
-def _strip_tags(raw: str) -> str:
-    cleaned = _TAG_RE.sub(" ", raw or "").strip()
-    cleaned = _html_lib.unescape(cleaned)
-    # collapse whitespace
-    return re.sub(r"\s+", " ", cleaned)
-
-
 def _parse_ddg_html(results_html: str) -> list[dict]:
-    """Best-effort parse of DDG HTML results.
-
-    DDG HTML result items are typically:
-        <div class="result__a">Title</div>
-        <div class="result__snippet">snippet</div>
-    or
-        <a class="result__a" href="URL">Title</a>
-
-    We return a list of dicts: {title, url, snippet}
-    """
-
+    """Best-effort DDG HTML result parser → list[{title, url, snippet}]."""
     results: list[dict] = []
-    # Split on result blocks (best-effort)
-    blocks = re.split(r"<div class=\"result[ \t]+\"?\s*", results_html)
+    blocks = re.split(r'<div class="result[ \t]+"', results_html)
     for blk in blocks:
-        if not blk:
+        a_match = re.search(
+            r'<a\s+[^>]*href="([^"]+)"[^>]*>(.*?)</a>', blk[:800], re.DOTALL
+        )
+        if not a_match:
             continue
-        # Extract title + url from <a> or title
-        try:
-            a_match = re.search(
-                r'<a\s+[^>]*href="([^"]+)"[^>]*>(.*?)</a>', blk[:500], re.DOTALL
-            )
-            if a_match:
-                url = a_match.group(1)
-                raw_title = a_match.group(2)
-                title = _strip_tags(raw_title)
-            else:
-                continue
-        except Exception:
-            continue
+        url = a_match.group(1)
+        raw_title = a_match.group(2)
+        title = _strip_tags(raw_title)
         snippet_m = re.search(
             r'class="result__snippet"[^>]*>(.*?)(?:</div>|$)', blk, re.DOTALL
         )
@@ -77,30 +58,14 @@ def _parse_ddg_html(results_html: str) -> list[dict]:
 
 
 def search_ddgo_html(query: str) -> list[dict]:
-    """Search DuckDuckGo HTML endpoint. Returns list of results.
-
-    Fallback: Instant Answer API if HTML fails.
-    """
-    import urllib.error
-    import urllib.request
-
-    # Try cache first
-    cache_url = DDG_HTML_URL + "?" + urlencode({"q": query})
-    cached = get_cached(cache_url)
-    if cached:
+    """Search DuckDuckGo HTML endpoint; fallback → Instant Answer API."""
+    # Cache key is the same URL we'd call without q.
+    cache_key = "search:" + query
+    cached = get_cached(cache_key)
+    if cached is not None:
         return _parse_ddg_html(cached.decode(errors="replace"))
 
     ua = rand_user_agent()
-    req = urllib.request.Request(
-        DDG_HTML_URL,
-        data=urlencode({"q": query}).encode(),
-        headers={
-            "User-Agent": ua,
-            "Accept": "text/html,application/xhtml+xml",
-        },
-        method="POST",
-    )
-    # NOTE: DDG html endpoint uses POST but some prefer GET — use GET as safer
     req = urllib.request.Request(
         DDG_HTML_URL + "?" + urlencode({"q": query, "kl": "wt-en"}),
         headers={
@@ -109,69 +74,30 @@ def search_ddgo_html(query: str) -> list[dict]:
         },
     )
 
-    import time as _t
-
     last_err: Exception | None = None
     for attempt in range(4):
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
-                if resp.status in (403, 429, 503):
-                    last_err = RuntimeError(f"HTTP {resp.status}")
-                    time.sleep(backoff(attempt))
-                    continue
-                # 200
                 raw = resp.read()
-                put_cached(cache_url, raw)
-                return _parse_ddg_html(raw.decode(errors="replace"))
+            put_cached(cache_key, raw)
+            return _parse_ddg_html(raw.decode(errors="replace"))
         except urllib.error.HTTPError as e:
             last_err = e
-            _t.sleep(backoff(attempt))
+            time.sleep(backoff(attempt))
             continue
         except Exception as e:
             last_err = e
-            _t.sleep(backoff(attempt))
+            time.sleep(backoff(attempt))
             continue
-
-    # Fallback: Instant Answer API
-    try:
-        ia_url = DDG_IA_URL + "?" + urlencode(
-            {"q": query, "format": "json"}
-        )
-        req2 = urllib.request.Request(
-            ia_url,
-            headers={"User-Agent": rand_user_agent()},
-        )
-        import json as _json  # type: ignore
-
-        with urllib.request.urlopen(req2, timeout=10) as resp:
-            if resp.status == 200:
-                data = _json.loads(resp.read())
-                if isinstance(data, dict) and "results" in data:
-                    out: list[dict] = []
-                    for r in data.get("results", []):
-                        if isinstance(r, dict):
-                            out.append(
-                                {
-                                    "title": str(r.get("heading", "") or "")[:200],
-                                    "url": str(r.get("url", "") or "")[:500],
-                                    "snippet": str(r.get("text", "") or "")[:400],
-                                }
-                            )
-                    return out
-    except Exception:
-        pass
 
     raise RuntimeError(f"DDG search failed: {last_err}")
 
 
 def fetch_ddgo(url: str) -> str:
-    """Fetch a URL and return plain text (best-effort, not markdown-convert)."""
-    import urllib.error
-    import urllib.request
-
-    cached = get_cached(url)
-    if cached:
-        return cached.decode(errors="replace")
+    """Fetch URL → plain text (stripped). Cache hit: cached text."""
+    cached_text = get_cached(url)
+    if cached_text is not None:
+        return cached_text.decode(errors="replace")
 
     ua = rand_user_agent()
     req = urllib.request.Request(
@@ -181,14 +107,13 @@ def fetch_ddgo(url: str) -> str:
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
             raw = resp.read()
-            put_cached(url, raw)
             text = raw.decode(errors="replace")
     except urllib.error.HTTPError as e:
-        raise RuntimeError(f"Fetch HTTP {e.code}: {url}")
+        raise RuntimeError(f"Fetch HTTP {e.code}: {url}") from e
     except Exception as e:
-        raise RuntimeError(f"Fetch failed: {e}: {url}")
+        raise RuntimeError(f"Fetch failed: {e}: {url}") from e
 
-    # Simplest: strip HTML tags
     body = _strip_tags(text)
+    # Cache the stripped text (not raw HTML)
+    put_cached(url, body.encode(errors="replace"))
     return body
-

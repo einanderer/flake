@@ -1,131 +1,93 @@
-"""ddg-mcp v2 entry-point.
-
-Starts an MCP server (Model Context Protocol) that opencode loads as stdio
-client. Logs go to stderr ONLY — stdout is pure JSON-RPC.
-
-Tools:
-- search(query, max_results)  -> DDG-HTML web search
-- fetch(url)                 -> fetch + strip HTML
-
-No external deps beyond `mcp` (Nixpkgs python314Packages.mcp).
-"""
+"""ddg-mcp entry-point — MCP stdio server for DuckDuckGo search."""
 
 from __future__ import annotations
 
+import os as _os
 import sys
 import traceback
-
-# Path self-sufficiency — opencode invokes us as a binary; make sure
-# our own tree is discoverable regardless of host PYTHONPATH.
-import os as _os
 
 _here = _os.path.dirname(_os.path.abspath(__file__))
 if _here not in sys.path:
     sys.path.insert(0, _here)
-if _here not in [str(p) for p in sys.path]:
-    sys.path.append(_here)
 
-# Strict stderr logging — never touch stdout. stdout carries JSON-RPC.
 import logging
 
-
-def _log_err(msg: str) -> None:
-    # Route ALL logs to stderr; the host parses stdout as pure JSON-RPC.
-    sys.stderr.write(f"[ddg-mcp] {msg}\n")
-
-
-def _log_err_debug(msg: str) -> None:
-    try:
-        _log_err(f"[debug] {msg}")
-    except Exception:
-        pass
-
-
-# Make logging module go to stderr (not stdout)
 logging.basicConfig(
     level=logging.DEBUG,
     stream=sys.stderr,
     format="[ddg-mcp] %(levelname)s %(message)s",
 )
 
-# Now wire the mcp library itself
-try:
-    from mcp.server import mcpserver  # type: ignore
 
-    _log_err_debug("imported mcp.server.mcpserver")
-
-    MCPServer = mcpserver.MCPServer
-except Exception as e:
-    _log_err(f"mcp import failed: {e}")
-    raise
-
-
-def _build_search(max_results: int = 10) -> "callable":
-    from engines import search_ddgo_html
-
-    def search() -> list[dict]:
-        raise RuntimeError("bind query first")
-
-    return search_ddgo_html
-
-
-def _tool_search() -> "callable":
-    """Tool: web search via DuckDuckGo HTML endpoint."""
-    from engines import search_ddgo_html
-
-    def tool(query: str, max_results: int = 10) -> dict:
-        try:
-            if not query:
-                return {"error": "empty query"}
-            results = search_ddgo_html(query)
-            results = results[:max(1, int(max_results))]
-            return {"results": results}
-        except Exception as e:
-            tb = traceback.format_exc()
-            _log_err(f"search failed: {tb}")
-            return {"error": f"search error: {e}"}
-
-    return tool
-
-
-def _tool_fetch() -> "callable":
-    """Tool: fetch URL -> plain text."""
-    from engines import fetch_ddgo
-
-    def tool(url: str, max_chars: int = 5000) -> dict:
-        try:
-            if not url:
-                return {"error": "empty url"}
-            text = fetch_ddgo(url)
-            if len(text) > max(100, int(max_chars)):
-                text = text[: max(100, int(max_chars))] + "…[truncated]"
-            return {"url": url, "text": text}
-        except Exception as e:
-            tb = traceback.format_exc()
-            _log_err(f"fetch failed: {tb}")
-            return {"error": f"fetch error: {e}"}
-
-    return tool
+def _log_err(msg: str) -> None:
+    sys.stderr.write(f"[ddg-mcp] {msg}\n")
 
 
 def main() -> None:
     try:
-        server = MCPServer()
+        from mcp.server import FastMCP
 
-        # Register: search(query, max_results)
-        add_tool = getattr(server, "add_tool", None)
-        if add_tool:
-            add_tool(name="search", fn=_tool_search())
-            add_tool(name="fetch", fn=_tool_fetch())
-        else:
-            # v1 fallback (still v2-compatible per rules)
-            _log_err("MCPServer has no add_tool; registering via tool decorator")
-            raise RuntimeError("MCPServer lacks add_tool")
+        _log_err("imported mcp.server.FastMCP")
 
-        _log_err("ddg-mcp ready (stdio, v2)")
-        import asyncio
+        server = FastMCP("ddg-mcp")
 
-        asyncio.run(server.run_stdio_async())
+        def _search(query: str, max_results: int = 10) -> dict:
+            from engines import search_ddgo_html
+
+            try:
+                if not query:
+                    return {"results": [], "error": "empty query"}
+                results = search_ddgo_html(query)
+                n = max(1, int(max_results))
+                return {"results": results[:n]}
+            except Exception as e:
+                _log_err(f"search failed: {e}")
+                return {"error": f"search error: {e}"}
+
+        def _fetch(url: str, max_chars: int = 5000) -> dict:
+            from engines import fetch_ddgo
+
+            try:
+                if not url:
+                    return {"error": "empty url"}
+                text = fetch_ddgo(url)
+                limit = max(100, int(max_chars))
+                if len(text) > limit:
+                    text = text[:limit] + "…[truncated]"
+                return {"url": url, "text": text}
+            except Exception as e:
+                _log_err(f"fetch failed: {e}")
+                return {"error": f"fetch error: {e}"}
+
+        @server.tool(
+            name="search",
+            title="DuckDuckGo HTML search",
+            description=(
+                "Search DuckDuckGo's HTML endpoint for a query. "
+                "Returns a list of {title, url, snippet} objects. "
+                "Use this for web research when another search API is unavailable."
+            ),
+        )
+        def tool_search(query: str, max_results: int = 10) -> dict:
+            return _search(query, max_results=max_results)
+
+        @server.tool(
+            name="fetch",
+            title="Fetch URL text",
+            description=(
+                "Fetch a URL and return its content as stripped plain text "
+                "(HTML tags and entities removed). "
+                "Content is capped at max_chars."
+            ),
+        )
+        def tool_fetch(url: str, max_chars: int = 5000) -> dict:
+            return _fetch(url, max_chars=max_chars)
+
+        _log_err("ddg-mcp ready (stdio)")
+
+        # server.run() is synchronous — drives anyio internally
+        server.run(transport="stdio")
+
     except Exception as e:
         _log_err(f"main failed: {e}")
         tb = traceback.format_exc()
