@@ -3,3 +3,10 @@ result*
 /logs/
 /scripts/
 .pre-commit-config.yaml
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Local draft files
+*.draft
