@@ -8,7 +8,7 @@
 - **Apply to remote host:** `nh os switch .#HOSTNAME --target-host HOSTNAME`
 
 ### Secrets Management (SOPS)
-- **Add new machine:** 
+- **Add new machine:**
   1. `ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub`
   2. Edit `.sops.yaml` to add the new key.
 - **Update SOPS keys:** `sops updatekeys secrets.yaml`
@@ -35,45 +35,3 @@
 - **Linting/Formatting:** Uses `treefmt.nix` and `git-hooks.nix`.
 - **Dev Shell:** Use `nix develop` to enter a shell with `sops`, `ssh-to-age`, and `nixos-anywhere`.
 - **Ad-hoc Tools:** For temporary tools not in the dev shell, use `nix shell -p <package>` or `nix run nixpkgs#<package>` instead of imperative package managers.
-
-## 🧠 Intelligence & Preferences
-
-### Path Awareness
-- Most active development and project-specific configurations are located within `~/Projekte/`.
-- Always ensure tool configurations (like Taskwarrior's `.taskrc`) are correctly placed within their respective project contexts to avoid polluting the home directory.
-
-### Terminal & Tooling
-- **Terminal-Centric:** The user environment heavily utilizes terminal multiplexers (e.g., Zellij) and CLI-first tools. 
-- **Existing Utilities:** Always check `~/.local/bin/` for existing scripts or custom utilities before implementing new ones to avoid duplication.
-
-### LSP Debugging Protocol
-- When LSP issues are reported, the standard procedure is to use the automated diagnostic script: `./scripts/test-lsp.sh`.
-- Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
-
-### Task Management
-- Use the `nix-dev-assistant` skill (via `scripts/nix_dev_helper.sh`) for Nix-related tasks:
-    - `format <file>`: Formats Nix files using `treefmt`.
-    - `check <file>`: Validates Nix syntax using `nix eval`.
-    - `shell <package>`: Runs commands in a `nix-shell` with the specified package.
-- Use the `research-agent` skill for deep technical dives, automated web-to-documentation workflows, and persistent knowledge management.
-- Register new diagnostic or testing workflows as persistent tasks.
-
-### Path Awareness
-- Most active development and project-specific configurations are located within `~/Projekte/`.
-- Always ensure tool configurations (like Taskwarrior's `.taskrc`) are correctly placed within their respective project contexts to avoid polluting the home directory.
-
-### Terminal & Tooling
-- **Terminal-Centric:** The user environment heavily utilizes terminal multiplexers (e.g., Zellij) and CLI-first tools. 
-- **Existing Utilities:** Always check `~/.local/bin/` for existing scripts or custom utilities before implementing new ones to avoid duplication.
-
-### LSP Debugging Protocol
-- When LSP issues are reported, the standard procedure is to use the automated diagnostic script: `./scripts/test-lsp.sh`.
-- Do not assume LSP availability; verify via headless Neovim commands (`:LspInfo`, `:checkhealth lsp`) if issues persist.
-
-### Task Management
-- Use the `nix-dev-assistant` skill (via `scripts/nix_dev_helper.sh`) for Nix-related tasks:
-    - `format <file>`: Formats Nix files using `treefmt`.
-    - `check <file>`: Validates Nix syntax using `nix eval`.
-    - `shell <package>`: Runs commands in a `nix-shell` with the specified package.
-- Use the `research-agent` skill for deep technical dives, automated web-to-documentation workflows, and persistent knowledge management.
-- Register new diagnostic or testing workflows as persistent tasks.
