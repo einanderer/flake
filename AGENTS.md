@@ -35,3 +35,8 @@
 - **Linting/Formatting:** Uses `treefmt.nix` and `git-hooks.nix`.
 - **Dev Shell:** Use `nix develop` to enter a shell with `sops`, `ssh-to-age`, and `nixos-anywhere`.
 - **Ad-hoc Tools:** For temporary tools not in the dev shell, use `nix shell -p <package>` or `nix run nixpkgs#<package>` instead of imperative package managers.
+
+## 📦 Commit Discipline
+- **Commit each verified change upon completion** — the moment a change is done and verified (build/test/read-back), commit it as its **own logical step**; do **not** carry verified, uncommitted work forward.
+- The **working directory is clean** after every step: no WIP, no half-applied files, no unstaged verified changes.
+- Never mix two steps into one commit.
