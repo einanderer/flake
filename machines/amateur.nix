@@ -92,6 +92,7 @@
 
   environment.systemPackages = with pkgs; [
     opencode
+    amdgpu_top
     taskwarrior3
     hardinfo2
     liquidctl
