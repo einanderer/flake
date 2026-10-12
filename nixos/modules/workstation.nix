@@ -364,7 +364,10 @@ in
     };
 
     programs.dconf.enable = true;
-    programs.iotop.enable = true;
+    # Disabled: nixpkgs iotop is a bash-wrapped Python script, fails the new
+    # ensure-wrapper-integrity check (target must be an ELF). Enable again once
+    # upstream fixes the packaging.
+    programs.iotop.enable = false;
     programs.iftop.enable = true;
     programs.wireshark = {
       enable = true;
