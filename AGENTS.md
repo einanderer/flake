@@ -4,7 +4,6 @@
 
 ### NixOS Management
 - **Apply configuration locally:** `nh os switch .`
-- **Rebuild NixOS (alternative):** `nixos-rebuild switch`
 - **Apply to remote host:** `nh os switch .#HOSTNAME --target-host HOSTNAME`
 
 ### Secrets Management (SOPS)
