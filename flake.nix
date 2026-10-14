@@ -112,7 +112,6 @@
         inputs.flake-root.flakeModule
         ./pkgs
         ./machines
-        ./home
         ./nixos
         ./treefmt.nix
       ];
