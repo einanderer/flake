@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -54,6 +55,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.overlays = [ inputs.bad_gateway.overlays.default ];
+
     anderer.os.workstation.libvirt = lib.mkOptionDefault (!cfg.battery);
 
     services.dbus.implementation = "broker";

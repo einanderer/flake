@@ -12,10 +12,7 @@
     #inputs.chaotic.nixosModules.default
   ];
 
-  nixpkgs.overlays = [
-    inputs.self.overlays.default
-    inputs.bad_gateway.overlays.default
-  ];
+  nixpkgs.overlays = [ inputs.self.overlays.default ];
 
   nixpkgs.flake = {
     source = lib.mkDefault inputs.nixpkgs;
