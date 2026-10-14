@@ -39,12 +39,6 @@
 
   anderer.network.tentacleEdge.enable = true;
 
-  anderer.server.stack = {
-    enable = false;
-    hostAlias = "tentacle";
-    grafanaDomain = "meine.tagesthe.men";
-  };
-
   anderer.network.ttvpn = {
     enable = true;
     privateKeyFile = config.sops.secrets.ttvpn_s-private.path;
