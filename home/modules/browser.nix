@@ -111,7 +111,6 @@ in
     programs.chromium = {
       enable = true;
       commandLineArgs = [
-        "--enable-features=WebRTCPipeWireCapturer,VaapiVideoDecoder,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL"
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
         "--disable-background-networking"
@@ -120,7 +119,7 @@ in
         "--no-default-browser-check"
         "--disable-sync"
         "--disable-features=MediaRouter"
-        "--enable-features=UseOzonePlatform"
+        "--enable-features=WebRTCPipeWireCapturer,VaapiVideoDecoder,AcceleratedVideoDecodeLinuxGL,AcceleratedVideoDecodeLinuxZeroCopyGL,UseOzonePlatform"
         "--ozone-platform-hint=auto"
       ];
       extensions = [

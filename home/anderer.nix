@@ -61,7 +61,7 @@
 
     sessionVariables = {
       PAGER = "less";
-      TZ = "Europe/Amsterdam";
+      TZ = "Europe/Berlin";
     };
 
     packages = with pkgs; [
