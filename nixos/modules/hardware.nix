@@ -14,7 +14,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf config.anderer.os.workstation.enable {
     services.udev.extraRules = ''
       ACTION=="add", KERNEL=="wl*", SUBSYSTEM=="net", \
         RUN+="${lib.getExe pkgs.iw} dev $name set power_save ${
