@@ -40,6 +40,7 @@ in
       users.${cfg.user} = ../../home/${cfg.user}.nix;
       extraSpecialArgs = {
         inherit inputs;
+        osConfig = config;
       };
       backupFileExtension = "hm_backup";
     };
