@@ -136,7 +136,7 @@ in
             "󱃂"
           ];
           warning-threshold = 80;
-          critical-thrshold = 90;
+          critical-threshold = 90;
         };
         upower = {
           icon-size = 16;
