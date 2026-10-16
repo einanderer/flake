@@ -18,7 +18,10 @@
     settings = {
       PasswordAuthentication = false;
       PubkeyAuthOptions = "verify-required";
-      # crypto hardening
+      # Crypto hardening for this host as a *server*. KEX is post-quantum
+      # only (ML-KEM/sntrup) plus classic curve25519, and the host key is
+      # ed25519-only. Clients that only support RSA host keys or pre-2024
+      # KEX will be unable to connect to this host on purpose.
       Ciphers = [
         "chacha20-poly1305@openssh.com"
       ];
