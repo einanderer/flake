@@ -17,7 +17,6 @@ in
 
   config = {
     nixpkgs.permittedUnfreePackages = [
-      "spotify"
       "steam"
       "steam-unwrapped"
       "1password"
@@ -25,13 +24,7 @@ in
       "intel-ocl"
       "geekbench"
       "libsciter"
-      "unigine-valley"
-      "unigine-heaven"
-      "unigine-tropics"
-      "unigine-sanctuary"
-      "unigine-superposition"
       "barbar.nvim"
-      "cursor"
     ];
     nixpkgs.config.allowUnfreePredicate =
       pkg: builtins.elem (lib.getName pkg) cfg.permittedUnfreePackages;
