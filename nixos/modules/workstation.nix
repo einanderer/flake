@@ -371,7 +371,6 @@ in
     # ensure-wrapper-integrity check (target must be an ELF). Enable again once
     # upstream fixes the packaging.
     programs.iotop.enable = false;
-    programs.iftop.enable = true;
     programs.wireshark = {
       enable = true;
       package = pkgs.wireshark;
