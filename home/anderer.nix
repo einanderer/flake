@@ -50,6 +50,10 @@
       fontconfig.enable = lib.mkDefault false;
       sxiv.enable = false;
       gnome-text-editor.enable = false;
+      # Randomized on-disk StoreID of librewolf's `default` profile
+      # (Firefox Profile Manager generated it). It is stable for the life
+      # of the profile directory and not resolvable declaratively; update
+      # it here if the profile is ever recreated and its StoreID changes.
       librewolf.profileNames = [ "7wx2c1if.default" ];
     };
   };
