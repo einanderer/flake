@@ -10,7 +10,6 @@
   '';
 
   config = lib.mkIf config.anderer.profiles.workstationLaptop.enable {
-    anderer.os.workstation.libvirt = lib.mkDefault false;
     anderer.os.workstation.battery = lib.mkDefault true;
   };
 }
