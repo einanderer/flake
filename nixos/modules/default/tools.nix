@@ -52,7 +52,7 @@
     pv
     file
     which
-    # netwoking
+    # networking
     tcpdump
     iptables
     ethtool
