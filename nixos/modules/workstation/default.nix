@@ -1,14 +1,24 @@
 {
   imports = [
-    ../workstation.nix
     ./1password.nix
+    ./ai.nix
+    ./audio.nix
+    ./base.nix
+    ./bluetooth.nix
+    ./boot.nix
     ./cursor.nix
     ./filesystems.nix
+    ./fonts.nix
     ./gaming.nix
     ./network.nix
+    ./nix.nix
     ./nvidia.nix
+    ./options.nix
     ./plymouth.nix
+    ./programs.nix
+    ./udev.nix
     ./uxplay.nix
+    ./virtualisation.nix
     ./wayland.nix
   ];
 }
