@@ -1,6 +1,6 @@
 {
   imports = [
-    ../hardware.nix
+    ./base.nix
     ./cpu-amd.nix
     ./gpu-amd.nix
     ./thinkpad.nix

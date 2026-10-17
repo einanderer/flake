@@ -2,7 +2,7 @@
 {
   imports = [
     ./core.nix
-    ./default/default.nix
+    ./base/default.nix
     ./network/default.nix
     ./hardware/default.nix
     ./workstation/default.nix
