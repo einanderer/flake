@@ -57,23 +57,23 @@ writers.writeBashBin "nixos-channel" ''
   short7="''${rev:0:7}"
   short12="''${rev:0:12}"
   tt="NixOS $CHANNEL ($label)"
-  [ -n "$mybuild" ] && tt="$tt<br>System: built $(age "$mybuild") ago"
-  [ -n "$upd" ] && [ "$upd" != "null" ] && tt="$tt<br>Channel updated $(age "$upd") ago"
+  [ -n "$mybuild" ] && tt="$tt<br/>System: built $(age "$mybuild") ago"
+  [ -n "$upd" ] && [ "$upd" != "null" ] && tt="$tt<br/>Channel updated $(age "$upd") ago"
 
   if [ "$fail" = "1" ]; then
     class="fail"; icon="✗"
-    tt="$tt<br>Hydra build for this channel is failing"
+    tt="$tt<br/>Hydra build for this channel is failing"
   elif [ -n "$myrev" ]; then
     if [ "$short7" = "$myrev" ]; then
       class="ok"; icon="✓"
-      tt="$tt<br>Your system is up to date ($short7)"
+      tt="$tt<br/>Your system is up to date ($short7)"
     else
       class="update"; icon="↑"
-      tt="$tt<br>Update available: $short12 (system has $myrev)"
+      tt="$tt<br/>Update available: $short12 (system has $myrev)"
     fi
   else
     class="update"; icon="↑"
-    tt="$tt<br>Update available: $short12 (system revision unknown)"
+    tt="$tt<br/>Update available: $short12 (system revision unknown)"
   fi
 
   printf '%s\n%s\n%s\n' "$icon" "$tt" "$class"
