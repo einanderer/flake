@@ -48,6 +48,7 @@ in
           "power-profiles-daemon"
           "temperature"
           "backlight"
+          "custom/nixos-channel"
         ];
         modules-center = [
           "mpris"
