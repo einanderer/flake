@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -240,6 +241,10 @@ in
             paused = "";
           };
         };
+        "custom/nixos-channel" = {
+          exec = "${inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nixos-channel}/bin/nixos-channel";
+          interval = 1800;
+        };
         systemd-failed-units = {
           hide-on-ok = false;
           format = "✗ {nr_failed}";
@@ -273,6 +278,7 @@ in
           #systemd-failed-units,
           #temperature,
           #mpris,
+          #custom-nixos-channel,
           #tray {
             padding: 0 5px;
           }
