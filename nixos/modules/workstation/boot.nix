@@ -32,7 +32,8 @@ in
         memtest86.enable = true;
         netbootxyz.enable = true;
       };
-      initrd.systemd.enable = true;
+      # Update 21.10.2026 The option definition `boot.initrd.systemd.enable' no longer has any effect; please remove it.
+      #initrd.systemd.enable = true;
       binfmt.emulatedSystems = lib.optional pkgs.stdenv.hostPlatform.isx86_64 "aarch64-linux";
     };
 
