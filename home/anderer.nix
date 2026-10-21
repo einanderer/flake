@@ -15,6 +15,7 @@
 
   stylix = {
     enable = true;
+    overlays.enable = false;
     base16Scheme = "${pkgs.base16-schemes.src}/base24/chalk.yaml";
     polarity = "dark";
     fonts = {
