@@ -20,7 +20,7 @@ in
         OLLAMA_FLASH_ATTENTION = "1";
         OLLAMA_KV_CACHE_TYPE = "q4_0";
         OLLAMA_NUM_THREADS = "8";
-        OLLAMA_CONTEXT_LENGTH = "65536";
+        OLLAMA_CONTEXT_LENGTH = "98304";
       };
       host = "127.0.0.1";
       port = 11434;
