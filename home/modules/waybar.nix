@@ -33,7 +33,7 @@ in
       enable = cfg.enable;
       systemd = {
         enable = true;
-        target = "wayland-session@sway.target";
+        targets = [ "wayland-session@sway.target" ];
       };
       settings.mainBar = {
         layer = "top";

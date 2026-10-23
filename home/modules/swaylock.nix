@@ -29,7 +29,7 @@ in
       in
       {
         enable = true;
-        systemdTarget = "wayland-session@sway.target";
+        systemdTargets = [ "wayland-session@sway.target" ];
         timeouts = [
           {
             timeout = 120;
