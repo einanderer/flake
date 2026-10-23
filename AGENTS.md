@@ -16,10 +16,13 @@
 
 ## 🏗️ Architecture & Structure
 - **`machines/`**: Host-specific NixOS configurations.
-- **`nixos/`**: System-wide NixOS modules and profiles.
-- **`home/`**: Home Manager configurations (user environment).
-- **`pkgs/`**: Custom package definitions.
+- **`nixos/`**: System-wide NixOS modules and profiles (subtrees: `base/`, `hardware/`, `network/`, `profiles/`, `workstation/`).
+- **`home/`**: Home Manager configurations (user environment), incl. `nixvim/` LSP setup.
+- **`pkgs/`**: Custom package definitions (`pkgs/by-name/*` auto-collected into `packages.*`).
 - **`secrets/`**: Encrypted secrets managed by SOPS.
+- **`docs/`**: Documentation (infrastructure overview, hardware specs, AI stack; see `docs/infrastructure_overview.md`).
+- **`static/`**: Non-Nix sources & assets (MCP server code, wallpapers, patches).
+- **`scripts/`**: Local dev helpers — **git-ignored, machine-local only**.
 
 ## 🌐 Host Inventory
 
