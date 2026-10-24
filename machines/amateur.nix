@@ -92,6 +92,7 @@
 
   environment.systemPackages = with pkgs; [
     opencode
+    llmfit
     amdgpu_top
     taskwarrior3
     hardinfo2
