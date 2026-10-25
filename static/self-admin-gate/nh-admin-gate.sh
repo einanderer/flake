@@ -65,8 +65,11 @@ case "$prog" in
 esac
 
 # The program store path must be a `nixos-system-<this host>` derivation, so
-# only THIS host's own system can ever be activated here.
-drv="$("$NIX" derivation show "$prog" 2>/dev/null | "$JQ" -r '.drvPath // empty' 2>/dev/null || true)"
+# only THIS host's own system can ever be activated here. `nix derivation
+# show <output path>` answers {"derivations":{"<drv-basename>.drv":{...}}} —
+# take that key and re-assemble the full drv store path.
+drvkey="$("$NIX" derivation show "$prog" 2>/dev/null | "$JQ" -r '(.derivations | keys | .[0]) // empty' 2>/dev/null || true)"
+drv="/nix/store/${drvkey}"
 case "$drv" in
   /nix/store/*-nixos-system-"$HOST"-*) AUDIT "drv ok: $drv" ;;
   *) AUDIT "REJECT: '$prog' is not a nixos-system-$HOST derivation (drv='$drv')"; exit 1 ;;
