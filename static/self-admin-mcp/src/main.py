@@ -321,10 +321,10 @@ def _os_mutate(mode: str, hostname: str, confirm: bool, generation: int = 0) -> 
 
 
 def main() -> None:
-    from mcp.server import FastMCP
+    from mcp.server.mcpserver import MCPServer
 
-    _log_err(f"imported mcp.server.FastMCP (host={_default_host()!r})")
-    server = FastMCP("self-admin-mcp")
+    _log_err(f"imported mcp.server.mcpserver.MCPServer (host={_default_host()!r})")
+    server = MCPServer("self-admin-mcp")
 
     @server.tool(
         name="os_status",
