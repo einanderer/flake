@@ -4,6 +4,8 @@
 }:
 
 {
+  imports = [ ../nixos/modules/default/nh-admin-gate.nix ];
+
   system.stateVersion = "25.11";
 
   fileSystems."/" = {
