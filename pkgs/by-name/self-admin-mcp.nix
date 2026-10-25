@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "MCP stdio server for self-administering the local NixOS flake via nh";
-    license = licenses.unfreeRedistributable;
+    license = licenses.mit;
     mainProgram = "self-admin-mcp";
   };
 }
