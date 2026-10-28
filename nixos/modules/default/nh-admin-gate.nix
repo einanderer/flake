@@ -6,7 +6,8 @@
 }:
 {
   options.andher.security.nhAdminGate = {
-    enable = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Allow the user to run the content-addressed `nh-admin-gate` without a
@@ -19,11 +20,11 @@
   };
 
   config = lib.mkIf (config.andher.security.nhAdminGate.enable) {
-    security.sudo.extraRules = [
+    security.sudo-rs.extraRules = [
       {
         users = [ "anderer" ];
         groups = [ ];
-        hosts = [ "ALL" ];
+        host = "ALL";
         commands = [
           {
             command = "${packages.nh-admin-gate}/bin/nh-admin-gate";
