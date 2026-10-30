@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     sed -e "s|@BASH@|${bash}|" \
         -e "s|@NIX@|${nix}|" \
+        -e "s|@LN@|${coreutils}|" \
         -e "s|@JQ@|${jq}|" \
         -e "s|@ENV@|${coreutils}|" \
         "$src/nh-admin-gate.sh" > "$out/bin/nh-admin-gate"
