@@ -158,20 +158,22 @@ def _t_os_status() -> dict:
     )
     if info["ok"]:
         lines = info["stdout"].strip().splitlines()
-        rows = [ln for ln in lines[1:] if ln.strip()]
+        # `nh os info` prints a TWO-line header (a "NixOS <version>" banner on
+        # line 1 + a "Generation No …" column header on line 2) and then one
+        # row per generation, sorted newest-first. Only rows whose first field
+        # is a digit are data, so scan all of them instead of assuming a
+        # single header line (the old `lines[1:]` assumed one header, which
+        # left rows[0] on the column header and yielded current=None).
         gens = []
-        for ln in rows:
+        current = None
+        for ln in lines:
             parts = ln.split()
             if len(parts) >= 2 and parts[0].isdigit():
-                gens.append(parts[0])
-        result["current_system_generation"] = None
-        if rows:
-            head = rows[0].split()
-            if head and head[0].endswith("(current)"):
-                result["current_system_generation"] = head[0].replace("(current)", "")
-            elif head and head[0].isdigit():
-                result["current_system_generation"] = head[0].replace("(current)", "")
-        result["latest_generation"] = int(gens[0]) if gens else None
+                gens.append(int(parts[0]))
+                if parts[1] == "(current)":
+                    current = int(parts[0])
+        result["current_system_generation"] = current
+        result["latest_generation"] = max(gens) if gens else None
     else:
         result["generation_error"] = info["stderr"][:500]
     git = _run(
