@@ -53,6 +53,37 @@ GATE = os.environ.get("NH_ADMIN_GATE", "")
 
 NH_BIN = os.environ.get("NH_ADMIN_NH_BIN", "/run/current-system/sw/bin/nh")
 
+# Env hygiene for the launched `nh`:
+#   `nh` is a Go binary that FORWARDS its own process env into the
+#   elevation-strategy argv (nh os switch/rollback). The gate validates
+#   every KEY=val in that argv against a strict allowlist — see
+#   nh-admin-gate.sh (env-key allowlist at the L58-62 case). Any key OUTSIDE
+#   that allowlist makes the gate REJECT the whole invocation (fail-closed,
+#   correct behavior).
+#   This module is driven by opencode and inherits NH_ADMIN_*, PWD, USER,
+#   SHELL, TERM, SHLVL, XDG_*, HOME, PATH, NIX_PATH (…). If we launched `nh`
+#   with the full env, the gate would see NH_ADMIN_*, PWD, TERM, … and
+#   reject (T2c attempt #1: REJECT: disallowed env key 'NH_ADMIN_LOCAL_HOSTS').
+#   Hand `nh` ONLY the gate-allowlisted keys. The resulting env is a SUBSET of
+#   the allowlist, so whatever nh forwards is already inside it. This keeps
+#   the gate's own fail-closed allowlist as the single source of truth — we
+#   don't loosen it, we just make our nh clean.
+_NH_ENV_KEYS: tuple[str, ...] = (
+    "USER", "LOCALE_ARCHIVE", "PATH", "NIX_PATH", "HOME", "TMPDIR",
+)
+
+
+def _nh_env() -> dict[str, str]:
+    """Curated env for the launched `nh`: exactly the gate-allowlisted keys.
+
+    Any other key (NH_ADMIN_*, PWD, SHELL, TERM, SHLVL, XDG_*, …) is stripped.
+    The values come from THIS process (opencode server), so we see what nh
+    sees. If a key is missing from the server env, it is simply absent (nh
+    inherits the normal user-env contract of `nix`).
+    """
+    return {k: os.environ[k] for k in _NH_ENV_KEYS if k in os.environ}
+
+
 OUT_LIMIT = 12000  # truncate tool output so agent context stays usable
 
 TIMEOUTS = {
@@ -112,6 +143,11 @@ def _run(args: list[str], timeout: int, cwd: str | None = None) -> dict:
             capture_output=True,
             text=True,
             timeout=timeout,
+            # Launch `nh` with a CURATED env (only the gate-allowlisted keys);
+            # see _nh_env() above. Full MCP-process env would leak NH_ADMIN_*,
+            # PWD, SHELL, TERM, SHLVL, XDG_* into nh and thus into the gate
+            # argv — REJECTing the switch (fail-closed, but blocks real ops).
+            env=_nh_env(),
         )
         rc, stdout, stderr = proc.returncode, proc.stdout, proc.stderr
     except subprocess.TimeoutExpired:
