@@ -1,6 +1,6 @@
 # AI Stack
 
-Local AI stack on the `amateur` workstation: an ROCm build of **ollama** serving local models over LLM inference, **opencode** as the agent client, and two custom **MCP** (Model Context Protocol) stdio servers providing search and transcription tools to the agent.
+Local AI stack on the `amateur` workstation: an ROCm build of **ollama** serving local models over LLM inference, **opencode** as the agent client, and three custom **MCP** (Model Context Protocol) stdio servers providing web search, transcription, and NixOS self-administration tools to the agent.
 
 ## Ollama (`services.ollama`)
 
@@ -34,6 +34,7 @@ Two hand-rolled MCP stdio servers (source in `static/`, build rules in `pkgs/by-
 | :--- | :--- | :--- |
 | `ddg-mcp` | DuckDuckGo web search as an MCP tool | FastMCP-based (`mcp` python3.14); DDG HTML engine with a bot-guards workaround (`static/ddg-mcp/src/`) |
 | `whisper-mcp` | Audio transcription via `whisper-cpp` (`whisper-cli`) | Tools: `transcribe <audio> [language]`, `list_models`. `whisper-cli` is copied into the package bin so PATH resolution works; model file expected at `~/.local/share/whisper-mcp/ggml-base.en.bin` (override: `WHISPER_MODEL`, CLI path override: `WHISPER_CLI_BIN`) |
+| `self-admin-mcp` | NixOS self-administration via `nh` (see `docs/mcp-self-admin.md`) | Plain `subprocess`-driven server (`static/self-admin-mcp/src/main.py`); 8 tools split read/build-only/mutating; host allowlists + content-addressed gate binary (`NH_ADMIN_GATE`); opencode entry in `~/.config/opencode/opencode.jsonc` (local config, not in this repo) |
 
 Validation helper: `scripts/validate_mcp.sh` (local-only, git-ignored) checks the opencode config and MCP server binaries.
 

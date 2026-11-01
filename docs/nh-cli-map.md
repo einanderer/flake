@@ -5,9 +5,10 @@ commands an MCP client may run safely**, split into *read* vs *mutating*
 classes, including remote targets, privilege-elevation, and the constraints
 observed on this box.
 
-> Status: **planning reference, not yet committed.** Facts are tagged
-> `[observed]` (verified on this machine this session) or `[to-verify]`
-> (needs a live run before the MCP relies on it).
+> Status: **implemented & committed** (`9554b89`); the MCP documented here
+> shipped as `self-admin-mcp` — see `docs/mcp-self-admin.md`. Facts are
+> tagged `[observed]` (verified on this machine) or `[to-verify]` (needs a
+> live run before the MCP relies on it).
 
 ---
 
@@ -46,10 +47,13 @@ observed on this box.
 | `build-vm` | Build a VM image | build-only | no | — |
 | `build-image` | Build a disk image | build-only | no | — |
 
-Dry-run semantics (`-n`): `[to-verify]` "Only print actions, without
-performing them". For `switch`/`rollback` it should print the unit
-start/stop list **without** applying. Confirm on a real run whether it still
-elevates when it *computes* the action list.
+Dry-run semantics (`-n`): "Only print actions, without performing them" —
+for `switch`/`rollback` it prints the unit start/stop list **without**
+applying. The MCP's `os_dryrun` deliberately drives it under
+`--elevation-strategy=none` (see `docs/mcp-self-admin.md`), so it never
+attempts elevation; if `-n` still demanded it, the call would fail cleanly
+without any root action. `[to-verify]` remaining: live confirmation on the
+first real switch/rollback.
 
 ### 3.2 `nh home <cmd>` (Home Manager)
 
@@ -107,8 +111,21 @@ So the MCP has exactly one of these, all requiring a decision:
    the normal way to make it work)
 3. **polkit** — interactive/agent approval, not friendly to a headless agent.
 
-`switch`/`boot`/`test`/`rollback`/`clean` are **impossible from this MCP without
-(2)**; `home switch`, `build`, `info`, `search` work fine without any of the above.
+**Resolution (shipped, S1–S5):** option (2) realized in content-addressed
+form — the box runs `security.sudo-rs`, and the single NOPASSWD rule covers
+exactly one command: the `nh-admin-gate` store path (option
+`andher.security.nhAdminGate.enable`, default `true`, in
+`nixos/modules/default/nh-admin-gate.nix`). Mutating `nh` calls from the MCP
+go `--elevation-strategy <gate store path>`; the gate audits and re-validates
+the whole argv itself before re-elevating via `sudo -n` (no other command,
+no argv can escalate — see `docs/mcp-self-admin.md`). Read/build tools use
+`--elevation-strategy=none` (never prompts), and mutating tools refuse to run
+when the gate env is unset — a read-only default.
+
+(Pre-resolution summary, kept for history:) `switch`/`boot`/`test`/
+`rollback`/`clean` were **impossible from this MCP without (2)**;
+`home switch`, `build`, `info`, `search` work fine without any of the above —
+still true today for everything the gate does not cover.
 
 ## 5. Remote deployments `[observed flags]`
 
@@ -141,6 +158,13 @@ Hosts in this repo (`machines/`): `amateur`, `bettenlager`, `server` (hostname
 | `os_rollback` | `nh os rollback -t GEN` | **mutating** (recovery) | yes |
 | `home_switch` | `nh home switch` | mutating (user) | no |
 | `search_pkgs` / `search_options` | `nh search …` | read | no |
+
+Implemented as of `self-admin-mcp` (see `docs/mcp-self-admin.md`):
+`os_status`, `os_generations`, `os_build`, `os_dryrun`, `search_packages`,
+`search_options` are the live read/build-only surface; `os_switch` and
+`os_rollback` are shipped but **gated** (mutating — host allowlisted,
+`confirm: true`, gate binary required); `os_boot`, `os_test`, `home_switch`,
+and all `clean` commands are **deliberately not exposed**.
 
 ## 7. Environment / wiring facts for the OpenCode config
 
