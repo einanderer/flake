@@ -338,6 +338,19 @@ in
           #pulseaudio, #mpris.paused, #power-profiles-daemon {
             color: @base0A;
           }
+
+          #custom-nixos-channel.ok {
+            color: @base0B;
+          }
+          #custom-nixos-channel.update {
+            color: @base0A;
+          }
+          #custom-nixos-channel.fail {
+            color: @base08;
+          }
+          #custom-nixos-channel.offline {
+            color: @base05;
+          }
         '';
     };
   };

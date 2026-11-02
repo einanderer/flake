@@ -49,8 +49,10 @@ writers.writeBashBin "nixos-channel" ''
     printf '%dd %dh %dm' $(( a / 86400 )) $(( (a % 86400) / 3600 )) $(( (a % 3600) / 60 ))
   }
 
+  mydisp="''${myrev:-?}"
+
   if [ -z "$rev" ] || [ "$rev" = "null" ]; then
-    printf '?\nNixOS %s: no channel data (API unreachable or channel unknown)\noffline\n' "$CHANNEL"
+    printf "? lokal $mydisp | up -\nNixOS %s: no channel data (API unreachable or channel unknown)\noffline\n" "$CHANNEL"
     exit 0
   fi
 
@@ -61,20 +63,20 @@ writers.writeBashBin "nixos-channel" ''
   [ -n "$upd" ] && [ "$upd" != "null" ] && tt="$tt<br/>Channel updated $(age "$upd") ago"
 
   if [ "$fail" = "1" ]; then
-    class="fail"; icon="✗"
+    class="fail"; text="✗ lokal $mydisp | up $short7 FAIL"
     tt="$tt<br/>Hydra build for this channel is failing"
   elif [ -n "$myrev" ]; then
     if [ "$short7" = "$myrev" ]; then
-      class="ok"; icon="✓"
+      class="ok"; text="✓ lokal $mydisp | up $short7 OK"
       tt="$tt<br/>Your system is up to date ($short7)"
     else
-      class="update"; icon="↑"
+      class="update"; text="↑ lokal $mydisp | up $short7 NEW"
       tt="$tt<br/>Update available: $short12 (system has $myrev)"
     fi
   else
-    class="update"; icon="↑"
+    class="update"; text="↑ lokal $mydisp | up $short7 NEW"
     tt="$tt<br/>Update available: $short12 (system revision unknown)"
   fi
 
-  printf '%s\n%s\n%s\n' "$icon" "$tt" "$class"
+  printf '%s\n%s\n%s\n' "$text" "$tt" "$class"
 ''
