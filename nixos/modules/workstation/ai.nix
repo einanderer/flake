@@ -9,7 +9,7 @@ let
   inherit (lib) mkIf;
   aiPackages = [
     pkgs.pi-coding-agent
-    #pkgs.opencode
+    pkgs.opencode
   ];
 in
 {
