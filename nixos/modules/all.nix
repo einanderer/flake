@@ -10,5 +10,6 @@
     ./home.nix
     ./secureboot.nix
     ./nixpkgs.nix
+    ./default/nh-admin-gate.nix
   ];
 }

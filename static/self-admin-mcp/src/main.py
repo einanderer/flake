@@ -53,6 +53,10 @@ GATE = os.environ.get("NH_ADMIN_GATE", "")
 
 NH_BIN = os.environ.get("NH_ADMIN_NH_BIN", "/run/current-system/sw/bin/nh")
 
+# Remote gate paths learned on demand, cached for process life
+# (see _probe_remote_gate).
+_REMOTE_GATE_PATHS = {}
+
 # Env hygiene for the launched `nh`:
 #   `nh` is a Go binary that FORWARDS its own process env into the
 #   elevation-strategy argv (nh os switch/rollback). The gate validates
@@ -111,6 +115,36 @@ def _log_err(msg: str) -> None:
 # ---------------------------------------------------------------------------
 # validation
 # ---------------------------------------------------------------------------
+
+
+def _probe_remote_gate(host: str) -> str:
+    """Probe the remote for /run/current-system/sw/bin/nh-admin-gate.
+
+    The gate ships in the machine's system closure via the
+    `anderer.security.nhAdminGate` module (default true). The path is
+    the same well-known string on every host; the probe is a single
+    `test -x` over ssh (BatchMode, 10s cap). Any failure (host down,
+    gate not deployed) yields "" and the caller falls back to
+    `auto` elevation (bootstrap mode). Caches per process life.
+    """
+    if host in _REMOTE_GATE_PATHS:
+        return _REMOTE_GATE_PATHS[host]
+    path = ""
+    try:
+        r = _run(
+            ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10",
+             host, "test -x /run/current-system/sw/bin/nh-admin-gate"],
+            15,
+        )
+        if r.get("ok"):
+            path = "/run/current-system/sw/bin/nh-admin-gate"
+        else:
+            _log_err(f"remote {host!r}: gate probe failed "
+                     f"(rc={r.get('rc')}, {r.get('stderr', '').strip()[:200]})")
+    except OSError as e:
+        _log_err(f"remote {host!r}: gate probe error: {e}")
+    _REMOTE_GATE_PATHS[host] = path
+    return path
 
 
 def _classify_host(host: str) -> tuple[str | None, str | None]:
@@ -335,15 +369,27 @@ def _os_mutate(mode: str, hostname: str, confirm: bool, generation: int = 0) -> 
     if i_generation < 0:
         return {"ok": False, "error": "generation must be >= 0"}
 
-    # Local hosts are gated by the OS-level nh-admin-gate binary (content-
-    # addressed, NH_ADMIN_GATE). Remote hosts go OVER SSH; their elevation
-    # happens on the remote side via nh's own auto-detection (sudo/doas/
-    # run0/pkexec). The gate binary does NOT exist on remotes (it is a
-    # local-only binary that validates nixos-system-$HOST for this machine).
-    # Use `auto` for remote so the remote-side elevation program is
-    # picked by nh, and the password prompt (if any) is handled by
-    # whatever TTY nh is running under.
-    elevation = "auto" if kind == "remote" else GATE
+    # Elevation strategy:
+    #   local  -> NH_ADMIN_GATE (hard requirement, no fallback, see above).
+    #   remote -> the remote's /run/current-system/sw/bin/nh-admin-gate
+    #             (identical binary, NOPASSWD sudoers rule installed by
+    #             the same `anderer.security.nhAdminGate` module). The
+    #             gate re-validates argv + nixos-system-<that host>
+    #             and re-execs via sudo -n, so no TTY / no password
+    #             prompt is needed end-to-end. If the gate is not
+    #             deployed to that host yet, fall back to `auto`
+    #             (bootstrap deploy mode) and log it; the remote sudo
+    #             prompt, if any, is handled by nh's TTY contract.
+    if kind == "remote":
+        remote_gate = _probe_remote_gate(host)
+        if remote_gate:
+            elevation = remote_gate
+        else:
+            elevation = "auto"
+            _log_err(f"remote {host!r}: gate absent, using auto "
+                     f"elevation (bootstrap mode)")
+    else:
+        elevation = GATE
     common = ["--elevation-strategy", elevation]
     if mode == "switch":
         args = [NH_BIN, "os", "switch", f".#{host}", *common]
