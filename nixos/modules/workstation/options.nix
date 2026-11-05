@@ -39,6 +39,12 @@ in
 
     ai = mkEnableOption "AI";
 
+    aiPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "AI/Agent tooling in environment.systemPackages (workstation/ai.nix)";
+    };
+
     internalDisplay = mkOption {
       type = types.nullOr types.str;
       default = null;

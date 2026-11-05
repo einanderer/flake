@@ -7,6 +7,10 @@
 let
   cfg = config.anderer.os.workstation;
   inherit (lib) mkIf;
+  aiPackages = [
+    pkgs.pi-coding-agent
+    #pkgs.opencode
+  ];
 in
 {
   config = mkIf cfg.enable {
@@ -25,5 +29,6 @@ in
       host = "127.0.0.1";
       port = 11434;
     };
+    environment.systemPackages = aiPackages ++ cfg.aiPackages;
   };
 }
