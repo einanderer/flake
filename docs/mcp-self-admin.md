@@ -30,7 +30,7 @@ mutating classes).
           "environment": {
             "NH_ADMIN_FLAKE_DIR": "/home/anderer/flake",
             "NH_ADMIN_LOCAL_HOSTS": "amateur",
-            "NH_ADMIN_REMOTE_HOSTS": "",
+            "NH_ADMIN_REMOTE_HOSTS": "trolllollo,tentacle,bettenlager",
             "NH_ADMIN_GATE": "<gate store path>/bin/nh-admin-gate"
           }
         }
@@ -124,4 +124,4 @@ escalate through it. Verified in S4 (2026-10-30): 5/5 reject tests all exit
   `rollback` is the recovery path that IS exposed.
 - `nh home *` — this flake has no standalone `homeConfigurations` (home
   manager lives inside the OS config); `nh home switch` would be a no-op.
-- Any remote target not in `NH_ADMIN_REMOTE_HOSTS` (currently empty).
+- Any remote target not in `NH_ADMIN_REMOTE_HOSTS` (configured hosts only).
