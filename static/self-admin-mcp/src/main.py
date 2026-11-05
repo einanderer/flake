@@ -335,7 +335,16 @@ def _os_mutate(mode: str, hostname: str, confirm: bool, generation: int = 0) -> 
     if i_generation < 0:
         return {"ok": False, "error": "generation must be >= 0"}
 
-    common = ["--elevation-strategy", GATE]
+    # Local hosts are gated by the OS-level nh-admin-gate binary (content-
+    # addressed, NH_ADMIN_GATE). Remote hosts go OVER SSH; their elevation
+    # happens on the remote side via nh's own auto-detection (sudo/doas/
+    # run0/pkexec). The gate binary does NOT exist on remotes (it is a
+    # local-only binary that validates nixos-system-$HOST for this machine).
+    # Use `auto` for remote so the remote-side elevation program is
+    # picked by nh, and the password prompt (if any) is handled by
+    # whatever TTY nh is running under.
+    elevation = "auto" if kind == "remote" else GATE
+    common = ["--elevation-strategy", elevation]
     if mode == "switch":
         args = [NH_BIN, "os", "switch", f".#{host}", *common]
         timeout = TIMEOUTS["switch"]
