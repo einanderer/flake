@@ -17,8 +17,11 @@ mutating classes).
   (shebang+coding lines, then one `addsitedir` line, then the entry point
   `import main; main.main()`) so `mcp.server` resolves without a venv — same
   pattern as `ddg-mcp`/`whisper-mcp` (see `docs/ai.md`).
-- opencode wiring (kept **locally, outside this git repo**) —
-  `~/.config/opencode/opencode.jsonc`:
+- Harness wiring (kept **locally, outside this git repo**) —
+  opencode: `~/.config/opencode/opencode.jsonc`, Pi:
+  `~/.pi/agent/mcp.json`. Both carry the same server with
+  `NH_ADMIN_REMOTE_HOSTS` empty (local-only; see
+  "Remote operation" below):
 
   ```jsonc
   {
@@ -30,7 +33,7 @@ mutating classes).
           "environment": {
             "NH_ADMIN_FLAKE_DIR": "/home/anderer/flake",
             "NH_ADMIN_LOCAL_HOSTS": "amateur",
-            "NH_ADMIN_REMOTE_HOSTS": "trolllollo,tentacle,bettenlager",
+            "NH_ADMIN_REMOTE_HOSTS": "",
             "NH_ADMIN_GATE": "<gate store path>/bin/nh-admin-gate"
           }
         }
@@ -76,6 +79,33 @@ Mutating tools require **all three**: allowlisted host, `confirm: true`, and a
 set+executable `NH_ADMIN_GATE` — and `nh` is invoked with
 `--elevation-strategy <gate store path>`, so any mutation rides layer 3 below.
 Run `os_dryrun` before `os_switch`.
+
+## Remote operation (unused since 2026-11-06 — user-shell deploy)
+
+The server code still supports allowlisted remote hosts
+(`--target-host <host>`), but in this deployment
+`NH_ADMIN_REMOTE_HOSTS` is intentionally empty in both harness
+configs (as of 2026-11-06 — decision: simplest robust route, the
+MCP stdio client has no TTY for the prompts, so it can't drive
+them):
+
+- When a remote host IS allowlisted, remote mutation rides the gate:
+  the server probes `ssh -o BatchMode=yes <host> test -x
+  /run/current-system/sw/bin/nh-admin-gate`, then `nh` runs with the
+  remote gate path as `--elevation-strategy`; the remote gate
+  (identical build, installed by the same machine module, same
+  `NOPASSWD` sudoers shape) re-execs itself via `sudo -n` —
+  no TTY, no password prompt end-to-end. This only works with
+  **key-based** ssh. When the probe fails (password-login ssh, host
+  unreachable, gate not deployed), the server falls back to `auto`;
+  `nh` then picks doas/sudo/run0/pkexec remotely, which can prompt —
+  and behind stdio the run hangs at the remote end instead.
+- Read-only remote checks stay with the agent, outside MCP:
+  `nh os build .#<host>` (strategy `none`; `machines/` builds
+  locally — no ssh, no gate, no remote prompts).
+- Remote `os switch`/`os rollback` is executed by the user in an
+  interactive shell: `nh os switch .#<host> --target-host <host> -n`
+  first (dry-run), then without `-n`.
 
 ## Security model (three layers)
 
@@ -124,4 +154,5 @@ escalate through it. Verified in S4 (2026-10-30): 5/5 reject tests all exit
   `rollback` is the recovery path that IS exposed.
 - `nh home *` — this flake has no standalone `homeConfigurations` (home
   manager lives inside the OS config); `nh home switch` would be a no-op.
-- Any remote target not in `NH_ADMIN_REMOTE_HOSTS` (configured hosts only).
+- Any remote target: `NH_ADMIN_REMOTE_HOSTS` is empty in this deployment
+  — see the "Remote operation" section above.
