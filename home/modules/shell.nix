@@ -18,6 +18,9 @@
 
     programs.nushell = {
       enable = true;
+      # Upstream default changed `false` -> `true`; pin explicitly while
+      # stateVersion < 26.11 to silence the legacy-default warning.
+      loadSessionVariables = false;
       environmentVariables = {
         CARAPACE_BRIDGES = "zsh,bash,inshellisense";
       };

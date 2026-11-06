@@ -15,7 +15,7 @@ in
       enable = true;
       alsa.enable = true;
       pulse.enable = true;
-      jack.enable = true;
+      # `jack.enable` deprecated (global LD_LIBRARY_PATH); no JACK apps in use.
       wireplumber.extraConfig.bluetoothEnhancements = {
         "monitor.bluez.properties" = {
           "bluez5.enable-sbc-xq" = true;
