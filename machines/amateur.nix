@@ -94,7 +94,7 @@
   environment.systemPackages = with pkgs; [
     llmfit
     amdgpu_top
-    taskwarrior3
+    #taskwarrior3
     hardinfo2
     liquidctl
     qpwgraph
