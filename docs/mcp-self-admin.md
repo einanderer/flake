@@ -17,6 +17,15 @@ mutating classes).
   (shebang+coding lines, then one `addsitedir` line, then the entry point
   `import main; main.main()`) so `mcp.server` resolves without a venv — same
   pattern as `ddg-mcp`/`whisper-mcp` (see `docs/ai.md`).
+- **Stable install (GC-proof)**: the NixOS module
+  `nixos/modules/default/self-admin-mcp.nix` (option
+  `andher.mcp.selfAdminMcp.enable`, default `true`) puts the package into
+  `environment.systemPackages`, so the binary lives at
+  `/run/current-system/sw/bin/self-admin-mcp` — the same mechanism as
+  `nh-admin-gate` (`nixos/modules/default/nh-admin-gate.nix`). Harness
+  configs reference that stable path, never a volatile `/nix/store` path,
+  so flake rebuilds can't leave the MCP server pointing at a GC'd
+  derivation.
 - Harness wiring (kept **locally, outside this git repo**) —
   opencode: `~/.config/opencode/opencode.jsonc`, Pi:
   `~/.pi/agent/mcp.json`. Both carry the same server with
@@ -29,12 +38,12 @@ mutating classes).
       "servers": {
         "self-admin": {
           "type": "local",
-          "command": [ "<store-path>/bin/self-admin-mcp" ],
+          "command": [ "/run/current-system/sw/bin/self-admin-mcp" ],
           "environment": {
             "NH_ADMIN_FLAKE_DIR": "/home/anderer/flake",
             "NH_ADMIN_LOCAL_HOSTS": "amateur",
             "NH_ADMIN_REMOTE_HOSTS": "",
-            "NH_ADMIN_GATE": "<gate store path>/bin/nh-admin-gate"
+            "NH_ADMIN_GATE": "/run/current-system/sw/bin/nh-admin-gate"
           }
         }
       }
@@ -42,10 +51,13 @@ mutating classes).
   }
   ```
 
-  Both the `command` entry and `NH_ADMIN_GATE` are **store paths**: after
-  flake changes that rebuild either package, the paths in `opencode.jsonc`
-  must be re-derived and the entry updated (no git commit involved — the
-  config lives in the user's home).
+  `command` and `NH_ADMIN_GATE` are **stable system paths**: a flake
+  rebuild that changes either package needs **no config edits** — the next
+  `nh os switch` delivers the new binary under the same path, and GC can
+  never break the link. One-time transition note: until the first switch
+  that activates the install module has run, the stable path does not
+  exist yet — keep a freshly built `/nix/store/...` path in both configs
+  until that switch, then swap to the stable path.
 
 ## Environment configuration
 
@@ -56,7 +68,7 @@ All config is env-driven; empty defaults make the server read-only.
 | `NH_ADMIN_FLAKE_DIR` | flake dir; `cwd` for every `nh` call | `/home/anderer/flake` |
 | `NH_ADMIN_LOCAL_HOSTS` | hosts switchable **without** `--target-host` (this box) | `""` → no switch possible |
 | `NH_ADMIN_REMOTE_HOSTS` | hosts switchable with `--target-host <host>` | `""` |
-| `NH_ADMIN_GATE` | store path of the gate binary; mutating tools **refuse** when unset or not executable (no fallback) | `""` → read-only server |
+| `NH_ADMIN_GATE` | gate binary path (stable: `/run/current-system/sw/bin/nh-admin-gate`); mutating tools **refuse** when unset or not executable (no fallback) | `""` → read-only server |
 | `NH_ADMIN_NH_BIN` | the `nh` binary | `/run/current-system/sw/bin/nh` |
 
 Every host argument of every tool is classified against the two allowlists;

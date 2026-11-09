@@ -11,5 +11,6 @@
     ./secureboot.nix
     ./nixpkgs.nix
     ./default/nh-admin-gate.nix
+    ./default/self-admin-mcp.nix
   ];
 }
