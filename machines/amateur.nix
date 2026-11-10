@@ -98,7 +98,7 @@
     hardinfo2
     liquidctl
     qpwgraph
-    openscad
+    openscad-unstable
     element-desktop
     legcord
     kdePackages.qtsvg
