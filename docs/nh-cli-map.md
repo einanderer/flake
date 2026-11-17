@@ -1,6 +1,6 @@
 # `nh` CLI Map — for the NixOS self-admin MCP
 
-Reference of **what `nh` 4.4.2 (`nix-community/nh`) can do** and **which
+Reference of **what `nh` (`nix-community/nh`) can do** and **which
 commands an MCP client may run safely**, split into *read* vs *mutating*
 classes, including remote targets, privilege-elevation, and the constraints
 observed on this box.
@@ -14,7 +14,7 @@ observed on this box.
 
 ## 1. Toolchain
 
-- Binary: `/run/current-system/sw/bin/nh`, self-reports `nh 4.4.2`.
+- Binary: `/run/current-system/sw/bin/nh`.
 - Repo: `nix-community/nh` (EUPL-1.2). Stable release ships via Nixpkgs as `nh`.
 - Replaces **both** `nixos-rebuild` and most of `home-manager`'s CLI.
 - **It does not cover** raw Nix primitives: `nix eval`, `nix build <drv>`,

@@ -5,7 +5,7 @@ MCP stdio server that lets the agent administer the local NixOS flake through
 state, build-only checks, a dry-run preview, and — strictly gated — mutating
 `switch`/`rollback`.
 
-Companion reading: `docs/nh-cli-map.md` (what `nh` 4.4.2 can do, read vs
+Companion reading: `docs/nh-cli-map.md` (what `nh` can do, read vs
 mutating classes).
 
 ## Build & wiring
