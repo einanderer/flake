@@ -28,7 +28,7 @@
 
 | Hostname | Type | Role | Notes |
 | :--- | :--- | :--- | :--- |
-| `amateur` | Local Desktop | Gaming, Streaming Server, Dev, Multimedia | **Core Deployment Machine**. Remote builds happen here. **Opencode runs here.** |
+| `amateur` | Local Desktop | Gaming, Streaming Server, Dev, Multimedia | **Core Deployment Machine**. Remote builds happen here. |
 | `tentacle` | External VPS (Hetzner) | VPN Gateway | **Critical Infrastructure**. Accessible via SSH or Hetzner Web Console. |
 | `trolllollo` | Local Notebook | Multimedia, Gaming, Streaming, Dev | **Critical**. High priority, similar importance to `amateur`. |
 | `bettenlager` | Local Notebook | Multimedia, Streaming Client | Non-critical consumer device. |

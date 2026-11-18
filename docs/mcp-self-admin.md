@@ -36,9 +36,8 @@ refactor step.
   configs reference that stable path, never a volatile `/nix/store` path,
   so flake rebuilds can't leave the MCP server pointing at a GC'd
   derivation.
-- Harness wiring (kept **locally, outside this git repo**) —
-  opencode: `~/.config/opencode/opencode.jsonc`, Pi:
-  `~/.pi/agent/mcp.json`. Both carry the same server with
+- Harness wiring (kept **locally, outside this git repo**) — Pi:
+  `~/.pi/agent/mcp.json`. It carries the same server with
   `NH_ADMIN_REMOTE_HOSTS` empty (local-only; see
   "Remote operation" below):
 

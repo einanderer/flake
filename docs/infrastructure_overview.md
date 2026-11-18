@@ -56,7 +56,7 @@ Machines select from this tree via options under `anderer.*` (e.g. `anderer.prof
 
 ## 🤖 AI Stack
 
-Local AI stack on the `amateur` workstation: **ollama-rocm** (AMD ROCm build) with tuned env vars, **opencode** as agent client, and two custom **MCP (Model Context Protocol)** stdio servers built in `pkgs/by-name/` (`ddg-mcp`: DuckDuckGo search; `whisper-mcp`: whisper.cpp transcription).
+Local AI stack on the `amateur` workstation: **ollama-rocm** (AMD ROCm build) with tuned env vars, and two custom **MCP (Model Context Protocol)** stdio servers built in `pkgs/by-name/` (`ddg-mcp`: DuckDuckGo search; `whisper-mcp`: whisper.cpp transcription).
 
 Configured in `nixos/modules/workstation/ai.nix`, `machines/amateur.nix`. Details, env-var rationale, and the MCP packages: **[ai.md](./ai.md)**.
 

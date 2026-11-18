@@ -262,7 +262,7 @@ that op JSON. And `os_dryrun` should map to `nh os dry-activate` for a true
 activation preview (4.5.0 `switch --dry` only builds — see
 `docs/mcp-self-admin.md`).
 
-## 7. Environment / wiring facts for the OpenCode config
+## 7. Environment / wiring facts for the agent harness config
 
 - `cwd` must be the flake dir (`/home/anderer/flake`) so `nh os switch .`
   resolves `.#amateur`.
