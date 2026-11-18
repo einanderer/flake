@@ -80,7 +80,7 @@ case "$prog" in
   nix) prog="$NIX" ;;
   ln)  prog="$LN" ;;
   /nix/store/*/bin/nh)
-    # New nh elevation contract (nh >= 4.5.0): nh re-invokes ITS OWN store
+    # New nh elevation contract: nh re-invokes ITS OWN store
     # path with `__privileged <JSON op>`. Validate the op JSON field by
     # field; the op is the only description of what gets activated.
     [ "${#ARGS[@]}" -eq 2 ] || { AUDIT "REJECT: nh argv arity ${#ARGS[@]} != 2"; exit 1; }

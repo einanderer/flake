@@ -234,10 +234,10 @@ def _t_os_status() -> dict:
         # is a digit are data, so scan all of them instead of assuming a
         # single header line (the old `lines[1:]` assumed one header, which
         # left rows[0] on the column header and yielded current=None).
-        # The running-generation marker is version-dependent: nh 4.4.x prints
-        # `N (current)`, nh >= 4.5.0 prints `N (running, boot)` — match the
-        # token prefix, not the exact string, so a nh update can't silently
-        # break current_generation again.
+        # The running-generation marker is version-dependent: nh prints
+        # a different marker per release ("N (current)" vs "N (running, boot)")
+        # — match the token prefix, not the exact string, so a nh update can't
+        # silently break current_generation again.
         gens = []
         current = None
         for ln in lines:
