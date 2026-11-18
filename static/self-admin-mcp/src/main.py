@@ -64,7 +64,8 @@ _REMOTE_GATE_PATHS = {}
 #   nh-admin-gate.sh (env-key allowlist at the L58-62 case). Any key OUTSIDE
 #   that allowlist makes the gate REJECT the whole invocation (fail-closed,
 #   correct behavior).
-#   This module is driven by opencode and inherits NH_ADMIN_*, PWD, USER,
+#   This module is driven by the agent harness (e.g. pi) and inherits
+#   NH_ADMIN_*, PWD, USER,
 #   SHELL, TERM, SHLVL, XDG_*, HOME, PATH, NIX_PATH (…). If we launched `nh`
 #   with the full env, the gate would see NH_ADMIN_*, PWD, TERM, … and
 #   reject (T2c attempt #1: REJECT: disallowed env key 'NH_ADMIN_LOCAL_HOSTS').
@@ -81,7 +82,7 @@ def _nh_env() -> dict[str, str]:
     """Curated env for the launched `nh`: exactly the gate-allowlisted keys.
 
     Any other key (NH_ADMIN_*, PWD, SHELL, TERM, SHLVL, XDG_*, …) is stripped.
-    The values come from THIS process (opencode server), so we see what nh
+    The values come from THIS process (the MCP server), so we see what nh
     sees. If a key is missing from the server env, it is simply absent (nh
     inherits the normal user-env contract of `nix`).
     """

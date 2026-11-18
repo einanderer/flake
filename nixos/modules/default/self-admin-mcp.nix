@@ -11,8 +11,8 @@
     description = ''
       Install the self-admin-mcp binary to the stable system path
       /run/current-system/sw/bin/self-admin-mcp (systemClosure member,
-      GC-proof). Harness configs (~/.pi/agent/mcp.json,
-      ~/.config/opencode/opencode.jsonc) reference that stable path
+      GC-proof). Harness configs (~/.pi/agent/mcp.json) reference that
+      stable path
       instead of a volatile /nix/store path, so flake rebuilds can
       never leave the MCP server pointing at a GC'd derivation.
       (Companion to andher.security.nhAdminGate: that one pins the

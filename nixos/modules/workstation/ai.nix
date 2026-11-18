@@ -8,9 +8,7 @@ let
   cfg = config.anderer.os.workstation;
   inherit (lib) mkIf;
   aiPackages = [
-    pkgs.omp
     pkgs.pi-coding-agent
-    pkgs.opencode
   ];
 in
 {
