@@ -7,18 +7,36 @@ description: Manage the 4-host NixOS flake (amateur, tentacle, trolllollo, bette
 
 This flake manages 4 NixOS hosts. Read `AGENTS.md` and `docs/nh-cli-map.md` for full detail; this skill is the quick-start.
 
-## Core commands
+## Applying a configuration
 
-```bash
-# Local apply (host: amateur)
-nh os switch .
+**Agents (headless — the default assumption): always use the `self_admin` MCP
+server, never `sudo`/TTY:**
 
-# Remote apply
-nh os switch .#HOSTNAME --target-host HOSTNAME
+```
+1. os_status        # current vs latest generation, gate + allowlists
+2. os_build         # build-only, no root, safe anytime (or skip —
+                       os_switch builds if needed)
+3. os_dryrun        # preview of the generation change (note: build-only
+                       in nh 4.5.0, see Boundaries)
+4. os_switch        # confirm: true; runs through the nh-admin-gate
+                     (NOPASSWD sudo, no TTY required)
+5. os_status        # verify latest == current, boot default updated
 ```
 
-For dry runs, rollbacks and builds use the `self_admin` MCP server
-(`os_dryrun`, `os_rollback`, `os_build`) or the matching `nh` commands.
+Hosts the local MCP instance may switch: see `NH_ADMIN_LOCAL_HOSTS` in
+`~/.pi/agent/mcp.json` (currently `amateur`). Remote hosts are **not** in the
+MCP allowlist — remote switches run via Bash:
+
+```bash
+# Remote apply (interactive terminal or NOPASSWD remote, e.g. tentacle)
+nh os switch .#HOSTNAME --target-host HOSTNAME
+# Remote dry-run / rollback for agent context without the MCP server:
+nh os switch -n .#HOSTNAME --target-host HOSTNAME
+```
+
+**Humans with a TTY** may use `nh os switch .` directly (sudo will prompt for
+a password). Do NOT do this from an agent — it dead-ends on
+"sudo: A terminal is required to authenticate".
 
 ## Host inventory
 
@@ -53,5 +71,5 @@ For dry runs, rollbacks and builds use the `self_admin` MCP server
 ## Boundaries
 
 - MCP `os_switch`/`os_rollback` are **mutating** and gated (confirm + allowlisted host + gate).
-- `os_dryrun` currently maps to `nh os switch -n` (build-only in nh 4.5.0) — it does NOT preview activation.
+- `os_dryrun` currently maps to `nh os switch -n` (build-only in nh 4.5.0) — it does NOT preview activation; `nh os dry-activate` is the real activation preview.
 - Remote hosts are **not** in the MCP allowlist — remote switches run via Bash `nh os switch .#HOST --target-host HOST`.
