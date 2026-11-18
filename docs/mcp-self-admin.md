@@ -8,6 +8,16 @@ state, build-only checks, a dry-run preview, and — strictly gated — mutating
 Companion reading: `docs/nh-cli-map.md` (what `nh` can do, read vs
 mutating classes).
 
+**4.5.0 note:** since `nh` 4.5.0, mutating tools no longer hand individual
+`switch-to-configuration`/`nix build`/`ln` steps to the elevation program —
+`nh` elevates **once** per mutation and re-invokes its own content-addressed
+store path as `nh __privileged <JSON op>` (op ∈ {NixosActivate,
+NixosRollback}); the gate validates that op JSON field by field before
+re-elevating via `sudo -n` (see §Security model). And `os_dryrun` is
+currently pointed at `nh os switch -n`, which in 4.5.0 is **build-only** —
+`nh os dry-activate` is the activation preview; re-pointing is the next
+refactor step.
+
 ## Build & wiring
 
 - Source: `static/self-admin-mcp/src/main.py` (single file; stdio MCP server
@@ -81,7 +91,7 @@ anything else is rejected inside the server before `nh` is ever spawned.
 | `os_status` | read | `nh os info --elevation-strategy=none` + `git status` | — |
 | `os_generations` | read | `nh os info` | `limit` (10, max 50) |
 | `os_build` | build-only (no activation, no root) | `nh os build .#<host> --elevation-strategy=none` | `hostname` (empty = local) |
-| `os_dryrun` | dry-run preview | `nh os switch -n .#<host> --elevation-strategy=none` | `hostname` |
+| `os_dryrun` | dry-run | `nh os switch -n .#<host> --elevation-strategy=none` (**4.5.0:** build-only, no activation — `dry-activate` is the activation preview; re-point pending) | `hostname` |
 | `search_packages` | read | `nh search packages <query>` | `query`, `limit` (15, max 50) |
 | `search_options` | read | `nh search options <query>` | `query`, `limit` (15, max 50) |
 | `os_switch` | **mutating** | `nh os switch .#<host> --elevation-strategy <gate>` | `hostname`, `confirm: bool` |
@@ -90,7 +100,10 @@ anything else is rejected inside the server before `nh` is ever spawned.
 Mutating tools require **all three**: allowlisted host, `confirm: true`, and a
 set+executable `NH_ADMIN_GATE` — and `nh` is invoked with
 `--elevation-strategy <gate store path>`, so any mutation rides layer 3 below.
-Run `os_dryrun` before `os_switch`.
+Under 4.5.0 that means a **single** elevation invocation per mutation
+(`nh __privileged <JSON op>`, not one per step). Run `os_dryrun` before
+`os_switch` — for a true activation preview use `dry-activate` (4.5.0
+`switch -n` only builds).
 
 ## Remote operation (unused since 2026-11-06 — user-shell deploy)
 
@@ -137,23 +150,30 @@ them):
   `NOPASSWD`, command = **exactly the gate's store path** — no other command,
   no arguments. That store path is the only privilege the gate can ever
   receive.
-- Runtime: nh invokes the gate as
-  `nh-admin-gate env USER=… LOCALE_ARCHIVE=… PATH=… NIX_PATH=… <prog> <args…>`.
-  The gate:
-  - re-validates the **entire argv** itself: env keys restricted to
-    `USER|LOCALE_ARCHIVE|PATH|NIX_PATH|HOME|TMPDIR`; program restricted to
-    `<SYSTEM>/bin/switch-to-configuration` (subs
-    `test|switch|dry-activate|activate|rollback|boot`), bare `nix`, bare `ln`;
-    per-program argv pinned to exactly
-    `nix build --no-link --profile /nix/var/nix/profiles/system <drv-output>` /
-    `ln -sfn <src> /nix/var/nix/profiles/system` with `<src>` matching
-    `/nix/var/nix/profiles/system-*`;
-  - re-verifies the target derivation: `nix derivation show <path>` must
-    resolve to `nixos-system-<this host>` — only this machine's own system
-    can ever be activated;
-  - re-execs itself via `sudo -n` (non-interactive; no fallback to a
-    non-elevated run, which is also the server's policy);
-  - only then execs the command, byte-exact, as root.
+- Runtime: **4.5.0 contract (current)** — `nh` elevates once per mutation
+  and invokes the gate as
+  `nh-admin-gate env USER=… LOCALE_ARCHIVE=… PATH=… NIX_PATH=… <nh store path>
+  __privileged <JSON op>`, where the op is `{NixosActivate:{action:"Switch",
+  switch_to_configuration, system, continue_on_activation_failure:false,
+  install_bootloader:false, systemd_run, nix_args:[]}}` or
+  `{NixosRollback:{target_profile, previous_profile, switch_to_configuration,
+  systemd_run}}`. The gate validates the **op JSON field by field** (op
+  name, action = `Switch` only, `install_bootloader`/
+  `continue_on_activation_failure` must be `false`, empty `nix_args`, exact
+  `switch_to_configuration` = `<system>/bin/switch-to-configuration` or
+  `<target_profile>/bin/switch-to-configuration`, target profiles must be
+  real `/nix/var/nix/profiles/system-<gen>-link` symlinks) — and then re-runs
+  the derivation check: only a `nixos-system-<this host>` derivation can ever
+  be activated here. (The old per-step argv forms —
+  `<SYSTEM>/bin/switch-to-configuration <sub>`, `nix build --no-link --profile
+  /nix/var/nix/profiles/system <drv>`, `ln -sfn <profile> /nix/var/nix/profiles/system`
+  — are still accepted and validated for defense-in-depth, in case an older
+  `nh` version is ever reinstalled.)
+- Runtime: the env-prefix argv before the program is re-validated
+  (allowlist `USER|LOCALE_ARCHIVE|PATH|NIX_PATH|HOME|TMPDIR`); the gate
+  re-executes itself via `sudo -n` (non-interactive; no fallback to a
+  non-elevated run, which is also the server's policy) and, as root, execs
+  the validated command byte-exact.
 
 Neither a wrong/compromised argv nor a foreign `nixos-system-*` derivation can
 escalate through it. Verified in S4 (2026-10-30): 5/5 reject tests all exit
