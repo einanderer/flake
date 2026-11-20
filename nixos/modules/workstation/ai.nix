@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  packages,
   ...
 }:
 let
@@ -16,29 +17,55 @@ in
     # llama.cpp server (llama-server) replaces ollama (2026-11-18): same workload
     # (Qwen3.8-27B-UD-IQ2_S + MTP draft), flags ported 1:1 from the old ollama
     # config. Models live under the service's StateDirectory /var/lib/llama-cpp.
-    services.llama-cpp = {
-      enable = cfg.ai;
-      package = pkgs.llama-cpp-rocm;
-      settings = {
-        host = "127.0.0.1";
-        port = 8080;
-        model = "/var/lib/llama-cpp/models/Qwen3.8-27B-UD-IQ2_S.gguf";
-        spec-draft-model = "/var/lib/llama-cpp/models/mtp-Qwen3.8-27B-Q4_0.gguf";
-        spec-type = "draft-mtp";
-        spec-draft-n-max = 4;
-        # ported from OLLAMA_CONTEXT_LENGTH / OLLAMA_KV_CACHE_TYPE / OLLAMA_FLASH_ATTENTION
-        ctx-size = 98304;
-        cache-type-k = "q4_0";
-        cache-type-v = "q4_0";
-        flash-attn = "on";
-        # Ollama defaults ported 1:1
-        batch-size = 512;
-        ubatch-size = 512;
-        context-shift = true;
-        keep = 4;
-        no-webui = true;
-        # stable API name: clients keep requesting "qwen3.8-27b-ud-iq2s-mtp"
-        alias = "qwen3.8-27b-ud-iq2s-mtp";
+    # 2026-11-20: on-demand only — the idle reverse proxy (llama-idle-proxy on
+    # 127.0.0.1:8080) starts this service on first request and stops it when
+    # idle, so the model's ~15 GB VRAM is only occupied while actually in use.
+    # Port moved 8080 -> 8081 (backend); the proxy owns the client-facing 8080.
+    systemd.services.llama-cpp = mkIf cfg.ai {
+      # Backend: unit is created (so the idle proxy can `systemctl start` it on
+      # demand) but not wanted by any target, so it does not auto-start at boot
+      # and VRAM is only occupied while a request is in flight.
+      enable = true;
+      wantedBy = [ ];
+      serviceConfig = {
+        Type = "simple";
+        DynamicUser = true;
+        StateDirectory = "llama-cpp";
+        CacheDirectory = "llama-cpp";
+        WorkingDirectory = "/var/lib/llama-cpp";
+        Environment = [ "LLAMA_CACHE=/var/cache/llama-cpp" ];
+        Restart = "on-failure";
+        RestartSec = "300";
+        # Same flags as the deployed server; port moved 8080 -> 8081 (proxy owns 8080).
+        ExecStart =
+          "${pkgs.llama-cpp-rocm}/bin/llama-server "
+          + "--alias qwen3.8-27b-ud-iq2s-mtp "
+          + "--model /var/lib/llama-cpp/models/Qwen3.8-27B-UD-IQ2_S.gguf "
+          + "--spec-draft-model /var/lib/llama-cpp/models/mtp-Qwen3.8-27B-Q4_0.gguf "
+          + "--spec-type draft-mtp --spec-draft-n-max 4 "
+          + "--ctx-size 98304 --cache-type-k q4_0 --cache-type-v q4_0 "
+          + "--flash-attn on --batch-size 512 --ubatch-size 512 "
+          + "--context-shift --keep 4 --no-webui "
+          + "--host 127.0.0.1 --port 8081";
+      };
+    };
+
+    # Client-facing reverse proxy (127.0.0.1:8080), transparent to existing clients
+    # (they still hit :8080). Starts llama-cpp.service on first request (waits up to
+    # 90s for the model load) and stops it after 300s idle, freeing GPU VRAM.
+    # Returns 503 while the backend is down or loading.
+    systemd.services.llama-idle-proxy = mkIf cfg.ai {
+      description = "Idle reverse proxy for llama-cpp (starts/stops backend on demand)";
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.systemd ];
+      serviceConfig = {
+        ExecStart =
+          "${packages.llama-idle-proxy}/bin/llama-idle-proxy "
+          + "--listen 127.0.0.1:8080 --backend 127.0.0.1:8081 "
+          + "--service llama-cpp.service --idle 300";
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
     };
     environment.systemPackages = aiPackages ++ cfg.aiPackages;
