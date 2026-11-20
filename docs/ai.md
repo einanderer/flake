@@ -1,25 +1,34 @@
 # AI Stack
 
-Local AI stack on the `amateur` workstation: an ROCm build of **ollama** serving local models over LLM inference, and three custom **MCP** (Model Context Protocol) stdio servers providing web search, transcription, and NixOS self-administration tools to the agent.
+Local AI stack on the `amateur` workstation: a **llama.cpp** `llama-server` (ROCm build) serving local models over an OpenAI-compatible API, and three custom **MCP** (Model Context Protocol) stdio servers providing web search, transcription, and NixOS self-administration tools to the agent.
 
-## Ollama (`services.ollama`)
+## llama.cpp (`services.llama-cpp`)
 
 Configured in `nixos/modules/workstation/ai.nix`, gated on `anderer.os.workstation.ai` (enabled only on `amateur`).
 
-- Package: `pkgs.ollama-rocm` (AMD ROCm backend; the machine has no NVIDIA GPU).
-- Bind: `127.0.0.1:11434` (localhost only — no external exposure).
-- Environment tuning:
+- Package: `pkgs.llama-cpp-rocm` (AMD ROCm backend; the machine has no NVIDIA GPU).
+- Bind: `127.0.0.1:8080` (localhost only — no external exposure, no firewall port opened).
+- OpenAI-compatible API under `/v1` (Anthropic-compatible API also available); the model is served under the stable alias `qwen3.8-27b-ud-iq2s-mtp` (`--alias`).
+- Models live in the service's StateDirectory `/var/lib/llama-cpp` (DynamicUser, sandboxed — no extra path grants needed):
+  - `Qwen3.8-27B-UD-IQ2_S.gguf` (7.9 GB) — main model
+  - `mtp-Qwen3.8-27B-Q4_0.gguf` (1.3 GB) — MTP draft model for speculative decoding
 
-| Variable | Value | Why |
+Server flags (1:1 ported from the previous ollama config):
+
+| Flag | Value | Why |
 | :--- | :--- | :--- |
-| `OLLAMA_CONTEXT_LENGTH` | `98304` | 96k-token context for long agent sessions |
-| `OLLAMA_KEEP_ALIVE` | `2h` | keep models loaded between requests |
-| `OLLAMA_MAX_LOADED_MODELS` / `OLLAMA_NUM_PARALLEL` | `1` | one model at a time for the 16 Gi VRAM budget |
-| `OLLAMA_FLASH_ATTENTION` | `1` | attention memory savings |
-| `OLLAMA_KV_CACHE_TYPE` | `q4_0` | quantized KV cache → much larger usable context |
-| `OLLAMA_NUM_THREADS` | `8` | matches the 5800X's 8 physical cores |
+| `--ctx-size` | `98304` | 96k-token context for long agent sessions (was `OLLAMA_CONTEXT_LENGTH`) |
+| `--cache-type-k` / `--cache-type-v` | `q4_0` | quantized KV cache → much larger usable context (was `OLLAMA_KV_CACHE_TYPE`) |
+| `--flash-attn` | `on` | attention memory savings (was `OLLAMA_FLASH_ATTENTION=1`) |
+| `--batch-size` / `--ubatch-size` | `512` / `512` | prompt-processing batches (Ollama defaults) |
+| `--context-shift` | on | sliding window for infinite conversations |
+| `--keep` | `4` | tokens kept from the initial prompt when shifting (Ollama default) |
+| `--spec-type draft-mtp` + `--spec-draft-model` + `--spec-draft-n-max 4` | | speculative decoding with the MTP draft model, as Ollama did |
+| `--n-gpu-layers` | *(unset → `auto`)* | all layers that fit in the RX 6950 XT's VRAM, the rest in RAM |
+| `--threads` | *(unset → auto)* | uses the 5800X's physical cores (was `OLLAMA_NUM_THREADS=8`) |
+| `--no-webui` | | no built-in web UI (Ollama also ran without one) |
 
-Agent clients are pointed at the local API endpoint `http://127.0.0.1:11434/v1`.
+Agent clients are pointed at the local API endpoint `http://127.0.0.1:8080/v1`.
 
 ## Supporting tools
 

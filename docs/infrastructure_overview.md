@@ -49,14 +49,14 @@ docs/         This documentation (infrastructure overview, hardware specs, AI st
 | `hardware/` | CPU/GPU detection modules, ThinkPad per-model modules (t470s, x230) |
 | `network/` | `server-uplink`, `tentacle-edge`, `ttvpn` (WireGuard hub/client) |
 | `profiles/` | Workstation profiles: `workstation-base` (tz, boot, workstation role), `workstation-desktop`, `workstation-laptop` |
-| `workstation/` | GUI/dev role modules: `ai.nix` (ollama), audio, Bluetooth, boot, cursor, filesystems, fonts, gaming (streaming, Remote Play), nix, nvidia, programs, udev, uxplay, virtualisation, wayland |
+| `workstation/` | GUI/dev role modules: `ai.nix` (llama.cpp server), audio, Bluetooth, boot, cursor, filesystems, fonts, gaming (streaming, Remote Play), nix, nvidia, programs, udev, uxplay, virtualisation, wayland |
 | (top level) | `core.nix` (nix, nixpkgs, sops, nixos-version), `home.nix` (user + Home Manager), `secureboot.nix` (Lanzaboote), `nixpkgs.nix` (unfree allow-lists) |
 
 Machines select from this tree via options under `anderer.*` (e.g. `anderer.profiles.workstationDesktop.enable`, `anderer.os.workstation.ai`, `anderer.hardware.thinkpad.t470s`).
 
 ## 🤖 AI Stack
 
-Local AI stack on the `amateur` workstation: **ollama-rocm** (AMD ROCm build) with tuned env vars, and two custom **MCP (Model Context Protocol)** stdio servers built in `pkgs/by-name/` (`ddg-mcp`: DuckDuckGo search; `whisper-mcp`: whisper.cpp transcription).
+Local AI stack on the `amateur` workstation: **llama.cpp** (ROCm build of `llama-server`) with tuned server flags, and three custom **MCP (Model Context Protocol)** stdio servers built in `pkgs/by-name/` (`ddg-mcp`: DuckDuckGo search; `whisper-mcp`: whisper.cpp transcription).
 
 Configured in `nixos/modules/workstation/ai.nix`, `machines/amateur.nix`. Details, env-var rationale, and the MCP packages: **[ai.md](./ai.md)**.
 
