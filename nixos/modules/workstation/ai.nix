@@ -14,9 +14,11 @@ let
 in
 {
   config = mkIf cfg.enable {
-    # llama.cpp server (llama-server) replaces ollama (2026-11-18): same workload
-    # (Qwen3.8-27B-UD-IQ2_S + MTP draft), flags ported 1:1 from the old ollama
-    # config. Models live under the service's StateDirectory /var/lib/llama-cpp.
+    # llama.cpp server (llama-server) replaces ollama (2026-11-18): flags ported
+    # 1:1 from the old ollama config. Models live under the service's StateDirectory
+    # /var/lib/llama-cpp.
+    # 2026-11-21: served model switched IQ2_S -> IQ4_XS (same MTP draft), alias
+    # qwen3.8-27b-ud-iq4xs-mtp.
     # 2026-11-20: on-demand only — the idle reverse proxy (llama-idle-proxy on
     # 127.0.0.1:8080) starts this service on first request and stops it when
     # idle, so the model's ~15 GB VRAM is only occupied while actually in use.
@@ -39,8 +41,8 @@ in
         # Same flags as the deployed server; port moved 8080 -> 8081 (proxy owns 8080).
         ExecStart =
           "${pkgs.llama-cpp-rocm}/bin/llama-server "
-          + "--alias qwen3.8-27b-ud-iq2s-mtp "
-          + "--model /var/lib/llama-cpp/models/Qwen3.8-27B-UD-IQ2_S.gguf "
+          + "--alias qwen3.8-27b-ud-iq4xs-mtp "
+          + "--model /var/lib/llama-cpp/models/Qwen3.8-27B-UD-IQ4_XS.gguf "
           + "--spec-draft-model /var/lib/llama-cpp/models/mtp-Qwen3.8-27B-Q4_0.gguf "
           + "--spec-type draft-mtp --spec-draft-n-max 4 "
           + "--ctx-size 98304 --cache-type-k q4_0 --cache-type-v q4_0 "
