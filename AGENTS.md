@@ -3,10 +3,14 @@
 ## 🛠️ Core Commands
 
 ### NixOS Management
-- **Apply configuration (agent / headless — ALWAYS):** via the `self_admin` MCP
-  server: `os_status` → `os_dryrun` → `os_switch` (`confirm: true`, runs
-  through the `nh-admin-gate`, no TTY). See `docs/mcp-self-admin.md` and the
-  `flake-nixos` skill for the exact sequence.
+- **Apply configuration (agent / headless — ALWAYS):** via the `self-admin` MCP
+  server (tools: `mcp__self_admin__*`): `os_status` → `os_dryrun` →
+  `os_switch` (`confirm: true`, runs through the `nh-admin-gate`, no TTY).
+  See `docs/mcp-self-admin.md` and the `flake-nixos` skill for the exact
+  sequence.
+- **Naming:** the MCP server/binary/package are `self-admin` /
+  `self-admin-mcp` (hyphen); tool calls use Pi's conversion
+  `mcp__self_admin__<tool>` (underscore).
 - **Apply to remote host:** `nh os switch .#HOSTNAME --target-host HOSTNAME`
   (remote hosts are **not** in the local MCP allowlist)
 - **Humans with a TTY only:** `nh os switch .` (sudo prompts for a password)
