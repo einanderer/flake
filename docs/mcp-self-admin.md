@@ -13,10 +13,9 @@ mutating classes).
 `nh` elevates **once** per mutation and re-invokes its own content-addressed
 store path as `nh __privileged <JSON op>` (op ∈ {NixosActivate,
 NixosRollback}); the gate validates that op JSON field by field before
-re-elevating via `sudo -n` (see §Security model). And `os_dryrun` is
-currently pointed at `nh os switch -n`, which in 4.5.0 is **build-only** —
-`nh os dry-activate` is the activation preview; re-pointing is the next
-refactor step.
+re-elevating via `sudo -n` (see §Security model). And `os_dryrun` points at
+`nh os dry-activate` — the real activation preview (build + planned unit
+changes, no apply, no root); in 4.5.0 `switch -n` is only **build-only**.
 
 ## Build & wiring
 
@@ -90,7 +89,7 @@ anything else is rejected inside the server before `nh` is ever spawned.
 | `os_status` | read | `nh os info --elevation-strategy=none` + `git status` | — |
 | `os_generations` | read | `nh os info` | `limit` (10, max 50) |
 | `os_build` | build-only (no activation, no root) | `nh os build .#<host> --elevation-strategy=none` | `hostname` (empty = local) |
-| `os_dryrun` | dry-run | `nh os switch -n .#<host> --elevation-strategy=none` (**4.5.0:** build-only, no activation — `dry-activate` is the activation preview; re-point pending) | `hostname` |
+| `os_dryrun` | dry-run (activation preview) | `nh os dry-activate .#<host> --elevation-strategy=none` | `hostname` |
 | `search_packages` | read | `nh search packages <query>` | `query`, `limit` (15, max 50) |
 | `search_options` | read | `nh search options <query>` | `query`, `limit` (15, max 50) |
 | `os_switch` | **mutating** | `nh os switch .#<host> --elevation-strategy <gate>` | `hostname`, `confirm: bool` |
@@ -101,8 +100,8 @@ set+executable `NH_ADMIN_GATE` — and `nh` is invoked with
 `--elevation-strategy <gate store path>`, so any mutation rides layer 3 below.
 Under 4.5.0 that means a **single** elevation invocation per mutation
 (`nh __privileged <JSON op>`, not one per step). Run `os_dryrun` before
-`os_switch` — for a true activation preview use `dry-activate` (4.5.0
-`switch -n` only builds).
+`os_switch` — it is the true activation preview (4.5.0 `switch -n`
+would only build).
 
 ## Remote operation (unused since 2026-11-06 — user-shell deploy)
 
@@ -128,8 +127,8 @@ them):
   `nh os build .#<host>` (strategy `none`; `machines/` builds
   locally — no ssh, no gate, no remote prompts).
 - Remote `os switch`/`os rollback` is executed by the user in an
-  interactive shell: `nh os switch .#<host> --target-host <host> -n`
-  first (dry-run), then without `-n`.
+  interactive shell: `nh os dry-activate .#<host> --target-host <host>`
+  first (activation preview), then `nh os switch .#<host> --target-host <host>`.
 
 ## Security model (three layers)
 

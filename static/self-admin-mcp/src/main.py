@@ -10,8 +10,9 @@ Tool surface (see docs/mcp-self-admin.md for the full contract):
     search_options     `nh search options`   (read-only option search)
   build-only (no activation, no boot entry, no root):
     os_build           `nh os build .#<host>`
-    os_dryrun          `nh os switch -n .#<host>` (action preview, [to-verify]
-                       that -n never elevates; fails cleanly when it must)
+    os_dryrun          `nh os dry-activate .#<host>` (activation preview —
+                       planned unit changes, build + preview, no activation,
+                       no root; strategy `none` verified against nh 4.5.0)
   mutating (require `confirm: true` AND the elevated gate path to be set):
     os_switch          `nh os switch .#<host>` via elevation strategy = gate
     os_rollback        `nh os rollback [-t GEN]` via elevation strategy = gate
@@ -297,10 +298,10 @@ def _t_os_build(hostname: str = "") -> dict:
 
 
 def _t_os_dryrun(hostname: str = "") -> dict:
-    """Dry run: `nh os switch -n` — preview actions without activating.
-
-    [to-verify] whether -n ever elevates; with strategy `none` it either works
-    as a pure preview (expected) or errors cleanly (visible to the caller).
+    """Dry run: `nh os dry-activate` — build + preview the activation (which
+    units would stop/reload/start) without applying or changing the boot
+    default. Runs without elevation (strategy `none`); verified against
+    nh 4.5.0 on the local host.
     """
     kind, err = _classify_host(hostname)
     if err:
@@ -309,9 +310,8 @@ def _t_os_dryrun(hostname: str = "") -> dict:
     args = [
         NH_BIN,
         "os",
-        "switch",
+        "dry-activate",
         f".#{host}",
-        "--dry",
         "--elevation-strategy=none",
     ]
     if kind == "remote":
@@ -459,11 +459,13 @@ def main() -> None:
 
     @server.tool(
         name="os_dryrun",
-        title="Dry run of os switch (preview actions)",
+        title="Dry run of os switch (activation preview)",
         description=(
-            "Runs `nh os switch -n` — prints the planned unit start/stop "
-            "actions WITHOUT applying. Read-ish; if it cannot run without "
-            "elevation it fails cleanly instead of mutating."
+            "Runs `nh os dry-activate` — builds the configuration and previews "
+            "the activation (planned unit stop/reload/start actions) WITHOUT "
+            "applying or changing the boot default. Runs without elevation; "
+            "safe to call any time. ALWAYS run this before os_switch and "
+            "show its output to the user."
         ),
     )
     def tool_os_dryrun(hostname: str = "") -> dict:
