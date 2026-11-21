@@ -8,10 +8,19 @@ Configured in `nixos/modules/workstation/ai.nix`, gated on `anderer.os.workstati
 
 - Package: `pkgs.llama-cpp-rocm` (AMD ROCm backend; the machine has no NVIDIA GPU).
 - Bind: `127.0.0.1:8080` (localhost only — no external exposure, no firewall port opened).
-- OpenAI-compatible API under `/v1` (Anthropic-compatible API also available); the model is served under the stable alias `qwen3.8-27b-ud-iq2s-mtp` (`--alias`).
+- OpenAI-compatible API under `/v1` (Anthropic-compatible API also available); the model is served under the aliases `qwen3.8-27b-ud-iq2s-mtp` (current) and `qwen3.8-27b-ud-iq4xs-mtp` (legacy, kept for clients pinned to it) (`--alias`, comma-separated).
 - Models live in the service's StateDirectory `/var/lib/llama-cpp` (DynamicUser, sandboxed — no extra path grants needed):
   - `Qwen3.8-27B-UD-IQ2_S.gguf` (7.9 GB) — main model
   - `mtp-Qwen3.8-27B-Q4_0.gguf` (1.3 GB) — MTP draft model for speculative decoding
+  - `Qwen3.8-27B-UD-IQ4_XS.gguf` (13.4 GB) — present but **not served**: tried 2026-11-21, does not fit in the RX 6950 XT's 16 GB VRAM together with the MTP draft + KV cache (see note below)
+
+> **2026-11-21 VRAM note:** a same-day experiment served the IQ4_XS quant for
+> higher quality. Weights (14.3 GB) + MTP draft (1.3 GB) leave no room for the
+> KV cache in 16 GB VRAM, so llama.cpp moved the KV cache to CPU RAM and
+> auto-disabled flash-attn and KV cache shifting — decode collapsed from ~45 to
+> ~8 tok/s. Reverted to IQ2_S (measured 41–56 tok/s decode, ~560–700 tok/s
+> prefill, MTP draft acceptance 43–63%). Serve IQ4_XS again only with more VRAM
+> (bigger card) or a smaller `--ctx-size` + no MTP.
 
 Server flags (1:1 ported from the previous ollama config):
 
